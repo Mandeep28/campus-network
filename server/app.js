@@ -28,6 +28,6 @@ const start = async () => {
     console.log(err);
   }
 };
-//first commit
+
 // start the app
 start();
