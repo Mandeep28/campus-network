@@ -1,34 +1,40 @@
 // external packages
 const express = require("express");
 require("dotenv").config();
+require('express-async-errors');
 
 // internal packages (modules)
-const connectToMongo = require("./database/db_connect");
-const route1 = require("./routes/route1");
+const connectToMongo = require("./db/connect");
+const authenticate = require("./routes/authenticate")
 
 // app code start
 const app = express();
-
-// atlas string in .env file
-// const url = process.env.MONGO_ATLAS_URI;
-const url = "mongodb://localhost:27017/finalProjectDB";
-const port = process.env.PORT || 5200;
-const hostname = "localhost";
 app.use(express.json());
 
-// All routes
-app.use("/auth", route1);
+// middleware
+
+
+const port = process.env.PORT || 5200;
+const hostname = "localhost";
+// const uri = process.env.MONGO_ALTAS_URI;
+const uri = "mongodb://127.0.0.1:27017/test";
+
+// routes
+app.use("/api/v1/auth", authenticate)
+
+
+
+
 // start arrow function that connect to db and listen the port
 const start = async () => {
   try {
-    await connectToMongo(url);
+    await connectToMongo(uri);
     app.listen(port, () => {
-      console.log(`Server is listening on http://${hostname}:${port}/`);
+      console.log(`Connect To DB + Server is listening on http://${hostname}:${port}/`);
     });
   } catch (err) {
     console.log(err);
   }
 };
-
 // start the app
 start();
