@@ -5,7 +5,7 @@ require('express-async-errors');
 
 // internal packages (modules)
 const connectToMongo = require("./db/connect");
-const authenticate = require("./routes/authenticate")
+const authenticate = require("./routes/auth")
 
 // app code start
 const app = express();
