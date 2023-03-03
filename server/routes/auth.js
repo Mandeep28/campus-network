@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const {createStudent, loginStudent, getStudentDetail, updateStudent, registerStudent} = require("../controler/authenticate")
+const {createStudent, loginStudent, getStudentDetail, updateStudent, registerStudent} = require("../controller/authenticate")
 
 // To do : check the id of admin while creating user
 router.route("/student").post(createStudent).get(getStudentDetail).put(updateStudent);
