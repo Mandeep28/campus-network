@@ -16,8 +16,7 @@ const StudentSchema = new Schema({
   },
   semester: {
     type: Number,
-    require: [true, "Value must be required"],
-    
+    require: [true, "Value must be required"],  
   },
   departmentName: {
     type: String,
