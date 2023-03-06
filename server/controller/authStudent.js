@@ -17,7 +17,7 @@ let JWT_SECRET = process.env.JWT_SECRET_STRING;
 
 const createStudent = async (req, res, next) => {
 
-  // To do : check if admin id is correct or not
+// To do : check if admin id is correct or not
 
   const { email, currentRollNo } = req.body;
 
