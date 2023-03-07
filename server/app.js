@@ -1,10 +1,11 @@
 // external packages
 const express = require("express");
 require("dotenv").config();
-require('express-async-errors');
+require("express-async-errors");
 
 // internal packages (modules)
 const connectToMongo = require("./db/connect");
+const errorHandler  = require("./middleware/errorHandler")
 const authenticate = require("./routes/auth")
 
 // app code start
@@ -20,9 +21,9 @@ const hostname = "localhost";
 const uri = "mongodb://127.0.0.1:27017/test";
 
 // routes
-app.use("/api/v1/auth", authenticate)
+app.use("/api/v1/auth", authenticate);
 
-
+app.use(errorHandler);
 
 
 // start arrow function that connect to db and listen the port
@@ -30,7 +31,7 @@ const start = async () => {
   try {
     await connectToMongo(uri);
     app.listen(port, () => {
-      console.log(`Connect To DB + Server is listening on http://${hostname}:${port}/`);
+      console.log(`Connected To MongoDB + Server is listening on http://${hostname}:${port}/`);
     });
   } catch (err) {
     console.log(err);
