@@ -1,29 +1,19 @@
 const express = require("express");
 const router = express.Router();
-const {createStudent, loginStudent, getStudentDetail, updateStudent, registerStudent} = require("../controller/authStudent");
-const {createTeacher, loginTeacher, getTeacherDetail, updateTeacher, registerTeacher} = require("../controller/authTeacher");
-const fetchUser  = require("../middleware/fetchUser");
+const fetchUser = require("../middleware/fetchUser");
+const {login, register, getUserDetail, verifyEmail, resetPassword, forgotPassword, adminLogin} = require("../controller/auth");
 
 
-// To do : check the id of admin while creating user
-router.route("/student").post(createStudent).get(fetchUser, getStudentDetail).put(updateStudent);
-router.route("/student/login").post(loginStudent);
-router.route("/student/register").post(registerStudent);
+router.post("/login" ,login)
+router.post("/register" ,register)
+router.post('/verify-email', verifyEmail);
+router.post('/reset-password', resetPassword);
+router.post('/forgot-password', forgotPassword);
+router.get("/getuserdetail" ,fetchUser, getUserDetail)
 
+// admin 
+router.post("/admin-login", adminLogin);
 
-
-router.route("/teacher").post(createTeacher).get(fetchUser, getTeacherDetail).put(updateTeacher);
-router.route("/teacher/login").post(loginTeacher);
-router.route("/teacher/register").post(registerTeacher);
-
-/*
-student-newAccount
-student-login
-getUserData
-
-teacher-newAccount
-teacher-login
-*/
 
 
 module.exports = router;

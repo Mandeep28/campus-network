@@ -1,57 +1,62 @@
 const mongoose = require("mongoose");
-const { Schema } = mongoose;
+const validator = require("validator");
 
-const StudentSchema = new Schema({
-  name: {
-    type: String,
-    require: [true, "Value must be required"],
-    minLength: [3, "Length must be 3 character"],
-    maxLength: [20, "Length should not be greater than 20 character"],
+const StudentSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Value must be requiredd"],
+      minlength: 3,
+      maxlength: 50,
+    },
+    email: {
+      type: String,
+      unique: true,
+      requiredd: [true, "Please provide email"],
+      validate: {
+        validator: validator.isEmail,
+        message: "Please provide valid email",
+      },
+    },
+    rollNo: {
+      type: Number,
+      required: [true, "Value must be required"],
+    },
+
+    semester: {
+      type: Number,
+      required: [true, "Value must be required"],
+    },
+    departmentName: {
+      type: String,
+      required: [true, "Value must be required"],
+      maxlength: 70,
+    },
+
+    course: {
+      type: String,
+      required: [true, "Value must be required"],
+      minlength: 3,
+      maxlength: 60,
+    },
+    degreeType: {
+      type: String,
+      enum: ["ug_3", "ug_4", "pg_2", "pg_3"],
+      default: "ug_3",
+    },
+
+    image: {
+      type: String,
+      default:
+        "https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png",
+    },
+    createdBy: {
+      type: mongoose.Schema.ObjectId,
+      ref: "User",
+      requiredd: true,
+    },
   },
-  class: {
-    type: String,
-    require: [true, "Value must be required"],
-    minLength: [13, "Length must be 3 character"],
-    maxLength: [60, "Length should not be greater than 20 character"],
-  },
-  semester: {
-    type: Number,
-    require: [true, "Value must be required"],  
-  },
-  departmentName: {
-    type: String,
-    require: [true, "Value must be required"],
-    minLength: [13, "Length must be 3 character"],
-    maxLength: [60, "Length should not be greater than 20 character"],
-  },
-  email: {
-    type: String,
-    unique: true,
-    require: [true, "value must provided"],
-    minLength: [15, "Length must be 3 character"],
-    maxLength: [50, "Length should not be greater than 20 character"],
-  },
-  currentRollNo: {
-    type: Number,
-    require: [true, "Value must be required"],
-  },
-  oldRollNo: {
-    type: Number,
-    default: null,
-  },
-  password: {
-    type: String,
-    default: null,
-  },
-  image: {
-    type: String,
-    default:
-      "https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png",
-  },
-  TimeStamp: {
-    type: Date,
-    default: Date.now,
-  },
-});
+  { timestamps: true }
+);
 
 module.exports = mongoose.model("student", StudentSchema);

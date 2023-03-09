@@ -6,9 +6,5 @@ class customError extends Error {
     }
 }
 
-// make obj of "customError class" 
-const customErrorHandler = (msg, statusCode)=>{
-    return new customError(msg, statusCode);
-}
 
-module.exports = {customError, customErrorHandler};
+module.exports = customError;

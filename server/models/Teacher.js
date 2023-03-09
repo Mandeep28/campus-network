@@ -1,34 +1,34 @@
 const mongoose = require("mongoose");
-const { Schema } = mongoose;
+const validator = require('validator');
 
-const TeacherSchema = new Schema({
+const TeacherSchema = new mongoose.Schema({
   name: {
     type: String,
-    require: [true, "Value must be required"],
-    minLength: [3, "Length must be 3 character"],
-    maxLength: [25, "Length should not be greater than 20 character"],
+    required: [true, "Value must be required"],
+    minlength: 3, 
+    maxlength: 50
   },
   departmentName: {
     type: String,
-    require: [true, "Value must be required"],
-    minLength: [15, "Length must be 3 character"],
-    maxLength: [60, "Length should not be greater than 20 character"],
+    required: [true, "Value must be required"],
+    minlength: 15, 
+    maxlength: 70
   },
   email: {
     type: String,
-    require: [true, "Value must be required"],
-    minLength: [15, "Length must be 3 character"],
-    maxLength: [50, "Length should not be greater than 20 character"],
     unique: true,
+    required: [true, 'Please provide email'],
+    validate: {
+      validator: validator.isEmail,
+      message: 'Please provide valid email',
+    },
   },
-  password: {
-    type: String,
-    default: null,
+  createdBy: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'User',
+    required: true,
   },
-  TimeStamp: {
-    type: Date,
-    default: Date.now,
-  },
-});
+
+}, {timestamps: true});
 
 module.exports = mongoose.model("teacher", TeacherSchema);
