@@ -4,13 +4,21 @@ const express = require("express");
 require("express-async-errors");
 
 // internal packages (modules)
+// database connection
 const connectToMongo = require("./db/connect");
-const errorHandler  = require("./middleware/errorHandler")
-const notFound = require("./middleware/notFound");
+
 // routes
-const auth = require("./routes/auth")
+const auth = require("./routes/auth");
 const admin = require("./routes/admin");
+const question_route = require("./routes/question_route");
+
+
+// middleware
 const authAdmin = require("./middleware/authAdmin");
+const errorHandler  = require("./middleware/errorHandler");
+const notFound = require("./middleware/notFound");
+const authUser = require("./middleware/authUser")
+
 
 // app code start
 const app = express();
@@ -27,6 +35,7 @@ const uri = "mongodb://127.0.0.1:27017/test-db1";
 // routes
 app.use("/api/v1/auth", auth);
 app.use("/api/v1/admin",authAdmin,  admin);
+app.use("/api/v1/community", authUser, question_route)
 
 
 // middleWares

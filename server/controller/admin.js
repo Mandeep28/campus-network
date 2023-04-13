@@ -56,17 +56,21 @@ const createUser = async (req, res)=>{
 
 const getAllUser  = async (req, res)=>{
     const type = req.query.type;
+    const data = {};
     // if(type === "all") {
 
     // }
     if(type === "student") {
-
+        data = await Student.find({});
     }
     if(type === "teacher") {
+        data = await Teacher.find({});
 
     }
-    res.send("get all user")
+    res.status(StatusCodes.OK).json({data, length: data.length});
 }
+
+// --------------------------------- Student ----------------------------------
 
 const getStudent = async (req, res)=>{
     const id = req.params.id;
@@ -101,6 +105,8 @@ const delteStudent = async (req, res)=>{
     res.status(StatusCodes.OK).json({msg: "student delete successsfully", student});
 
 }
+
+// ----------------------- Teacher -------------------------------------
 const getTeacher = async (req, res)=>{
     const id = req.params.id;
     const teacher = await Teacher.findOne({_id : id});
@@ -132,6 +138,9 @@ const deleteTeacher = async (req, res)=>{
     teacher = await Teacher.findOneAndDelete({_id : id});
     res.status(StatusCodes.OK).json({msg: "Teacher delete successfullly", teacher});
 }
+
+// ---------------------------------- Admin ---------------------------------------
+
 
 
 module.exports = {createUser, getAllUser, getStudent,  updateStudent , delteStudent, getTeacher, updateTeacher, deleteTeacher}
