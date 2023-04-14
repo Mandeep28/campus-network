@@ -11,37 +11,47 @@ const userSchema = new mongoose.Schema({
     minlength: 3,
     maxlength: 50
   },
-    email: {
-        type: String,
-        unique: true,
-        required: [true, 'Please provide email'],
-        validate: {
-          validator: validator.isEmail,
-          message: 'Please provide valid email',
-        },
-      },
-    password : {
-        type: String, 
-        required: [true, "please provide the passowrd"],
-        minlength: 6,
-    },
-    role: {
-        type: String, 
-        enum : ['student', 'teacher', 'admin'], 
-        default : 'student'
-    },
-    verificationToken: String,
-    isVerified: {
-      type: Boolean,
-      default: false,
-    },
-    verified: Date,
-    passwordToken: {
+  email: {
       type: String,
+      unique: true,
+      required: [true, 'Please provide email'],
+      validate: {
+        validator: validator.isEmail,
+        message: 'Please provide valid email',
+      },
     },
-    passwordTokenExpirationDate: {
-      type: Date,
-    },
+  password : {
+      type: String, 
+      required: [true, "please provide the passowrd"],
+      minlength: 6,
+  },
+  role: {
+      type: String, 
+      enum : ['student', 'teacher', 'admin'], 
+      default : 'student'
+  }, 
+  pic: {
+    type: String,
+    default:
+      "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
+  },
+  isAdmin: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
+  verificationToken: String,
+  isVerified: {
+    type: Boolean,
+    default: false,
+  },
+  verified: Date,
+  passwordToken: {
+    type: String,
+  },
+  passwordTokenExpirationDate: {
+    type: Date,
+  },
 
   });
 
