@@ -12,7 +12,7 @@ router.post('/forgot-password', forgotPassword);
 router.get("/getuserdetail" ,fetchUser, getUserDetail)
 
 // admin 
-router.post("/admin-login", adminLogin);
+// router.post("/admin-login", adminLogin);
 
 
 

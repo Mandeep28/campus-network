@@ -14,8 +14,10 @@ const fetchUser =  async (req, res, next) => {
         if(!findAdmin) {
             throw new customError("Unauthorized", StatusCodes.UNAUTHORIZED);
         }
+        console.log(findAdmin);
+        
 
-      req.user = data;
+      req.user = findAdmin;
       next();
   };
 

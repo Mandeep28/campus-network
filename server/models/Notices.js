@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 const NoticeSchema = new Schema({
     title : {
         type: String,
-        required: [true, "please provide the title"],
+        required: [true, "Title must be required"],
         minlength: 3,
       },
     body : {
@@ -14,41 +14,50 @@ const NoticeSchema = new Schema({
       attachment_url : {
         type : String, 
       },
-    uploadBy_name : {
-        type: String,
-        required: [true, "please provide the name"],
-        minlength: 3,
-        maxlength: 50
+      uploadBy: {
+        name: {
+          type: String,
+          required: true,
+        },
+       id: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User',
+        required: true,
+       }
       },
-      uploadBy_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "user",
-        required: [true, "please provide the objectId"],
+      semester: {
+        type: Number,
+        required: [true, "Semester must be required"],
       },
-    departmentName : {
-        type: String,
-        required: [true, "please provide the department name"],
-        maxlength: 70,
-      },
-    semester: {
-      type: Number,
-      required: [true, "Value must be required"],
+      department : {
+        name: {
+          type: String,
+          required: [true, " department name must be required"],
+          maxlength: 70,
+        },
+        id: {
+          type: String,
+          required: [true, " department id must be required"],
+          maxlength: 70,
+        }
     },
-    course: {
-      type: String,
-      required: [true, "Value must be required"],
-      minlength: 3,
-      maxlength: 60,
-    },
+  
+      course: {
+          type: String,
+          required: [true, "course name must be required"],
+          minlength: 3,
+          maxlength: 60,
+    
+      },
     type: {
       type: String, 
       enum : ['notice', 'event', 'news'], 
-      default : 'student'
+      default : 'notice'
   },
     notice_for: {
       type: String, 
       enum : ['teacher', 'student', 'both'], 
-      default : 'student'
+      default : 'both'
   },
 }, {timestamps: true});
 

@@ -110,27 +110,10 @@ const login = async (req, res) => {
     throw new customError("Please Verify Your Email", StatusCodes.BAD_REQUEST);
  }
  const token = await findUser.createJWT();
- res.status(StatusCodes.OK).json({token , name: findUser.name})
+ res.status(StatusCodes.OK).json({token , name: findUser.name, role : findUser.role})
 
 };
 
-//  Send the user detials after checking the correct id 
-const getUserDetail = async (req, res) => {
-    const {userid, email, role} = req.user;
-      //   check if user is already present or not in User model
-  const findUser = await User.findOne({ _id : userid });
-  if (!findUser) {
-    throw new customError("Unauthorized", StatusCodes.UNAUTHORIZED);
-  }
-  let details = {};
-  if(role === "student") {
-     details = await Student.findOne({email});
-  }
-  if(role === "teacher") {
-     details = await Teacher.findOne({email});
-  }
-  res.status(StatusCodes.OK).json({details})
-};
 
 
 // it will send a email that contain link for reset the password
@@ -188,27 +171,29 @@ const forgotPassword = async (req, res) =>{
     res.status(StatusCodes.OK).json({msg: 'Password Reset successfully'});
 }
 
-// Admin Login 
-const adminLogin = async (req, res) =>{
-  const {email, password} = req.body;
-  //   check if user is already present or not in User model
-  const findUser = await User.findOne({ email , role : 'admin'});
-  if (!findUser) {
-    throw new customError("Please Provide correct credentials", StatusCodes.UNAUTHORIZED)
-  }
-  const isPasswordMatch = await findUser.comparePassword(password);
-  if(!isPasswordMatch) {
-    throw new customError("Please Provide correct credentials", StatusCodes.UNAUTHORIZED)
-  }
-  if(!findUser.isVerified) {
-    throw new customError("Please Verify Your Email", StatusCodes.BAD_REQUEST);
- }
- const token = await findUser.createJWT();
- res.status(StatusCodes.OK).json({token , name: findUser.name})
 
+//  Send the user detials after checking the correct id 
+const getUserDetail = async (req, res) => {
+  const {userid, email, role} = req.user;
+    //   check if user is already present or not in User model
+const findUser = await User.findOne({ _id : userid });
+if (!findUser) {
+  throw new customError("Unauthorized", StatusCodes.UNAUTHORIZED);
 }
+let details = {};
+if(role === "student") {
+   details = await Student.findOne({email});
+}
+if(role === "teacher") {
+   details = await Teacher.findOne({email});
+}
+res.status(StatusCodes.OK).json({details})
+};
+
+//  user can update his/her details (imageURL , rollno, password)
 
 
 
 
-module.exports = { register, login, getUserDetail , verifyEmail, resetPassword, forgotPassword , adminLogin};
+
+module.exports = { register, login, getUserDetail , verifyEmail, resetPassword, forgotPassword };

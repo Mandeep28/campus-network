@@ -12,22 +12,32 @@ const QuestionSchema = new Schema({
         required: [true, "please provide the body"],
         minlength: 3,
       },
-    uploadBy_name : {
-        type: String,
+    uploadBy : {
+        name: {
+          type: String,
         required: [true, "please provide the name"],
         minlength: 3,
         maxlength: 50
+        },
+        id: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "user",
+          required: [true, "please provide the objectId"],
+        }
       },
-      uploadBy_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "user",
-        required: [true, "please provide the objectId"],
-      },
-    departmentName : {
-        type: String,
-        required: [true, "please provide the department name"],
-        maxlength: 70,
-      },
+      department : {
+        name: {
+          type: String,
+          required: [true, "department name must be required"],
+          maxlength: 70,
+        },
+        id: {
+          type: String,
+          required: [true, " department id must be required"],
+          maxlength: 70,
+          unique: true,
+        }
+    },
 }, {timestamps: true});
 
 module.exports = mongoose.model("question", QuestionSchema);

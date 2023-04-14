@@ -7,21 +7,31 @@ const AnswerSchema = new Schema({
         required: [true, "please provide the title"],
         minlength: 3,
       },
-    uploadBy_name : {
-        type: String,
+      uploadBy : {
+        name: {
+          type: String,
         required: [true, "please provide the name"],
         minlength: 3,
         maxlength: 50
-      },
-      uploadBy_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "user",
-        required: [true, "please provide the objectId"],
+        },
+        id: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "user",
+          required: [true, "please provide the objectId"],
+        }
       },
       question_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "question",
         required: [true, "please provide the objectId"],
+      },
+      upVote: {
+        type: Number,
+        default: 0
+      },
+      downVote: {
+        type: Number,
+        default: 0
       },
 }, {timestamps: true});
 

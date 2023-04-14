@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 
-const StudentSchema = new mongoose.Schema(
+const AluminiSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -18,15 +18,9 @@ const StudentSchema = new mongoose.Schema(
         message: "Please provide valid email",
       },
     },
-    rollNo: {
-      type: Number,
-      required: [true, "Roll Number must be required"],
-    },
+   
 
-    semester: {
-      type: Number,
-      default: 1
-    },
+ 
     department : {
       name: {
         type: String,
@@ -59,18 +53,19 @@ const StudentSchema = new mongoose.Schema(
         "https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png",
     },
     createdBy: {
-      name: {
-        type: String,
+        name: {
+          type: String,
+          required: true,
+        },
+       id: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User',
         required: true,
+       }
       },
-     id: {
-      type: mongoose.Schema.ObjectId,
-      ref: 'User',
-      required: true,
-     }
-    },
+   
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("student", StudentSchema);
+module.exports = mongoose.model("alumini", AluminiSchema);
