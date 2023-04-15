@@ -9,8 +9,8 @@ const connectToMongo = require("./db/connect");
 
 // routes
 const auth = require("./routes/auth");
-const admin = require("./routes/admin");
-const question_route = require("./routes/question_route");
+const admin = require("./routes/admin_routes");
+const userData_routes = require("./routes/userData_routes");
 
 
 // middleware
@@ -35,7 +35,7 @@ const uri = "mongodb://127.0.0.1:27017/test-db1";
 // routes
 app.use("/api/v1/auth", auth);
 app.use("/api/v1/admin",authAdmin,  admin);
-app.use("/api/v1/community", authUser, question_route)
+app.use("/api/v1/user", authUser, userData_routes)
 
 
 // middleWares

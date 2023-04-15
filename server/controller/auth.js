@@ -166,7 +166,7 @@ const forgotPassword = async (req, res) =>{
       await user.save();
     }
     else {
-        throw new customError("Link is expired please generate reset Password link again.", StatusCodes.UNAUTHORIZED);
+        throw new customError("Reset password Link expired.", StatusCodes.UNAUTHORIZED);
     }
     res.status(StatusCodes.OK).json({msg: 'Password Reset successfully'});
 }
@@ -174,12 +174,8 @@ const forgotPassword = async (req, res) =>{
 
 //  Send the user detials after checking the correct id 
 const getUserDetail = async (req, res) => {
-  const {userid, email, role} = req.user;
-    //   check if user is already present or not in User model
-const findUser = await User.findOne({ _id : userid });
-if (!findUser) {
-  throw new customError("Unauthorized", StatusCodes.UNAUTHORIZED);
-}
+  const { email, role} = req.data;
+  
 let details = {};
 if(role === "student") {
    details = await Student.findOne({email});

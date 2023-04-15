@@ -98,7 +98,7 @@ const getQuestions = async (req, res) => {
     res.status(StatusCodes.OK).json({ questions, length: questions.length });
   }
    else {
-    throw new customError("Something Went Wrong", StatusCodes.BAD_REQUEST);
+    throw new customError("User type not exits", StatusCodes.UNAUTHORIZED);
   }
 };
 
@@ -233,6 +233,5 @@ module.exports = {
   postAnswer,
   getAnswers,
   deleteAnswer,
-  upVote,
-  downvote
+ vote
 };
