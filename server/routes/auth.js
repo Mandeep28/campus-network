@@ -1,7 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const authUser = require("../middleware/authUser");
-const {login, register, getUserDetail, verifyEmail, resetPassword, forgotPassword} = require("../controller/auth");
+const {login, register, getUserDetail, verifyEmail, resetPassword, forgotPassword , allUsers} = require("../controller/auth");
+
+const {protect} = require("../middleware/authMiddleware");
 
 
 router.post("/login" ,login)
@@ -13,6 +15,9 @@ router.get("/getuserdetail" ,authUser, getUserDetail)
 
 // admin 
 // router.post("/admin-login", adminLogin);
+
+router.get("/users/", protect , allUsers);
+
 
 
 

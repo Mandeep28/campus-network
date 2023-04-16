@@ -24,6 +24,13 @@ const {
 }= require("../controller/notes");
 const authTeacher = require("../middleware/authTeacher");
 
+const {allUsers} = require("../controller/auth");
+
+
+router.route("/").get( allUsers);
+
+
+
 //  question in community
 router.route("/community").post(postQuestion).get(getQuestions);
 router.route("/community:id").get(getSingleQuestiion).delete(deleteQuestion);
