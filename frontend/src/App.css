@@ -1,10 +1,19 @@
 
 @import url("https://fonts.googleapis.com/css2?family=Work+Sans:wght@300&display=swap");
 
-.App {
+:root {
+  --color-primary  : teal;
+  --color-primary-hover : rgb(1, 106, 106);
+  --transition : 0.3s linear all;
+}
+
+
+
+
+.mainBg {
   min-height: 100vh;
   display: flex;
-  background-image: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.6) ),url("./bg4.jpg");
+  background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.6) ),url("./bg4.jpg") no-repeat center center/cover;
   background-position: center;
   background-size: cover;
 }
@@ -27,4 +36,56 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+/* bootstrap customisation */
+.navbar-toggler:focus , .navbar-toggler:hover , .navbar-toggler {
+  box-shadow: none;
+  outline: none;
+  border: none;
+  color: var(--color-primary);
+}
+.nav-link:hover , .nav-link:focus {
+  background: var(--color-primary);
+  color: white;
+  border-radius: 5px;
+}
+
+
+/*  custom classes  */
+.text-teal {
+  color: var(--color-primary);
+}
+.bg-teal {
+  background: var(--color-primary);
+}
+.btn-teal {
+  background: var(--color-primary);
+  color: white;
+  transition: var(--transition);
+}
+.btn-teal:focus, .btn-teal:hover {
+ background: var(--color-primary-hover);
+ color: white;
+
+}
+.btn-outline-teal {
+  border: 1px solid var(--color-primary);
+  color: var(--color-primary);
+  transition: var(--transition);
+  background: white;
+}
+
+.btn-outline-teal:focus , .btn-outline-teal:hover{
+background: teal;
+color: white
+}
+
+
+/*  dashboard section  */
+.background {
+  background: #cce3cd;  /* fallback for old browsers */
+  background: linear-gradient(to right, #e4f0ea, #cce3d6);   /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #e4f0ea, #cce3d6); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  
 }

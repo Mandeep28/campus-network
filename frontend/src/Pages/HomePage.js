@@ -20,10 +20,12 @@ const HomePage = () => {
   useEffect(() => {
     const userInformation = JSON.parse(localStorage.getItem("userInformation"));
 
-    if (userInformation) navigate("/chats");
+    if (userInformation) navigate("/dashboard");
   }, [navigate]);
 
   return (
+    <div className="mainBg">
+   
     <Container maxW="xl" centerContent>
       <Box
         d="flex"
@@ -64,6 +66,8 @@ const HomePage = () => {
         </Tabs>
       </Box>
     </Container>
+       
+    </div>
   );
 };
 

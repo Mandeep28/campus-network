@@ -55,12 +55,12 @@ const Login = () => {
 
       localStorage.setItem("userInformation", JSON.stringify(data));
       setLoading(false);
-      navigate("/chats");
+      navigate("/dashboard");
     } catch (error) {
       console.log(error.response.data);
       toast({
-        title: "invalid credentials",
-        description: error.response.data.message,
+        title: "Error Occured!",
+        description: error.response.data.msg,
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -68,6 +68,8 @@ const Login = () => {
       });
       setLoading(false);
     }
+    setEmail("");
+    setPassword("");
   };
 
   return (
