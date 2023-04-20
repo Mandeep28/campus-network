@@ -1,7 +1,15 @@
-import React from 'react'
+import React , {useRef} from 'react'
 import { Link } from 'react-router-dom'
 
 const Sidebar = () => {
+const refClose = useRef(null);
+
+
+const handleClick = ()=>{
+  refClose.current.click();
+}
+
+
   return (
     <nav className="navbar bg-body-tertiary positon-static px-5 shadow shadow-md" >
     <div className="container-fluid">
@@ -33,33 +41,34 @@ const Sidebar = () => {
             className="btn-close"
             data-bs-dismiss="offcanvas"
             aria-label="Close"
+            ref={refClose}
           />
         </div>
         <div className="offcanvas-body">
           <ul className="navbar-nav justify-content-end flex-grow-1 pe-3 text-teal">
-            <li className="nav-item">
+            <li className="nav-item" onClick={handleClick}>
               <Link className="nav-link text-teal  " aria-current="page" to="/">
-              <i class="fa fa-home mx-1"></i> Home
+              <i className="fa fa-home mx-1"></i> Home
               </Link>
             </li>
-            <li className="nav-item">
+            <li className="nav-item" onClick={handleClick}>
               <Link className="nav-link text-teal" to="/">
-              <i class="fa fa-flag mx-1"></i>  Notices
+              <i className="fa fa-flag mx-1"></i>  Notices
               </Link>
             </li>
-            <li className="nav-item">
+            <li className="nav-item" onClick={handleClick}>
               <Link className="nav-link text-teal" to="/">
-              <i class="fa fa-book mx-1"></i>   Notes
+              <i className="fa fa-book mx-1"></i>   Notes
               </Link>
             </li>
-            <li className="nav-item">
+            <li className="nav-item" onClick={handleClick}>
               <Link className="nav-link text-teal" to="/community">
-              <i class="fa fa-users mx-1"></i> Community
+              <i className="fa fa-users mx-1"></i> Community
               </Link>
             </li>
-            <li className="nav-item">
+            <li className="nav-item" onClick={handleClick}>
               <Link className="nav-link text-teal" to="/">
-              <i class="fa fa-sign-out mx-1"></i> Logout
+              <i className="fa fa-sign-out mx-1"></i> Logout
               </Link>
             </li>
           

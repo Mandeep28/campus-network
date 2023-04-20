@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, { useContext, useEffect } from "react";
 import { Avatar } from "@chakra-ui/avatar";
 import { Tooltip } from "@chakra-ui/tooltip";
 import ScrollableFeed from "react-scrollable-feed";
@@ -11,8 +11,19 @@ import {
 import ChatContext from "../Context/chat-context";
 
 const ScrollableChat = ({ messages }) => {
+  useEffect(() => {
+    console.log(messages);
+  }, []);
 
-  const { user } =  useContext(ChatContext);
+  const { user } = useContext(ChatContext);
+  function newTime(utcTimeString) {
+    const utcTime = new Date(utcTimeString);
+    const now = new Date();
+    const differenceInMs = utcTime.getTime() - now.getTime();
+    const localTime = new Date(now.getTime() + differenceInMs);
+    const localTimeString = localTime.toLocaleTimeString();
+    return localTimeString;
+  }
 
   return (
     <ScrollableFeed>
@@ -21,7 +32,11 @@ const ScrollableChat = ({ messages }) => {
           <div style={{ display: "flex" }} key={message._id}>
             {(isSameSender(messages, message, i, user._id) ||
               isLastMessage(messages, i, user._id)) && (
-              <Tooltip label={message.sender.name} placement="bottom-start" hasArrow>
+              <Tooltip
+                label={message.sender.name}
+                placement="bottom-start"
+                hasArrow
+              >
                 <Avatar
                   mt="7px"
                   mr={1}
@@ -44,6 +59,15 @@ const ScrollableChat = ({ messages }) => {
               }}
             >
               {message.content}
+              <span
+                className=" text-muted d-block"
+                style={{ fontSize: "10px",
+                 letterSpacing: "0",
+                 textAlign : message.sender._id === user._id ? "right" : "left"
+               }}
+              >
+                {newTime(message.createdAt)}
+              </span>
             </span>
           </div>
         ))}

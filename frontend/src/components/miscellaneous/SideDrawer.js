@@ -70,7 +70,7 @@ const SideDrawer = () => {
         headers: { Authorization: `Bearer ${user.token}`}
       };
 
-      const { data } = await axios.get(`/api/user?search=${search}`, config);
+      const { data } = await axios.get(`/api/v1/auth/users?search=${search}`, config);
       //console.log(data, 'searchQuerry keyword response data');
 
       setLoading(false);
