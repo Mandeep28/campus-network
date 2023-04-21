@@ -11,7 +11,7 @@ router.post("/register" ,register)
 router.post('/verify-email', verifyEmail);
 router.post('/reset-password', resetPassword);
 router.post('/forgot-password', forgotPassword);
-router.get("/getuserdetail" ,authUser, getUserDetail)
+router.get("/getuserdetail" , getUserDetail)
 
 // admin 
 // router.post("/admin-login", adminLogin);

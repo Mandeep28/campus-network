@@ -1,6 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const Message = require("../models/messageModel");
-const User = require("../models/userModel");
+const User = require("../models/User");
 const Chat = require("../models/chatModel");
 const { StatusCodes } = require("http-status-codes");
 

@@ -2,6 +2,7 @@
 const crypto = require("crypto");
 const { StatusCodes } = require("http-status-codes");
 const asyncHandler = require("express-async-handler");
+const jwt = require("jsonwebtoken");
 
 // Custom Error
 const customError = require("../error/customError");
@@ -191,16 +192,21 @@ const forgotPassword = async (req, res) => {
 
 //  Send the user detials after checking the correct id
 const getUserDetail = async (req, res) => {
-  const { email, role } = req.data;
+  const token = req.header("auth-token");
+    if (!token) {
+     throw new customError("Unauthorized", StatusCodes.UNAUTHORIZED);
+    }
+      let data =  jwt.verify(token, process.env.JWT_SECRET);
+      const id  = data.userid;
+        const findUser = await User.findOne({_id: id});
+        
+        if(!findUser) {
+            throw new customError("Unauthorized", StatusCodes.UNAUTHORIZED);
+        }
 
-  let details = {};
-  if (role === "student") {
-    details = await Student.findOne({ email });
-  }
-  if (role === "teacher") {
-    details = await Teacher.findOne({ email });
-  }
-  res.status(StatusCodes.OK).json({ details });
+      // req.data = findUser;
+
+  res.status(StatusCodes.OK).json({ details: findUser });
 };
 
 //  user can update his/her details (imageURL , rollno, password)

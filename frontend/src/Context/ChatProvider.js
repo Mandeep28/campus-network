@@ -12,12 +12,15 @@ const ChatProvider = (props) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if(!localStorage.getItem("userToken")) {
-      navigate("/login");
-    }
-    else {
-      getUserDetails();
-    }
+    // if(!localStorage.getItem("userToken")) {
+    //   navigate("/login");
+    // }
+    // else {
+      if(localStorage.getItem("userToken")){
+
+        getUserDetails();
+      }
+    // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
 
@@ -36,8 +39,12 @@ const getUserDetails = async ()=>{
     const { data } = await axios.get(
       "/api/v1/auth/getuserdetail", config
     );
-    // console.log(data.details);
-    setUser(data.details)
+    console.log(data.details);
+    let tempData = data.details;
+    tempData.token = token
+    // console.log("temp Data", tempData.token)
+    // setUser(tempData)
+    setUser(tempData);
 
     // setLoading(false);
   } catch (error) {

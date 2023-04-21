@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext , useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ChatContext from "../../Context/chat-context";
 import ProfileModal from "./ProfileModal";
@@ -45,6 +45,12 @@ const SideDrawer = () => {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+useEffect(()=>{
+console.log(user);
+},[])
+
+
+
   const logoutHandler = () => {
     localStorage.removeItem("userInformation");
     navigate("/");
@@ -71,7 +77,7 @@ const SideDrawer = () => {
       };
 
       const { data } = await axios.get(`/api/v1/auth/users?search=${search}`, config);
-      //console.log(data, 'searchQuerry keyword response data');
+      console.log(data, 'searchQuerry keyword response data');
 
       setLoading(false);
       setSearchResult(data);
@@ -105,6 +111,7 @@ const SideDrawer = () => {
         },
       };
       const { data } = await axios.post(`/api/chat`, { userId }, config);
+      console.log(data);
 
       if (!chats.find((chat) => chat._id === data._id)) setChats([data, ...chats]); 
       //already existing check clause //newly created chat above the rest
