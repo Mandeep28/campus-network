@@ -28,7 +28,13 @@ const register = async (req, res) => {
   if (existingEmail) {
     throw new customError("Email Already Exist", StatusCodes.BAD_REQUEST);
   }
-  let role = "";
+  var role = "";
+  const isFirstAccount = (await User.countDocuments({})) === 0;
+  if(isFirstAccount) {
+    role = "admin";
+
+  }
+  else {
   //   if student want to register
   if (hidden === "student") {
     // check if student data is present in Student model or not
@@ -51,6 +57,7 @@ const register = async (req, res) => {
   // if(hidden === "admin") {
   //   role = "admin"
   // }
+}
 
   const verificationToken = crypto.randomBytes(40).toString("hex");
   const user = await User.create({

@@ -78,7 +78,6 @@ console.log(user);
 
       const { data } = await axios.get(`/api/v1/auth/users?search=${search}`, config);
       console.log(data, 'searchQuerry keyword response data');
-
       setLoading(false);
       setSearchResult(data);
 
