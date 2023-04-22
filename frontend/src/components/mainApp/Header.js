@@ -246,7 +246,7 @@ const Header = () => {
 
 
     {/* header  */}
-    <nav className={`navbar bg-body-tertiary positon-static px-${padding} shadow shadow-md`}>
+    <nav className={`navbar bg-body-tertiary positon-static mb-4 px-${padding} shadow shadow-md`}>
       <div className="container-fluid">
         <div className="d-flex justify-content-between w-100">
         <Link className="navbar-brand text-uppercase text-teal logo" to="/">

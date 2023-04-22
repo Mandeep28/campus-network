@@ -448,7 +448,7 @@ const postDetails = (pics) => {
                           <p>{item.title} </p>
                           <div className="d-flex justify-content-between fs-6">
                             <p style={{ fontSize: "9px" }}>
-                              By - {item.uploadBy.name}
+                              By - {item.uploadBy}
                             </p>
                             <p
                               className="text-end"

@@ -53,15 +53,8 @@ const AluminiSchema = new mongoose.Schema(
         "https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png",
     },
     createdBy: {
-        name: {
-          type: String,
-          required: true,
-        },
-       id: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'User',
-        required: true,
-       }
+      type: mongoose.Schema.ObjectId,
+      ref: 'User',
       },
    
   },

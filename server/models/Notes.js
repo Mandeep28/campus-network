@@ -12,15 +12,8 @@ const NotesSchema = new Schema({
         type : String, 
       },
       uploadBy: {
-        name: {
-          type: String,
-          required: true,
-        },
-       id: {
         type: mongoose.Schema.ObjectId,
-        ref: 'teacher',
-        required: true,
-       }
+        ref: 'User',
       },
      
       department : {

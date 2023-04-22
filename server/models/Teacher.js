@@ -30,17 +30,23 @@ const TeacherSchema = new mongoose.Schema({
     },
   },
   createdBy: {
-    name: {
-      type: String,
-      required: true,
-    },
-   id: {
     type: mongoose.Schema.ObjectId,
     ref: 'User',
-    required: true,
-   }
   },
 
 }, {timestamps: true});
 
 module.exports = mongoose.model("teacher", TeacherSchema);
+
+
+
+
+
+
+
+
+
+
+
+
+

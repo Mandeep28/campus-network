@@ -8,6 +8,7 @@ const {
   postAnswer,
   getAnswers,
   deleteAnswer,
+  getMyQuestion
 } = require("../controller/question");
 
 const { getAllNotices, getSingleNotice , latestNotice } = require("../controller/notice");
@@ -33,7 +34,10 @@ router.route("/").get( allUsers);
 
 //  question in community
 router.route("/community").post(postQuestion).get(getQuestions);
-router.route("/community:id").get(getSingleQuestiion).delete(deleteQuestion);
+router.route("/community/question/:id").get(getSingleQuestiion).delete(deleteQuestion);
+
+//  get only those question that are upload by user itselft
+router.get("/community/my/question" , getMyQuestion);
 
 //  answer of question in community
 router.route("/community/answer").post(postAnswer).get(getAnswers);

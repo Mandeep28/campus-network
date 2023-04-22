@@ -9,15 +9,8 @@ const SubjectSchema = new Schema({
       },
     
       createdBy: {
-        name: {
-          type: String,
-          required: true,
-        },
-       id: {
         type: mongoose.Schema.ObjectId,
-        ref: 'teacher',
-        required: true,
-       }
+        ref: 'User',
       },
       department : {
         name: {

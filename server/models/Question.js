@@ -13,17 +13,8 @@ const QuestionSchema = new Schema({
         minlength: 3,
       },
     uploadBy : {
-        name: {
-          type: String,
-        required: [true, "please provide the name"],
-        minlength: 3,
-        maxlength: 50
-        },
-        id: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "user",
-          required: [true, "please provide the objectId"],
-        }
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
       },
       department : {
         name: {
@@ -34,8 +25,6 @@ const QuestionSchema = new Schema({
         id: {
           type: String,
           required: [true, " department id must be required"],
-          maxlength: 70,
-          unique: true,
         }
     },
 }, {timestamps: true});

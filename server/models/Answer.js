@@ -4,21 +4,12 @@ const { Schema } = mongoose;
 const AnswerSchema = new Schema({
     answer : {
         type: String,
-        required: [true, "please provide the title"],
+        required: [true, "please provide the answer body"],
         minlength: 3,
       },
       uploadBy : {
-        name: {
-          type: String,
-        required: [true, "please provide the name"],
-        minlength: 3,
-        maxlength: 50
-        },
-        id: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "user",
-          required: [true, "please provide the objectId"],
-        }
+        type: mongoose.Schema.ObjectId,
+        ref: 'User',
       },
       question_id: {
         type: mongoose.Schema.Types.ObjectId,

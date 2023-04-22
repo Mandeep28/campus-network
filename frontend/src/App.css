@@ -33,7 +33,7 @@ h1,h2,h3,h4,h5,h6 {
 
 
 p{
-  font-size: 15px;
+  font-size: 1rem;
 }
 
 
@@ -86,14 +86,14 @@ p{
   color: var(--color-primary2);
 }
 .bg-teal {
-  background: var(--color-primary2);
+  background: var(--color-primary1);
 }
 .btn-teal {
   background: var(--color-primary1);
   color: white;
   transition: var(--transition);
 }
-.btn-teal:focus, .btn-teal:hover {
+.btn-teal:focus, .btn-teal:hover .btn-teal.active {
  background: var(--color-primary1-hover);
  color: white;
 
@@ -105,7 +105,7 @@ p{
   background: white;
 }
 
-.btn-outline-teal:focus , .btn-outline-teal:hover{
+.btn-outline-teal:focus , .btn-outline-teal:hover .btn-outline-teal:active {
 background: var(--color-primary1);
 color: white
 }
@@ -113,7 +113,7 @@ color: white
 
 /*  dashboard section  */
 .background {
-  background: var(--background)
+  background: var(--background);
 }
 
 /*  media query  */
@@ -122,3 +122,50 @@ color: white
   width: 100%;
 }
 }
+
+
+.form-control::placeholder {
+  color:rgba(157, 157, 157, 0.781);
+}
+
+/*  pagination  */
+.pagination {
+margin: 25px;
+gap: 10px;
+justify-content: center;
+text-decoration: none;   
+}
+.pagination li  {
+ 
+  background: var(--color-primary1);
+
+  padding: 6px 8px;
+  border-radius: 8px;
+  margin: 0 4px;
+  color: #fff;
+}
+.pagination li a {
+  text-decoration: none;
+  color: #fff;
+}
+
+ .pagination .active {
+  border: 1px solid var(--color-primary2);
+  color: var(--color-primary2);
+  background: white ;
+}
+
+
+
+/*  tabs css  */
+.rb-tabs .rb-tabs-header .rb-tabs-items {
+  justify-content: center;
+
+}
+.rb-tabs-item {
+  font-size: 1.2rem;
+  margin: 0 7px;
+}
+
+
+

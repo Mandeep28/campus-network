@@ -15,15 +15,8 @@ const NoticeSchema = new Schema({
         type : String, 
       },
       uploadBy: {
-        name: {
-          type: String,
-          required: true,
-        },
-       id: {
         type: mongoose.Schema.ObjectId,
         ref: 'User',
-        required: true,
-       }
       },
      
       department : {

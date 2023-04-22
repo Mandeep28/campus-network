@@ -8,8 +8,10 @@ const Answer = require("../models/Answer");
 // -------------------------- Questions ---------------------------------
 
 const postQuestion = async (req, res) => {
-  const { title, body, departmentName } = req.body;
+  const { title, body } = req.body;
   const userData = req.data;
+  console.log(userData.role);
+
   if (userData.role === "student") {
     //...
     const user = await Student.findOne({ email: userData.email });
@@ -18,14 +20,11 @@ const postQuestion = async (req, res) => {
     const question = await Question.create({
       title,
       body,
-     uploadBy : {
-      name: user.name,
-      id: uesr._id
-     },
-     department: {
-      name: user.department.name,
-      id: user.department.id,
-     }
+      uploadBy: userData._id,
+      department: {
+        name: user.department.name,
+        id: user.department.id,
+      },
     });
     // console.log(question);
 
@@ -35,29 +34,23 @@ const postQuestion = async (req, res) => {
     const question = Question.create({
       title,
       body,
-      uploadBy : {
-        name: user.name,
-        id: uesr._id
-       },
-       department: {
+      uploadBy: userData._id,
+      department: {
         name: user.department.name,
         id: user.department.id,
-       }
+      },
     });
     res.status(StatusCodes.CREATED).json({ question });
     //....
   } else if (userData.role === "admin") {
-    const question = Question.create({
+    const question = await Question.create({
       title,
       body,
-      uploadBy : {
-        name: userData.name,
-        id: userData._id
-       },
-       department: {
-        name: userData.department.name,
-        id: userData.department.id,
-       }
+      uploadBy: userData._id,
+      department: {
+        name: "All",
+        id: "All",
+      },
     });
     res.status(StatusCodes.CREATED).json({ question });
   } else {
@@ -68,43 +61,52 @@ const postQuestion = async (req, res) => {
 const getQuestions = async (req, res) => {
   const userData = req.data;
   console.log(userData);
-  
-  if (userData.role === "teacher" ) {
-    const user = await Teacher.findOne({email: userData.email});
-    if(!user) {
+
+  if (userData.role === "teacher") {
+    const user = await Teacher.findOne({ email: userData.email });
+    if (!user) {
       throw new customError("Not authorized ", StatusCodes.UNAUTHORIZED);
     }
     const questions = await Question.find({
-      department: {
-        id: user.department.id
-      },
-    });
+      $or: [
+        { "department.id": user.department.id },
+        { "department.id": "All" },
+      ],
+    })
+      .populate("uploadBy", "-password")
+      .sort({ _id: -1 });
+
     res.status(StatusCodes.OK).json({ questions, length: questions.length });
-  }
-  else if (userData.role === "student" ) {
-    const user = await Student.findOne({email: userData.email});
-    if(!user) {
+  } else if (userData.role === "student") {
+    const user = await Student.findOne({ email: userData.email });
+    if (!user) {
       throw new customError("Not authorized ", StatusCodes.UNAUTHORIZED);
     }
     const questions = await Question.find({
-      department: {
-        id: user.department.id
-      },
-    });
+      $or: [
+        { "department.id": user.department.id },
+        { "department.id": "All" },
+      ],
+    })
+      .populate("uploadBy", "-password")
+      .sort({ _id: -1 });
     res.status(StatusCodes.OK).json({ questions, length: questions.length });
-  }
-   else if (userData.role === "admin") {
-    const questions = await Question.find({});
+  } else if (userData.role === "admin") {
+    const questions = await Question.find({})
+      .populate("uploadBy", " -password ")
+      .sort({ _id: -1 });
     res.status(StatusCodes.OK).json({ questions, length: questions.length });
-  }
-   else {
+  } else {
     throw new customError("User type not exits", StatusCodes.UNAUTHORIZED);
   }
 };
 
 const getSingleQuestiion = async (req, res) => {
   const questionId = req.params.id;
-  const question = await Question.findOne({ _id: questionId });
+  const question = await Question.findOne({ _id: questionId }).populate(
+    "uploadBy",
+    "-password"
+  );
   if (question) {
     res.status(StatusCodes.OK).json(question);
   } else {
@@ -119,7 +121,6 @@ const deleteQuestion = async (req, res) => {
   const questionId = req.params.id;
   const userData = req.data;
   const question = await Question.findById(questionId);
-  
 
   if (!question) {
     throw new customError(
@@ -128,10 +129,10 @@ const deleteQuestion = async (req, res) => {
     );
   }
 
-  if (!question.uploadBy.id.equals(userData._id)) {
+  if (!question.uploadBy.equals(userData._id)) {
     throw new customError("Not authorized ", StatusCodes.UNAUTHORIZED);
   }
-  
+
   question.remove();
   res.status(StatusCodes.OK).json({ msg: "Question deleted successfully" });
 };
@@ -151,17 +152,14 @@ const postAnswer = async (req, res) => {
   const data = await Answer.create({
     answer,
     question_id: questionId,
-    uploadBy : {
-      name: userData.name,
-      id: userData._id
-     },
+    uploadBy: userData._id,
   });
   res.status(StatusCodes.CREATED).json(data);
 };
 
 const getAnswers = async (req, res) => {
-const questionId =req.query.id;
-  
+  const questionId = req.query.id;
+
   const findQuestion = await Question.findById(questionId);
   if (!findQuestion) {
     throw new customError(
@@ -169,8 +167,8 @@ const questionId =req.query.id;
       StatusCodes.NOT_FOUND
     );
   }
-  const data = await Answer.find({ question_id: questionId });
-  res.status(StatusCodes.OK).json({ data, length: data.length });
+  const data = await Answer.find({ question_id: questionId }).populate( "uploadBy","-password" );
+  res.status(StatusCodes.OK).json({ data , length: data.length });
 };
 
 const deleteAnswer = async (req, res) => {
@@ -184,15 +182,39 @@ const deleteAnswer = async (req, res) => {
     );
   }
 
-  if (!findAnswer.uploadBy.id.equals(userData._id)) {
+  if (!findAnswer.uploadBy.equals(userData._id)) {
     throw new customError("Not authorized ", StatusCodes.UNAUTHORIZED);
   }
   findAnswer.remove();
   res.status(StatusCodes.OK).json({ msg: "Answer delted successfully" });
 };
 
-const vote = async (req, res)=>{
-  const answerId =req.query.id;
+
+//  ------------------- my question -----------------------------------
+const getMyQuestion = async (req, res) =>{
+
+  const userData = req.data;
+  const questions = await Question.find({uploadBy : userData._id
+  })
+    .populate("uploadBy", "-password")
+    .sort({ _id: -1 });
+  res.status(StatusCodes.OK).json({questions , length: questions.length}) ;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+const vote = async (req, res) => {
+  const answerId = req.query.id;
   const voteType = req.query.type;
   const userData = req.data;
   const findAnswer = await Answer.findById(answerId);
@@ -202,28 +224,24 @@ const vote = async (req, res)=>{
       StatusCodes.NOT_FOUND
     );
   }
-  if(voteType === "upvote") {
+  if (voteType === "upvote") {
     // upvote logic here
-    findAnswer.upVote +=1;
+    findAnswer.upVote += 1;
     findAnswer.save();
-    res.status(StatusCodes.OK).json({status: true, msg: "Successfully upvote the answer"});
+    res
+      .status(StatusCodes.OK)
+      .json({ status: true, msg: "Successfully upvote the answer" });
+  } else if (voteType === "downvote") {
+    // down vote logic here
+    findAnswer.downVote += 1;
+    findAnswer.save();
+    res
+      .status(StatusCodes.OK)
+      .json({ status: true, msg: "Successfully DownVote the answer" });
+  } else {
+    throw new customError("type not exits", StatusCodes.NOT_FOUND);
   }
-else if(voteType === "downvote") {
-  // down vote logic here
-  findAnswer.downVote +=1;
-  findAnswer.save();
-  res.status(StatusCodes.OK).json({status: true, msg: "Successfully DownVote the answer"});
-}
-else {
-  throw new customError("type not exits", StatusCodes.NOT_FOUND);
-}
-
-
-}
- 
-
-
-
+};
 
 module.exports = {
   postQuestion,
@@ -233,5 +251,6 @@ module.exports = {
   postAnswer,
   getAnswers,
   deleteAnswer,
- vote
+  vote,
+  getMyQuestion
 };

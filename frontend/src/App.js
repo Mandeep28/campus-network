@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect , useState } from "react";
 import "./App.css";
 
 import ChatPage from "./Pages/ChatPage";
-import {BrowserRouter, Routes, Route } from "react-router-dom";
+import {BrowserRouter, Routes, Route, useLocation  } from "react-router-dom";
 import Dashboard from "./Pages/Dashboard";
 import Community from "./Pages/Community";
 import Login from "./components/Authentication/Login";
@@ -16,10 +16,29 @@ import VerifyEmail from "./components/Authentication/VerifyEmail";
 import SendResetMail from "./components/Authentication/SendResetMail";
 import Sidebar from "./components/mainApp/Header";
 import Footer from "./components/mainApp/Footer";
+import SingleQuestion from "./components/community/SingleQuestion";
+import NotFound from "./Pages/NotFound";
 
 
 
 function App() {
+  // const location = useLocation();
+  const [show, setShow] = useState(true);
+  useEffect(()=>{
+    const baseName = window.location.pathname.split("/")[1];
+    console.log("location from app.js", baseName);
+    if(baseName === "login" ||baseName === "register" ||baseName === "verify-email" ||baseName === "reset-password" ||baseName === "sendResetMail" ) {
+      setShow(false);
+    }
+    else {
+      setShow(true);
+    }
+    
+  },[window.location.pathname])
+
+
+
+
   return (
     <BrowserRouter >
     <ChatProvider>
@@ -34,7 +53,7 @@ function App() {
             <Route  path="/sendResetMail" element={<SendResetMail />} />
           </Routes>
           {/* auth routes end */}
-          <Sidebar />
+        {show &&  <Sidebar />}
           <Routes>
             <Route exact path="/" element={<Dashboard/>} />
 
@@ -42,8 +61,11 @@ function App() {
             <Route exact  path="/chats" element={<ChakraProvider><ChatPage /></ChakraProvider>} />
             {/* community page routes */}
             <Route  path="/community" element={<Community/>} />
+            <Route path = "/community/singlequestion/:id" element= {<SingleQuestion/>} />
+            <Route path = "*" element= {<NotFound/>} />
+
           </Routes>
-          <Footer/>
+         {show && <Footer/>}
           
     </div>
 
