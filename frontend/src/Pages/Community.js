@@ -1,43 +1,36 @@
-import React from "react";
-import Sidebar from "../components/mainApp/Sidebar";
-import { Box, Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
-import AllQuestion from "../components/community/AllQuestion";
-import MyQuestion from "../components/community/MyQuestion";
-import AddQuestion from "../components/community/AddQuestion";
+import React from 'react'
+import Tabs, {Tab} from 'react-best-tabs';
+import 'react-best-tabs/dist/index.css';
+import AllQuestion from '../components/community/AllQuestion'
 
 const Community = () => {
   return (
-    <>
-      <section className="background section">
-        <Sidebar />
-        <div
-          className="container my-4 py-3 bg-light text-dark"
-          style={{ borderRadius: "13px" }}
+    <div >
+       <Tabs
+          activeTab="1"
+          className="d-flex "
+          ulClassName=""
+          activityClassName="bg-success"
+          onClick={(event, tab) => console.log(event, tab)}
         >
-          <Box p={4} borderRadius="lg">
-            <Tabs variant="soft-rounded" colorScheme="teal">
-              <TabList mb="1em">
-                <Tab fontWeight="bold">All Questions</Tab>
-                <Tab fontWeight="bold">My Questions</Tab>
-                <Tab fontWeight="bold">Add Question</Tab>
-              </TabList>
-              <TabPanels>
-                <TabPanel>
-                  <AllQuestion />
-                </TabPanel>
-                <TabPanel>
-                  <MyQuestion />
-                </TabPanel>
-                <TabPanel>
-                  <AddQuestion />
-                </TabPanel>
-              </TabPanels>
-            </Tabs>
-          </Box>
-        </div>
-      </section>
-    </>
-  );
-};
+            <Tab title="All Question" className="mr-3">
+                <div className="mt-3">
+                    <AllQuestion/>
+                </div>
+            </Tab>
+            <Tab title="My Questions" className="mr-3">
+                <div className="mt-3">
+                    Tab 2 content
+                </div>
+            </Tab>
+            <Tab title="Ask Question" className="mr-3">
+                <div className="mt-3">
+                    Tab 3 content
+                </div>
+            </Tab>
+        </Tabs>
+    </div>
+  )
+}
 
-export default Community;
+export default Community

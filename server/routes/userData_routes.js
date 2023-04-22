@@ -10,7 +10,7 @@ const {
   deleteAnswer,
 } = require("../controller/question");
 
-const { getAllNotices, getSingleNotice } = require("../controller/notice");
+const { getAllNotices, getSingleNotice , latestNotice } = require("../controller/notice");
 const {
   postNote,
   getSingleNote,
@@ -41,6 +41,7 @@ router.route("/community/answer/:id").delete(deleteAnswer);
 
 //  notices  for user (role : student or teacher)
 router.get("/notice", getAllNotices);
+router.get("/latestNotice", latestNotice)
 router.get("/notice/:id", getSingleNotice);
 
 //  notes (get routes) - for student , student , admin

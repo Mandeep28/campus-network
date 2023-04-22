@@ -1,24 +1,29 @@
-import React, { useState, useContext} from "react";
-import ChatContext from "../Context/chat-context";
+import React, { useState, useContext, useEffect} from "react";
+
 import MyChats from '../components/MyChats';
 import ChatBox from '../components/ChatBox';
-import SideDrawer from '../components/miscellaneous/SideDrawer';
+// import SideDrawer from '../components/miscellaneous/SideDrawer';
 import { Box } from '@chakra-ui/react';
+import { ChatState } from "../Context/ChatProvider";
 
 
 const ChatPage = () => {
   const [fetchAgain, setFetchAgain] = useState(false);
-  const { user } = useContext(ChatContext);
+  const { user , getUserDetails } = ChatState();
+  useEffect(()=>{
+    getUserDetails();
+    console.log(user);
+    
+  },[])
 
 
 
   return (
-    <div style={{ width: "100%" }}>
-     
-          {user && <SideDrawer />}
+    <div className="background" style={{ width: "100%"  }}>
+      {/* <SideDrawer /> */}
           <Box d="flex" justifyContent="space-between" width="100%" h="90.5vh" p="12px">
-            {user && <MyChats fetchAgain={fetchAgain} />}
-            {user && ( <ChatBox fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />)}
+           <MyChats fetchAgain={fetchAgain} userDetails={user} />
+            <ChatBox fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />
           </Box>
       
     </div>

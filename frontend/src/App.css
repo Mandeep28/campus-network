@@ -5,6 +5,13 @@
   --color-primary  : teal;
   --color-primary-hover : rgb(1, 106, 106);
   --transition : 0.3s linear all;
+  /* --color-primary1 : linear-gradient(-135deg,#899fd4,#a389d4); */
+  --color-primary1 : linear-gradient(-135deg,#0ecf9f,#11b1d5);
+  --color-primary2 : #0ecf9f;
+  --background: linear-gradient(to left,#d0fef3,#d7f8ff);
+  --background-dark : linear-gradient(to left,#032e23,#02171c);
+  --color-primary1-hover: linear-gradient(-135deg,#0aba8e,#0c97b7);
+  /* --color-primary2-hover: linear-gradient(-135deg,#728cc8,#8f67da); */
 }
 
 * {
@@ -25,6 +32,9 @@ h1,h2,h3,h4,h5,h6 {
 
 
 
+p{
+  font-size: 15px;
+}
 
 
 
@@ -62,10 +72,10 @@ h1,h2,h3,h4,h5,h6 {
   box-shadow: none;
   outline: none;
   border: none;
-  color: var(--color-primary);
+  color: var(--color-primary1);
 }
 .nav-link:hover , .nav-link:focus {
-  background: var(--color-primary);
+  background: var(--color-primary1);
   color: white;
   border-radius: 5px;
 }
@@ -73,39 +83,37 @@ h1,h2,h3,h4,h5,h6 {
 
 /*  custom classes  */
 .text-teal {
-  color: var(--color-primary);
+  color: var(--color-primary2);
 }
 .bg-teal {
-  background: var(--color-primary);
+  background: var(--color-primary2);
 }
 .btn-teal {
-  background: var(--color-primary);
+  background: var(--color-primary1);
   color: white;
   transition: var(--transition);
 }
 .btn-teal:focus, .btn-teal:hover {
- background: var(--color-primary-hover);
+ background: var(--color-primary1-hover);
  color: white;
 
 }
 .btn-outline-teal {
-  border: 1px solid var(--color-primary);
-  color: var(--color-primary);
+  border: 1px solid var(--color-primary2);
+  color: var(--color-primary2);
   transition: var(--transition);
   background: white;
 }
 
 .btn-outline-teal:focus , .btn-outline-teal:hover{
-background: teal;
+background: var(--color-primary1);
 color: white
 }
 
 
 /*  dashboard section  */
 .background {
-  background: #cce3cd;  /* fallback for old browsers */
-  background: linear-gradient(to right, #e4f0ea, #cce3d6);   /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #e4f0ea, #cce3d6); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: var(--background)
 }
 
 /*  media query  */

@@ -13,6 +13,7 @@ useEffect(()=>{
   if(!token || !email) {
       navigate("/login");
   }
+  // eslint-disable-next-line
 },[]);
 
 

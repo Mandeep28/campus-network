@@ -17,8 +17,8 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useState, useContext } from "react";
-import ChatContext from "../../Context/chat-context";
+import { useState } from "react";
+import { ChatState } from "../../Context/ChatProvider";
 import UserBadgeItem from "../userAvatar/UserBadgeItem";
 import UserListItem from "../userAvatar/UserListItem";
 
@@ -26,7 +26,7 @@ const UpdateGroupChatModal = ({  fetchAgain, setFetchAgain, fetchMessages }) => 
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const [groupChatName, setGroupChatName] = useState();
+  const [groupChatName, setGroupChatName] = useState("");
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -34,15 +34,16 @@ const UpdateGroupChatModal = ({  fetchAgain, setFetchAgain, fetchMessages }) => 
 
   const toast = useToast();
 
-  const { selectedChat, setSelectedChat, user } = useContext(ChatContext);
+  const { selectedChat, setSelectedChat, user } = ChatState();
 
 
-  const handleSearch = async (query) => {
+  const handleSearch = async () => {
+    // console.log(query);
 
-    setSearch(query);
-    if (!query) {
-      return;
-    }
+    // setSearch(query);
+    // if (!query) {
+    //   return;
+    // }
 
     try {
       setLoading(true);
@@ -50,9 +51,8 @@ const UpdateGroupChatModal = ({  fetchAgain, setFetchAgain, fetchMessages }) => 
         headers: { Authorization: `Bearer ${user.token}`}
       };
 
-      const { data } = await axios.get(`/apiv1/auth/users?search=${search}`, config);
-
-      console.log(data, 'user search response');
+      const { data } = await axios.get(`/api/v1/auth/users?search=${search}`, config);
+      console.log(data, 'searchQuerry keyword response data');
       setLoading(false);
       setSearchResult(data);
 
@@ -61,7 +61,7 @@ const UpdateGroupChatModal = ({  fetchAgain, setFetchAgain, fetchMessages }) => 
       console.log(error.message)  
       toast({
         title: "Error Occured!",
-        description: "Failed to Load the Search Results",
+        description: error.message,
         status: "error",
         duration: 3000,
         isClosable: true,
@@ -266,12 +266,21 @@ const UpdateGroupChatModal = ({  fetchAgain, setFetchAgain, fetchMessages }) => 
                 Update
               </Button>
             </FormControl>
-            <FormControl>
+            <FormControl d="flex">
               <Input
                 placeholder="Add User to group"
                 mb={1}
-                onChange={(e) => handleSearch(e.target.value)}
+                onChange={(e) => (e)=>{setSearch(e.currentTarget.value)}}
               />
+                <Button
+                variant="solid"
+                colorScheme="teal"
+                ml={1}
+                isLoading={renameLoading}
+                onClick={handleSearch}
+              >
+                Search
+                </Button>
             </FormControl>
 
             {loading ? (

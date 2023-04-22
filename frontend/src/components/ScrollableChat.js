@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React from "react";
 import { Avatar } from "@chakra-ui/avatar";
 import { Tooltip } from "@chakra-ui/tooltip";
 import ScrollableFeed from "react-scrollable-feed";
@@ -8,14 +8,12 @@ import {
   isSameSenderMargin,
   isSameUser,
 } from "../config/ChatLogics";
-import ChatContext from "../Context/chat-context";
+import { ChatState } from "../Context/ChatProvider";
 
 const ScrollableChat = ({ messages }) => {
-  useEffect(() => {
-    console.log(messages);
-  }, []);
 
-  const { user } = useContext(ChatContext);
+
+  const { user } = ChatState();
   function newTime(utcTimeString) {
     const utcTime = new Date(utcTimeString);
     const now = new Date();

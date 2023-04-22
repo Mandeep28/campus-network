@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect , createContext, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import ChatContext from "./chat-context";
+// import ChatContext from "./chat-context";
 import axios from "axios";
+
+const ChatContext = createContext();
 
 const ChatProvider = (props) => {
   const [user, setUser] = useState();
@@ -68,12 +70,17 @@ const getUserDetails = async ()=>{
           setChats,
           notification,
           setNotification,
+          getUserDetails
         }}
       >
         {props.children}
       </ChatContext.Provider>
     </div>
   );
+};
+
+export const ChatState = () => {
+  return useContext(ChatContext);
 };
 
 export default ChatProvider;

@@ -1,26 +1,24 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { AddIcon } from "@chakra-ui/icons";
+import React, { useEffect, useState } from 'react';
 import { Box, Stack, Text } from "@chakra-ui/layout";
 import { useToast } from "@chakra-ui/toast";
 import axios from "axios";
-import ChatContext from "../Context/chat-context";
+import { ChatState } from "../Context/ChatProvider";
 import { getSender } from "../config/ChatLogics";
 import ChatLoading from "./ChatLoading";
 import GroupChatModal from "./miscellaneous/GroupChatModal";
-import { Button } from "@chakra-ui/react";
 //import { useHelper } from '../config/helper-hook';
 
-const MyChats = ({ fetchAgain }) => {
+const MyChats = ({ fetchAgain, userDetails }) => {
   const [loggedUser, setLoggedUser] = useState();
 
-  const { selectedChat, setSelectedChat, user, chats, setChats } = useContext(ChatContext);
+  const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
 
   //const {getSender}=useHelper();
 
   const toast = useToast();
   
   const fetchChats = async () => {
-    // console.log(user._id);
+    console.log("user details is (from my chats)",userDetails);
     try {
       const config = {
         headers: { Authorization: `Bearer ${user.token}`}
@@ -48,6 +46,8 @@ const MyChats = ({ fetchAgain }) => {
 
   useEffect(() => {
     setLoggedUser(user); //chatLogics 
+    console.log("logged use from my chats", loggedUser);
+    
     fetchChats();
     // eslint-disable-next-line
   }, [fetchAgain]);
@@ -68,22 +68,20 @@ const MyChats = ({ fetchAgain }) => {
       <Box
         pb={3}
         px={3}
-        fontSize={{ base: "28px", md: "30px" }}
-        fontFamily="Work sans"
+        fontSize="1.5rem"
+        fontFamily="sans-serif"
         d="flex"
         w="100%"
+        flexDirection={{lg: "row", md: "column-reverse"}}
+        flexWrap="wrap"
         justifyContent="space-between"
         alignItems="center"
       >
         My Chats
         <GroupChatModal>
-          <Button
-            d="flex"
-            fontSize={{ base: "17px", md: "10px", lg: "17px" }}
-            rightIcon={<AddIcon />}
-          >
-            New Group Chat
-          </Button>
+          <button className='btn btn-teal' >
+            New Group Chat <i className="fa fa-plus mx-1"></i>
+          </button>
         </GroupChatModal>
       </Box>
       <Box
@@ -111,7 +109,7 @@ const MyChats = ({ fetchAgain }) => {
                 key={chat._id}
               >
                 <Text>
-                  {!chat.isGroupChat ? getSender(loggedUser, chat.users) : chat.chatName}
+                  {!chat.isGroupChat ? getSender(user, chat.users) : chat.chatName}
                   {/* <span className="d-block text-muted" style={{fontSize: "10px"}}>{chat.latestMessage.content}</span> */}
                 </Text>
               </Box>

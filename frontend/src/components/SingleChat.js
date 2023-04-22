@@ -5,15 +5,16 @@ import "./styles.css";
 import { IconButton, Spinner, useToast } from "@chakra-ui/react";
 import { getSender, getSenderFull } from "../config/ChatLogics";
 //import { useHelper } from '../config/helper-hook';
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import ProfileModal from "./miscellaneous/ProfileModal";
 import ScrollableChat from "./ScrollableChat";
 import UpdateGroupChatModal from "./miscellaneous/UpdateGroupChatModal";
-import ChatContext from "../Context/chat-context";
+import { ChatState } from "../Context/ChatProvider";
 import Lottie from "react-lottie";
 import animationData from "../animations/typing.json";
+import movieHand from '../assets/images/movieHand.gif'
 
 import io from "socket.io-client";
 
@@ -30,8 +31,12 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [istyping, setIsTyping] = useState(false);
 
   const toast = useToast();
+  useEffect(()=>{
+    console.log("user details (from single chat) is :", user);
+    
+  },[])
 
-  const { selectedChat, setSelectedChat, user, notification, setNotification } = useContext(ChatContext);
+  const { selectedChat, setSelectedChat, user, notification, setNotification } = ChatState();
   //console.log(selectedChat, "selectedChat in chatBox");
 
   const defaultOptions = {
@@ -122,7 +127,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   };
 
   useEffect(() => {
-    console.log("user is this ", user)
+    console.log("user is this (from single chats)", user)
     socket = io(ENDPOINT);
     socket.emit("setup", user);
     socket.on("connected", () => setSocketConnected(true));
@@ -274,8 +279,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           </Box>
         </>
       ) : (
-        <Box d="flex" alignItems="center" justifyContent="center" h="100%">
+        <Box d="flex"  justifyContent="center" h="100%">
           <Text fontSize="3xl" pb={3} fontFamily="Work sans">
+            <img className="d-block m-auto"
+             src={movieHand} alt="moving hand gif" style={{width: "200px"}} />
             Click on a user to start chatting
           </Text>
         </Box>

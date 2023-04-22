@@ -21,9 +21,10 @@ const UserListItem = ({user, handleFunction }) => { //user !notLoggedIn //select
       px={3}
       py={2}
       mb={2}
+      mt={5}
       borderRadius="lg"
     >
-      <Avatar mr={2} size="sm" cursor="pointer" name={user.name}/>
+      <img src={user.image} alt="" className='rounded-circle mx-2 my-1' style={{width: "40px"}} />
       <Box>
         <Text>{user.name}</Text>
         <Text fontSize="xs"> <b>Email : </b> {user.email} </Text>

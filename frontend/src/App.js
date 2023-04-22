@@ -8,12 +8,14 @@ import Community from "./Pages/Community";
 import Login from "./components/Authentication/Login";
 import ChatProvider from "./Context/ChatProvider";
 import { ChakraProvider } from "@chakra-ui/react";
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ResetPassword from "./components/Authentication/ResetPassword";
 import Signup from "./components/Authentication/Signup";
 import VerifyEmail from "./components/Authentication/VerifyEmail";
 import SendResetMail from "./components/Authentication/SendResetMail";
+import Sidebar from "./components/mainApp/Header";
+import Footer from "./components/mainApp/Footer";
 
 
 
@@ -23,19 +25,26 @@ function App() {
     <ChatProvider>
     <div >
 
+          {/* auth routes  start*/}
           <Routes>
-          {/* auth routes */}
-            <Route exact path="/login" element={<Login />} />
-            <Route exact path="/register" element={<Signup />} />
-            <Route exact path="/verify-email" element={<VerifyEmail />} />
-            <Route exact path="/reset-password" element={<ResetPassword />} />
-            <Route exact path="/sendResetMail" element={<SendResetMail />} />
-            <Route exact path="/chats" element={<ChakraProvider><ChatPage /></ChakraProvider>} />
-
-            <Route exact path="/dashboard" element={<Dashboard/>} />
-            <Route exact path="/community" element={<Community/>} />
-          
+            <Route  path="/login" element={<Login />} />
+            <Route  path="/register" element={<Signup />} />
+            <Route  path="/verify-email" element={<VerifyEmail />} />
+            <Route  path="/reset-password" element={<ResetPassword />} />
+            <Route  path="/sendResetMail" element={<SendResetMail />} />
           </Routes>
+          {/* auth routes end */}
+          <Sidebar />
+          <Routes>
+            <Route exact path="/" element={<Dashboard/>} />
+
+            {/* chats routes */}
+            <Route exact  path="/chats" element={<ChakraProvider><ChatPage /></ChakraProvider>} />
+            {/* community page routes */}
+            <Route  path="/community" element={<Community/>} />
+          </Routes>
+          <Footer/>
+          
     </div>
 
       <ToastContainer />

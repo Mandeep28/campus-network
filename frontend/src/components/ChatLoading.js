@@ -1,23 +1,14 @@
 import React from 'react';
-import { Stack } from "@chakra-ui/layout";
-import { Skeleton } from "@chakra-ui/skeleton";
 
 const ChatLoading = () => {
   return (
-    <Stack>
-      <Skeleton height="45px" />
-      <Skeleton height="45px" />
-      <Skeleton height="45px" />
-      <Skeleton height="45px" />
-      <Skeleton height="45px" />
-      <Skeleton height="45px" />
-      <Skeleton height="45px" />
-      <Skeleton height="45px" />
-      <Skeleton height="45px" />
-      <Skeleton height="45px" />
-      <Skeleton height="45px" />
-      <Skeleton height="45px" />
-    </Stack>
+   <p className='placeholder-glow mt-3'>
+    <span className="btn btn-secondary w-100  disabled placeholder my-1" ></span>
+    <span className="btn btn-secondary w-100  disabled placeholder my-1" ></span>
+    <span className="btn btn-secondary w-100  disabled placeholder my-1" ></span>
+    <span className="btn btn-secondary w-100  disabled placeholder my-1" ></span>
+    <span className="btn btn-secondary w-100  disabled placeholder my-1" ></span>
+   </p>
   );
 };
 

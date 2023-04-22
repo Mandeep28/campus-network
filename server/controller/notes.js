@@ -76,6 +76,17 @@ const getNotes = async (req, res) => {
     throw new customError("User type not exits", StatusCodes.UNAUTHORIZED);
   }
 };
+
+
+
+
+
+
+
+
+
+
+
 //  ---------------------- get single notes -----------------------
 const getSingleNote = async (req, res) => {
   const notesId = req.params.id;

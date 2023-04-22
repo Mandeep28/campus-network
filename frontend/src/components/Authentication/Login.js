@@ -5,6 +5,16 @@ import { Link, useNavigate } from "react-router-dom";
 import "./auth.css";
 
 const Login = () => {
+
+// if user Token is present in localStorage then no need to show the login page (redirect user to dashboard)
+
+
+
+
+
+
+
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);

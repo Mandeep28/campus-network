@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -15,7 +15,7 @@ import {
   Box,
 } from "@chakra-ui/react";
 import axios from "axios";
-import ChatContext from "../../Context/chat-context";
+import { ChatState } from "../../Context/ChatProvider";
 import UserBadgeItem from "../userAvatar/UserBadgeItem";
 import UserListItem from "../userAvatar/UserListItem";
 
@@ -27,7 +27,7 @@ const GroupChatModal = ({ children }) => {
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const { user, chats, setChats } = useContext(ChatContext);
+  const { user, chats, setChats } = ChatState();
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();  
   

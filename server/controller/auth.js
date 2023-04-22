@@ -30,34 +30,32 @@ const register = async (req, res) => {
   }
   var role = "";
   const isFirstAccount = (await User.countDocuments({})) === 0;
-  if(isFirstAccount) {
+  if (isFirstAccount) {
     role = "admin";
-
-  }
-  else {
-  //   if student want to register
-  if (hidden === "student") {
-    // check if student data is present in Student model or not
-    const findUser = await Student.findOne({ email });
-    if (!findUser) {
-      throw new customError("Unauthorized", StatusCodes.UNAUTHORIZED);
+  } else {
+    //   if student want to register
+    if (hidden === "student") {
+      // check if student data is present in Student model or not
+      const findUser = await Student.findOne({ email });
+      if (!findUser) {
+        throw new customError("Unauthorized", StatusCodes.UNAUTHORIZED);
+      }
+      role = "student";
     }
-    role = "student";
-  }
-  //   if teacher want to register
-  if (hidden === "teacher") {
-    // check if teacher data is present in Teacher model or not
-    const findUser = await Teacher.findOne({ email });
-    if (!findUser) {
-      throw new customError("Unauthorized", StatusCodes.UNAUTHORIZED);
+    //   if teacher want to register
+    if (hidden === "teacher") {
+      // check if teacher data is present in Teacher model or not
+      const findUser = await Teacher.findOne({ email });
+      if (!findUser) {
+        throw new customError("Unauthorized", StatusCodes.UNAUTHORIZED);
+      }
+      role = "teacher";
     }
-    role = "teacher";
+    // Uncomment this to make your first admin
+    // if(hidden === "admin") {
+    //   role = "admin"
+    // }
   }
-  // Uncomment this to make your first admin
-  // if(hidden === "admin") {
-  //   role = "admin"
-  // }
-}
 
   const verificationToken = crypto.randomBytes(40).toString("hex");
   const user = await User.create({
@@ -88,6 +86,10 @@ const verifyEmail = async (req, res) => {
   const findUser = await User.findOne({ email });
   if (!findUser) {
     throw new customError("Unauthorized", StatusCodes.UNAUTHORIZED);
+  }
+  if (findUser.isVerified) {
+    res.status(StatusCodes.OK).json({ msg: "Email Already verified" });
+    return;
   }
   if (token !== findUser.verificationToken) {
     throw new customError("Unauthorized", StatusCodes.UNAUTHORIZED);
@@ -123,15 +125,13 @@ const login = async (req, res) => {
     throw new customError("Please Verify Your Email", StatusCodes.BAD_REQUEST);
   }
   const token = await findUser.createJWT();
-  res
-    .status(StatusCodes.OK)
-    .json({
-      token,
-      _id : findUser._id,
-      name: findUser.name,
-      role: findUser.role,
-      email: findUser.email,
-    });
+  res.status(StatusCodes.OK).json({
+    token,
+    _id: findUser._id,
+    name: findUser.name,
+    role: findUser.role,
+    email: findUser.email,
+  });
 };
 
 // it will send a email that contain link for reset the password
@@ -200,23 +200,101 @@ const forgotPassword = async (req, res) => {
 //  Send the user detials after checking the correct id
 const getUserDetail = async (req, res) => {
   const token = req.header("auth-token");
-    if (!token) {
-     throw new customError("Unauthorized", StatusCodes.UNAUTHORIZED);
-    }
-      let data =  jwt.verify(token, process.env.JWT_SECRET);
-      const id  = data.userid;
-        const findUser = await User.findOne({_id: id});
-        
-        if(!findUser) {
-            throw new customError("Unauthorized", StatusCodes.UNAUTHORIZED);
-        }
+  if (!token) {
+    throw new customError("Unauthorized", StatusCodes.UNAUTHORIZED);
+  }
+  let data = jwt.verify(token, process.env.JWT_SECRET);
+  const id = data.userid;
+  const findUser = await User.findOne({ _id: id });
 
-      // req.data = findUser;
+  if (!findUser) {
+    throw new customError("Unauthorized", StatusCodes.UNAUTHORIZED);
+  }
 
   res.status(StatusCodes.OK).json({ details: findUser });
 };
+//  get detail of user from student and teacher collection (according to their role )
+const getDetails = async (req, res) => {
+  const { email, role } = req.data;
+  let details = {};
+  if (role === "student") {
+    details = await Student.findOne({ email });
+  } else if (role === "teacher") {
+    details = await Teacher.findOne({ email });
+  }
+  if (!details) {
+    throw new customError("No details found", StatusCodes.NOT_FOUND);
+  }
+  res.status(StatusCodes.OK).json({ details });
+};
 
-//  user can update his/her details (imageURL , rollno, password)
+//  update Profile
+const updateProfile = async (req, res) => {
+  const token = req.header("auth-token");
+  if (!token) {
+    throw new customError("Unauthorized", StatusCodes.UNAUTHORIZED);
+  }
+  let data = jwt.verify(token, process.env.JWT_SECRET);
+  const id = data.userid;
+  const userData = await User.findOne({ _id: id });
+  if (!userData) {
+    throw new customError("Unauthorized", StatusCodes.UNAUTHORIZED);
+  }
+  const { image, name } = req.body;
+  console.log("iamge is ", image, "name is : ", name);
+  
+  if(!image || !name) {
+    throw new customError("Please provide all values", StatusCodes.BAD_REQUEST);
+  }
+
+
+  const user = await User.findOneAndUpdate(
+    { _id: userData._id },
+    {
+      image,
+      name,
+    },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+  res
+    .status(StatusCodes.OK)
+    .json({ details: user, msg: "Fields update successfully" });
+};
+
+// --------------------- changePassword   ---------------------------------
+const changePassword = async (req, res) => {
+  const token = req.header("auth-token");
+  if (!token) {
+    throw new customError("Unauthorized", StatusCodes.UNAUTHORIZED);
+  }
+  let data = jwt.verify(token, process.env.JWT_SECRET);
+  const id = data.userid;
+  const userData = await User.findOne({ _id: id });
+  if (!userData) {
+    throw new customError("Unauthorized", StatusCodes.UNAUTHORIZED);
+  }
+
+  const { oldpassword, password } = req.body;
+  if(!oldpassword || !password) {
+    throw new customError("Please provide all values", StatusCodes.BAD_REQUEST);
+  }
+
+  //  check if old password match or not
+  const isPasswordMatch = await userData.comparePassword(oldpassword);
+  if (!isPasswordMatch) {
+    throw new customError(
+      "Please Provide correct credentials",
+      StatusCodes.UNAUTHORIZED
+    );
+  }
+  //  change the password 
+  userData.password = password;
+  await userData.save();
+  res.status(StatusCodes.OK).json({ msg: "Password change successfully" });
+};
 
 const allUsers = asyncHandler(async (req, res) => {
   const keyword = req.query.search
@@ -244,4 +322,7 @@ module.exports = {
   resetPassword,
   forgotPassword,
   allUsers,
+  getDetails,
+  updateProfile,
+  changePassword
 };
