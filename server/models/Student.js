@@ -18,7 +18,7 @@ const StudentSchema = new mongoose.Schema(
         message: "Please provide valid email",
       },
     },
-    rollNo: {
+    rollno: {
       type: Number,
       required: [true, "Roll Number must be required"],
     },
@@ -28,16 +28,8 @@ const StudentSchema = new mongoose.Schema(
       default: 1
     },
     department : {
-      name: {
-        type: String,
-        required: [true, " department name must be required"],
-        maxlength: 70,
-      },
-      id: {
-        type: String,
-        required: [true, " department id must be required"],
-        maxlength: 70,
-      }
+      type: mongoose.Schema.ObjectId,
+    ref: 'Department',
   },
 
     course: {

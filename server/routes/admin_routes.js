@@ -11,7 +11,9 @@ const {
     updateTeacher,
     deleteTeacher,
     updateSemester,
-    adminRegister
+    adminRegister,
+    addDepartment , 
+    getDepartments
   } = require("../controller/admin");
   const  {
     createNotice,
@@ -20,6 +22,7 @@ const {
     getSingleNotice ,
     updateNotice, 
     deleteNotice
+    
   } = require("../controller/notice");
 
 //  create user , update user , delete user 
@@ -34,10 +37,13 @@ router.get("/updateSemester", updateSemester);
 
 // notice routes
 router.route("/notice").post(createNotice).get(getAllNotices);
-router.route("/notice:id").get(getNotices).put(updateNotice).delete(deleteNotice);
+router.route("/notice/:id").get(getNotices).put(updateNotice).delete(deleteNotice);
 
 //  send all the notice of their own
 router.get('/mynotice', getNotices);
+
+//  department routes (add and get)
+router.route("/department").post(addDepartment).get(getDepartments)
 
 
 

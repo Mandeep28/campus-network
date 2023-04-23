@@ -18,6 +18,7 @@ import Sidebar from "./components/mainApp/Header";
 import Footer from "./components/mainApp/Footer";
 import SingleQuestion from "./components/community/SingleQuestion";
 import NotFound from "./Pages/NotFound";
+import User from "./Pages/User";
 
 
 
@@ -63,7 +64,9 @@ function App() {
             <Route  path="/community" element={<Community/>} />
             <Route path = "/community/singlequestion/:id" element= {<SingleQuestion/>} />
             <Route path = "*" element= {<NotFound/>} />
+            {/*  user routes */}
 
+            <Route path = "/user" element= {<User/>} />
           </Routes>
          {show && <Footer/>}
           

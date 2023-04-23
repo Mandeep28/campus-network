@@ -5,7 +5,7 @@ import {  toast } from "react-toastify";
 import axios from "axios";
 
 
-const AddQuestion = () => {
+const AddQuestion = ({setFetchAgain}) => {
   const [loading, setLoading] = useState(false);
   const [body, setBody] = useState("");
   const [title, setTitle] = useState("");
@@ -13,13 +13,13 @@ const AddQuestion = () => {
     ["bold", "italic", "underline", "strike"], // toggled buttons
     ["blockquote", "code-block"],
 
-    [{ header: 1 }, { header: 2 }], // custom button values
+ 
     [{ list: "ordered" }, { list: "bullet" }],
     [{ script: "sub" }, { script: "super" }], // superscript/subscript
     [{ indent: "-1" }, { indent: "+1" }], // outdent/indent
 
     [{ size: ["small", false, "large", "huge"] }], // custom dropdown
-    [{ header: [1, 2, 3, 4, 5, 6, false] }],
+    [{ header: [ 4, 5, 6, false] }],
 
     [{ font: [] }],
     [{ align: [] }],
@@ -119,6 +119,7 @@ const AddQuestion = () => {
     }
     setTitle("");
     setBody("");
+    setFetchAgain(true);
     
   }
 

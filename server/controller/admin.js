@@ -5,6 +5,7 @@ const { StatusCodes } = require("http-status-codes");
 const crypto = require("crypto");
 const User = require("../models/User");
 const Alumini = require("../models/Alumini");
+const Department = require("../models/Department");
 
 // Client Url
 const origin = "http://localhost:3000";
@@ -17,14 +18,15 @@ const createUser = async (req, res) => {
     throw new customError("Email already exists", StatusCodes.BAD_REQUEST);
   }
 
+  let user = "";
   const { hidden } = req.body;
+  console.log(hidden);
   if (hidden === "student") {
     const {
       name,
       email,
-      rollNo,
-      departmentName,
-      departmentId,
+      rollno,
+      department,
       semester,
       course,
       degreeType,
@@ -34,49 +36,40 @@ const createUser = async (req, res) => {
       throw new customError("Email already exists", StatusCodes.BAD_REQUEST);
     }
 
-    const user = await Student.create({
+     user = await Student.create({
       name,
       email,
-      rollNo,
-      department: {
-        name: departmentName,
-        id: departmentId,
-      },
+      rollno,
+      department,
       semester,
       course,
       degreeType,
-      createdBy: {
-        name: adminInfo.name,
-        id: adminInfo._id,
-      },
+      createdBy:adminInfo._id,
     });
 
-    res.status(StatusCodes.CREATED).json(user);
+    
   } else if (hidden === "teacher") {
-    const { name, email, departmentName, departmentId } = req.body;
+    const { name, email, department } = req.body;
 
     const findUser = await Teacher.findOne({ email });
     if (findUser) {
       throw new customError("Email already exists", StatusCodes.BAD_REQUEST);
     }
 
-    const user = await Teacher.create({
+     user = await Teacher.create({
       name,
       email,
-      department: {
-        name: departmentName,
-        id: departmentId,
-      },
-      createdBy: {
-        name: adminInfo.name,
-        id: adminInfo._id,
-      },
+      department:department,
+      createdBy: adminInfo._id,
     });
 
-    res.status(StatusCodes.CREATED).json(user);
+  
   } else {
     throw new customError("Something Went Wrong", StatusCodes.BAD_REQUEST);
   }
+  console.log(user);
+  
+  res.status(StatusCodes.CREATED).json(user);
 };
 
 const getAllUser = async (req, res) => {
@@ -86,10 +79,10 @@ const getAllUser = async (req, res) => {
 
   // }
   if (type === "student") {
-    data = await Student.find({});
+    data = await Student.find({}).populate("department", "name").populate("createdBy", "-password");
   }
   if (type === "teacher") {
-    data = await Teacher.find({});
+    data = await Teacher.find({}).populate("department", "name").populate("createdBy", "-password");
   }
   res.status(StatusCodes.OK).json({ data, length: data.length });
 };
@@ -242,6 +235,34 @@ const updateSemester = async (req, res) => {
     .json({ msg: "semester update successfully + alumini added" });
 };
 
+//  ---------------------- Add new department  -----------------------
+const addDepartment = async (req, res) =>{
+  const userData = req.user;
+  const {name} = req.body;
+  const department = await Department.create({
+    name, 
+    createdBy : userData._id
+  });
+
+  res.status(StatusCodes.CREATED).json({department , msg: "department added successfully"})
+
+}
+
+
+//  --------------------- Get all department -------------------------------
+const getDepartments = async (req, res) =>{
+  const departments = await Department.find({});
+
+  res.status(StatusCodes.OK).json({departments})
+}
+
+
+
+
+
+
+
+
 module.exports = {
   createUser,
   getAllUser,
@@ -252,5 +273,7 @@ module.exports = {
   updateTeacher,
   deleteTeacher,
   updateSemester,
-  adminRegister
+  adminRegister,
+  addDepartment , 
+  getDepartments
 };

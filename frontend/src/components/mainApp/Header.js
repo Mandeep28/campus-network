@@ -141,9 +141,9 @@ const Header = () => {
     } else {
       setPadding(5);
     }
-     console.log(location.pathname);
+    //  console.log(location.pathname);
      if(location.pathname ==="/chats") {
-      console.log("true");
+      // console.log("true");
       setShowSearch(true);
       
      }
@@ -246,7 +246,7 @@ const Header = () => {
 
 
     {/* header  */}
-    <nav className={`navbar bg-body-tertiary positon-static mb-4 px-${padding} shadow shadow-md`}>
+    <nav className={`navbar bg-body-tertiary positon-static  px-${padding} shadow shadow-md`}>
       <div className="container-fluid">
         <div className="d-flex justify-content-between w-100">
         <Link className="navbar-brand text-uppercase text-teal logo" to="/">
@@ -261,7 +261,7 @@ const Header = () => {
         <div className="dropdown">
           <a
           
-            className="btn btn-light btn-sm dropdown-toggle"
+            className="btn  btn-sm dropdown-toggle"
             role="button"
             href="#!"
             // eslint-disable-next-line
@@ -355,6 +355,11 @@ const Header = () => {
                   <i className="fa fa-users mx-1"></i> Community
                 </Link>
               </li>
+             {user && (user.role ==="admin") ? <li className="nav-item" onClick={handleClick} >
+                <Link className="nav-link text-teal" to="/user">
+                  <i className="fa fa-users mx-1"></i> Users
+                </Link>
+              </li> : ""}
               <li className="nav-item" onClick={handleClick}>
                 <Link className="nav-link text-teal" to="/">
                   <i className="fa fa-sign-out mx-1"></i> Logout

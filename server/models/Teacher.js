@@ -9,16 +9,8 @@ const TeacherSchema = new mongoose.Schema({
     maxlength: 50
   },
   department : {
-    name: {
-      type: String,
-      required: [true, " department name must be required"],
-      maxlength: 70,
-    },
-    id: {
-      type: String,
-      required: [true, " department id must be required"],
-      maxlength: 70,
-    }
+    type: mongoose.Schema.ObjectId,
+    ref: 'Department',
 },
   email: {
     type: String,

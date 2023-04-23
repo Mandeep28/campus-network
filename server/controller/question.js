@@ -1,6 +1,7 @@
 const Student = require("../models/Student");
 const Question = require("../models/Question");
 const Teacher = require("../models/Teacher");
+const User = require("../models/User")
 const { StatusCodes } = require("http-status-codes");
 const customError = require("../error/customError");
 const Answer = require("../models/Answer");
@@ -10,96 +11,114 @@ const Answer = require("../models/Answer");
 const postQuestion = async (req, res) => {
   const { title, body } = req.body;
   const userData = req.data;
-  console.log(userData.role);
+  // console.log(userData.role);
+
+  let question = {};
 
   if (userData.role === "student") {
     //...
     const user = await Student.findOne({ email: userData.email });
     // console.log(user);
 
-    const question = await Question.create({
+     question = await Question.create({
       title,
       body,
       uploadBy: userData._id,
-      department: {
-        name: user.department.name,
-        id: user.department.id,
-      },
+      department: user.department,
     });
     // console.log(question);
 
-    res.status(StatusCodes.CREATED).json({ question });
+   
   } else if (userData.role === "teacher") {
     const user = await Teacher.findOne({ email: userData.email });
-    const question = Question.create({
+     question = Question.create({
       title,
       body,
       uploadBy: userData._id,
-      department: {
-        name: user.department.name,
-        id: user.department.id,
-      },
+      department: user.department,
     });
-    res.status(StatusCodes.CREATED).json({ question });
+
     //....
   } else if (userData.role === "admin") {
-    const question = await Question.create({
+     question = await Question.create({
       title,
       body,
       uploadBy: userData._id,
-      department: {
-        name: "All",
-        id: "All",
-      },
+    
     });
-    res.status(StatusCodes.CREATED).json({ question });
+
   } else {
     throw new customError("Something Went Wrong", StatusCodes.BAD_REQUEST);
   }
+
+  res.status(StatusCodes.CREATED).json({ question });
 };
+
+//  -------------------- get all question -------------------------------------
 
 const getQuestions = async (req, res) => {
   const userData = req.data;
-  console.log(userData);
+  // console.log(userData);
+
+  const adminUsers = await User.find({ role: 'admin' }, '_id'); // retrieve ids of admin users
+  let adminUserIds = adminUsers.map(user => user._id); // get array of admin user ids
+  console.log(adminUserIds);
+  
+
+  let questions = {};
 
   if (userData.role === "teacher") {
     const user = await Teacher.findOne({ email: userData.email });
     if (!user) {
       throw new customError("Not authorized ", StatusCodes.UNAUTHORIZED);
     }
-    const questions = await Question.find({
-      $or: [
-        { "department.id": user.department.id },
-        { "department.id": "All" },
-      ],
-    })
-      .populate("uploadBy", "-password")
-      .sort({ _id: -1 });
+     questions =await Question.find({
+      $or : [
 
-    res.status(StatusCodes.OK).json({ questions, length: questions.length });
-  } else if (userData.role === "student") {
+        { uploadBy : {$in: adminUserIds} },
+        { "department.id": user.department.id },
+      ]
+
+      })
+     .populate('uploadBy', '-password')
+     .sort({ _id: -1 });
+    //  console.log(questions)
+ 
+  } 
+  //  if user is student
+  else if (userData.role === "student") {
     const user = await Student.findOne({ email: userData.email });
     if (!user) {
       throw new customError("Not authorized ", StatusCodes.UNAUTHORIZED);
     }
-    const questions = await Question.find({
-      $or: [
+     questions = await Question.find({
+      $or : [
+
+        { uploadBy : {$in: adminUserIds} },
         { "department.id": user.department.id },
-        { "department.id": "All" },
-      ],
-    })
-      .populate("uploadBy", "-password")
-      .sort({ _id: -1 });
-    res.status(StatusCodes.OK).json({ questions, length: questions.length });
-  } else if (userData.role === "admin") {
-    const questions = await Question.find({})
+      ]
+
+      })
+     .populate('uploadBy', '-password')
+     .sort({ _id: -1 });
+
+    
+  } 
+  //  if user is admin 
+  else if (userData.role === "admin") {
+     questions = await Question.find({})
       .populate("uploadBy", " -password ")
       .sort({ _id: -1 });
-    res.status(StatusCodes.OK).json({ questions, length: questions.length });
+
   } else {
     throw new customError("User type not exits", StatusCodes.UNAUTHORIZED);
   }
+ 
+  res.status(StatusCodes.OK).json({ questions, length: questions.length });
+
 };
+
+//  ------------------- get single question ------------------------------------
 
 const getSingleQuestiion = async (req, res) => {
   const questionId = req.params.id;
@@ -116,6 +135,8 @@ const getSingleQuestiion = async (req, res) => {
     );
   }
 };
+
+// ----------------------- delete question ------------------------------------
 
 const deleteQuestion = async (req, res) => {
   const questionId = req.params.id;
@@ -157,6 +178,10 @@ const postAnswer = async (req, res) => {
   res.status(StatusCodes.CREATED).json(data);
 };
 
+
+
+
+
 const getAnswers = async (req, res) => {
   const questionId = req.query.id;
 
@@ -170,6 +195,9 @@ const getAnswers = async (req, res) => {
   const data = await Answer.find({ question_id: questionId }).populate( "uploadBy","-password" );
   res.status(StatusCodes.OK).json({ data , length: data.length });
 };
+
+
+
 
 const deleteAnswer = async (req, res) => {
   const answerId = req.params.id;
@@ -203,16 +231,6 @@ const getMyQuestion = async (req, res) =>{
 }
 
 
-
-
-
-
-
-
-
-
-
-
 const vote = async (req, res) => {
   const answerId = req.query.id;
   const voteType = req.query.type;
@@ -242,6 +260,9 @@ const vote = async (req, res) => {
     throw new customError("type not exits", StatusCodes.NOT_FOUND);
   }
 };
+
+
+
 
 module.exports = {
   postQuestion,

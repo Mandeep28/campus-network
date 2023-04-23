@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import Tabs, {Tab} from 'react-best-tabs';
 import 'react-best-tabs/dist/index.css';
-import AllQuestion from '../components/community/AllQuestion'
 import axios  from 'axios';
+import AllQuestion from '../components/community/AllQuestion'
 import AddQuestion from '../components/community/AddQuestion';
-import MyQuestion from '../components/community/MyQuestion';
-// import { Toast } from 'react-toastify/dist/components';
 
 const Community = () => {
+    const [fetchagain, setFetchAgain] = useState(false);
 
 
   return (
@@ -21,17 +20,17 @@ const Community = () => {
         >
             <Tab title="All Question" className="mr-3">
                 <div className="mt-3">
-                    <AllQuestion/>
+                    <AllQuestion endpoint="community" showTrash={false}  fetchAgain={fetchagain} />
                 </div>
             </Tab>
             <Tab title="My Questions" className="mr-3">
                 <div className="mt-3">
-                    <MyQuestion/>
+                <AllQuestion endpoint="community/my/question" showTrash={true} fetchAgain={fetchagain} />
                 </div>
             </Tab>
             <Tab title="Ask Question" className="mr-3">
                 <div className="mt-3">
-                    <AddQuestion/>
+                    <AddQuestion fetchagain={fetchagain} setFetchAgain={setFetchAgain}/>
                 </div>
             </Tab>
         </Tabs>

@@ -19,11 +19,15 @@ const Dashboard = () => {
   const [password, setPassword] = useState("");
   const [oldpassword, setOldpassword] = useState("");
   const [passloading, setPassloading] = useState(false);
+  const [departmentName, setDepartmentName] = useState("");
 
 
   useEffect(() => {
     fetchDetails();
     fetchLatestNotice();
+    // console.log(details);
+    
+    
   }, []);
 
   const fetchDetails = async () => {
@@ -34,12 +38,13 @@ const Dashboard = () => {
       };
 
       const { data } = await axios.get("/api/v1/auth/getDetail", config);
-      // console.log(data);
+      console.log(data);
       setDetails(data.details);
+      setDepartmentName(data.details.department.name);
 
       // setLoading(false);
     } catch (error) {
-      console.log(error.response.data);
+      console.log(error);
     }
   };
 
@@ -415,7 +420,7 @@ const postDetails = (pics) => {
                       </div>
                       <div className="col-9">
                         <p className="text-muted mb-0">
-                          {details ? details.department.name : "null"}
+                          {details ? departmentName : "null"}
                         </p>
                       </div>
                     </div>

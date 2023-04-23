@@ -244,7 +244,7 @@ function setLocalTime(utcTimeString) {
  {question && <div className="container my-3 py-3">
     <h4>{question ? question.title : ""}</h4>
     <div>
-        <p>Asked <span className="text-secondary me-3">{question ?  new Date(question.createdAt).toLocaleString() : ""}</span> Modified <span className="text-secondary me-3">{question ? new Date( question.updatedAt).toLocaleString() : ""}</span> </p>
+        <p>Asked <span className="text-secondary me-3">{question ?  new Date(question.createdAt).toLocaleString() : ""}</span> </p>
     </div>
     <div>{question ? parse(`${question.body}`): ""}</div>   
     <div className='text-end'>

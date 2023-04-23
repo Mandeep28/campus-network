@@ -24,7 +24,7 @@ const accessChat = async (req, res) => {
     .populate("users", "-password")
     .populate("latestMessage");
 
-    console.log("is chat is ", isChat)
+    // console.log("is chat is ", isChat)
 
   //populating with the user in that latestMessage.sender in our chat doc
   isChat = await User.populate(isChat, {

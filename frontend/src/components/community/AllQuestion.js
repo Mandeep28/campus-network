@@ -1,17 +1,18 @@
 import React , {useEffect, useState} from "react";
 import ReactPaginate from 'react-paginate';
 import axios from "axios";
+import {  toast } from "react-toastify";
 
 import { Link } from "react-router-dom";
 
-const AllQuestion = () => {
+const AllQuestion = ({endpoint , showTrash , fetchAgain}) => {
 
   const [question , setQuestion] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(()=>{
       fetchQuestion();
-  },[])
+  },[fetchAgain])
 
 
     //  fetch latest notice
@@ -22,8 +23,8 @@ const AllQuestion = () => {
           headers: { "Content-type": "application/json", "auth-token": token },
         };
   
-        const { data } = await axios.get("/api/v1/user/community", config);
-        console.log(data);
+        const { data } = await axios.get(`/api/v1/user/${endpoint}`, config);
+        // console.log(data);
         setQuestion(data.questions);
   
         // setLoading(false);
@@ -78,10 +79,60 @@ const endIndex = startIndex + itemsPerPage;
   setCurrentPage(0); // reset to first page when search query changes
 };
 
+//  handle delete 
+
+const handleDelete = async (e)=>{
+  // console.log("delted", e.target.id);
+  const answerId = e.target.id;
+  let token = localStorage.getItem("userToken");
+  try {
+    const config = {
+      headers: { "Content-type": "application/json", "auth-token": token },
+    };
+
+    const { data } = await axios.delete("/api/v1/user/community/question/"+answerId, config);
+    // console.log(data);
+    toast.success("Question deleted successfully", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: 0,
+      theme: "colored",
+    });
+  } catch (error) {
+    console.log(error.response.data);
+    toast.error(error.response.data.msg, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: 0,
+      theme: "colored",
+    });
+  }
+  fetchQuestion();
+
+  
+}
+
+
+// if(question.length > 0 ) {
+//   return (
+//     <div className="container d-flex align-items-center justify-content-center" style={{minHeight : "60vh"} }>
+//       <h5>No question to show ... You can add question anytime.</h5>
+//     </div>
+//   )
+// }
+
 
   return (
     <>
-      <div className="container">
+      <div className="container" style={{minHeight : "60vh"}}>
       <form className="d-flex" role="search">
   <input
     className="form-control me-2"
@@ -99,7 +150,7 @@ const endIndex = startIndex + itemsPerPage;
        { itemsToDisplay && itemsToDisplay.map ((item , index)=>{
 
    return (
-
+    
 
        
           <div className="card my-3" key={item._id}>
@@ -112,7 +163,7 @@ const endIndex = startIndex + itemsPerPage;
               {/* <p>{parse(item.body.slice(0, 150))}...</p> */}
               
 
-              <div className="d-flex justify-content-between px-2 my-1">
+              <div className="d-flex justify-content-between px-2">
                <div>
                <img src={item.uploadBy.image} alt="" className="rounded-circle image-fluid" style={{width: "30px" , height: "30px"}} />
                   <a href="#!" className="text-decoration-none d-inline-block mx-3 text-secondary">
@@ -122,13 +173,17 @@ const endIndex = startIndex + itemsPerPage;
                   </p>
                   </a>
                </div>
-                  
-                  <p className="card-text ">
+               <div>
+               <p className="card-text  d-inline-block">
                     <small className="text-body-secondary">
                       {" "}
                       {setLocalTime(item.createdAt)} 
                     </small>
                   </p>
+                 { showTrash &&  <i className="fa fa-trash mx-3 fs-5 text-danger" id={item._id} onClick={handleDelete} style={{cursor: "pointer"}}></i>}
+               </div>
+                  
+                 
               
                
               </div>
@@ -141,7 +196,8 @@ const endIndex = startIndex + itemsPerPage;
     }
     {/* single item end */}
       </div>
-      <ReactPaginate
+    { (question.length > 0) && 
+     <ReactPaginate
       pageCount={pageCount}
       pageRangeDisplayed={5}
       marginPagesDisplayed={2}
@@ -152,6 +208,8 @@ const endIndex = startIndex + itemsPerPage;
         nextLabel="next >"
         previousLabel="< previous"
     />
+   
+  }
     </>
   );
 };

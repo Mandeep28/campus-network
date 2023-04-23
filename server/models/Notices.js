@@ -7,12 +7,11 @@ const NoticeSchema = new Schema({
         required: [true, "Title must be required"],
         minlength: 3,
       },
-    body : {
-        type: String,
-        minlength: 3,
-      },
+ 
       attachment_url : {
         type : String, 
+        required: [true, "url must be required"],
+
       },
       uploadBy: {
         type: mongoose.Schema.ObjectId,
@@ -20,16 +19,8 @@ const NoticeSchema = new Schema({
       },
      
       department : {
-        name: {
-          type: String,
-          required: [true, " department name must be required"],
-          maxlength: 70,
-        },
-        id: {
-          type: String,
-          required: [true, " department id must be required"],
-          maxlength: 70,
-        }
+        type: mongoose.Schema.ObjectId,
+        ref: 'Department',
     },
     type: {
       type: String, 

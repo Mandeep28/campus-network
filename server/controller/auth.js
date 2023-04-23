@@ -241,7 +241,7 @@ const updateProfile = async (req, res) => {
     throw new customError("Unauthorized", StatusCodes.UNAUTHORIZED);
   }
   const { image, name } = req.body;
-  console.log("iamge is ", image, "name is : ", name);
+  // console.log("iamge is ", image, "name is : ", name);
   
   if(!image || !name) {
     throw new customError("Please provide all values", StatusCodes.BAD_REQUEST);
