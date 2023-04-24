@@ -365,7 +365,7 @@ const postDetails = (pics) => {
                           <div className="col-sm-9">
                             <p className="text-muted mb-0">
                               {" "}
-                              {details ? details.rollNo : "00000"}
+                              {details ? details.rollno : "00000"}
                             </p>
                           </div>
                         </div>

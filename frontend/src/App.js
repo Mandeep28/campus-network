@@ -19,14 +19,18 @@ import Footer from "./components/mainApp/Footer";
 import SingleQuestion from "./components/community/SingleQuestion";
 import NotFound from "./Pages/NotFound";
 import User from "./Pages/User";
+import Logout from "./components/Authentication/Logout";
 
 
 
 function App() {
   // const location = useLocation();
   const [show, setShow] = useState(true);
+  const baseName = window.location.pathname.split("/")[1];
+  const baseName2 = window.location.pathname.split("/")[0];
+
   useEffect(()=>{
-    const baseName = window.location.pathname.split("/")[1];
+
     console.log("location from app.js", baseName);
     if(baseName === "login" ||baseName === "register" ||baseName === "verify-email" ||baseName === "reset-password" ||baseName === "sendResetMail" ) {
       setShow(false);
@@ -35,7 +39,7 @@ function App() {
       setShow(true);
     }
     
-  },[window.location.pathname])
+  },[baseName ])
 
 
 
@@ -44,18 +48,18 @@ function App() {
     <BrowserRouter >
     <ChatProvider>
     <div >
-
+         {show &&  <Sidebar setShow={setShow} />}
           {/* auth routes  start*/}
           <Routes>
-            <Route  path="/login" element={<Login />} />
+            <Route  path="/login" element={<Login setShow={setShow} />} />
             <Route  path="/register" element={<Signup />} />
             <Route  path="/verify-email" element={<VerifyEmail />} />
             <Route  path="/reset-password" element={<ResetPassword />} />
             <Route  path="/sendResetMail" element={<SendResetMail />} />
-          </Routes>
+        
           {/* auth routes end */}
-        {show &&  <Sidebar />}
-          <Routes>
+      
+       
             <Route exact path="/" element={<Dashboard/>} />
 
             {/* chats routes */}

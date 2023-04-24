@@ -95,6 +95,7 @@ useEffect(()=>{
         progress: 0,
         theme: "colored",
       });
+      navigate("/login");
       setConfirmpassword("");
       setPassword("");
 

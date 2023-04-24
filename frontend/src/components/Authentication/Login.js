@@ -4,16 +4,10 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import "./auth.css";
 
-const Login = () => {
+const Login = ({setShow}) => {
 
 // if user Token is present in localStorage then no need to show the login page (redirect user to dashboard)
-
-
-
-
-
-
-
+const abortController = new AbortController();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -74,12 +68,16 @@ const Login = () => {
         theme: "colored",
       });
       localStorage.setItem("userToken", data.token);
-      navigate("/dashboard");
+      setShow(true);
+      navigate("/");
 
+      return () => {
+        abortController.abort();
+      };
 
       setLoading(false);
     } catch (error) {
-      console.log(error.response.data);
+      console.log(error.response);
       toast.error(error.response.data.msg, {
         position: "top-right",
         autoClose: 5000,

@@ -218,7 +218,7 @@ const getDetails = async (req, res) => {
   const { email, role } = req.data;
   let details = {};
   if (role === "student") {
-    details = await Student.findOne({ email });
+    details = await Student.findOne({ email }).populate("department", "name");
   } else if (role === "teacher") {
     details = await Teacher.findOne({ email });
   }

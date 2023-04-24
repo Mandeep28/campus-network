@@ -1,5 +1,5 @@
 import React, { useRef, useContext, useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import NotificationBadge from "react-notification-badge";
 import { Effect } from "react-notification-badge";
 import { getSender } from "../../config/ChatLogics";
@@ -15,7 +15,7 @@ import {  Spinner } from "@chakra-ui/react";
 import ChatLoading from "../ChatLoading";
 import UserListItem from "../userAvatar/UserListItem";
 
-const Header = () => {
+const Header = ({setShow}) => {
   const refClose = useRef(null);
   const refSearchModalClose = useRef(null);
   const [padding, setPadding] = useState(5); // set initial padding to 0px
@@ -28,7 +28,7 @@ const Header = () => {
   const [loading, setLoading] = useState(false);
   const [loadingChat, setLoadingChat] = useState(false);
 
-
+const navigate = useNavigate();
 
   const {
     user,
@@ -361,7 +361,11 @@ const Header = () => {
                 </Link>
               </li> : ""}
               <li className="nav-item" onClick={handleClick}>
-                <Link className="nav-link text-teal" to="/">
+                <Link className="nav-link text-teal" to="/login" onClick={()=>{
+                  localStorage.clear();
+                  navigate("/login");
+                  setShow(false);
+                }}>
                   <i className="fa fa-sign-out mx-1"></i> Logout
                 </Link>
               </li>

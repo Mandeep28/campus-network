@@ -2,6 +2,7 @@ import { useState } from "react";
 import {  toast } from "react-toastify";
 import axios from "axios";
 import "./auth.css";
+import { Link } from "react-router-dom";
 
 const SendResetMail = () => {
     const [email, setEmail] = useState("");
@@ -111,6 +112,7 @@ const SendResetMail = () => {
                   ></span>{" "}
                   Send Mail
                 </button>
+                <p>Remember Password ? <Link to="/login">Login</Link></p>
           </div>
         </div>
       </div>
