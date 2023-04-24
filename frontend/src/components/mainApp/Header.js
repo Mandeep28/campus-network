@@ -341,12 +341,12 @@ const navigate = useNavigate();
                 </Link>
               </li>
               <li className="nav-item" onClick={handleClick}>
-                <Link className="nav-link text-teal" to="/">
+                <Link className="nav-link text-teal" to="/notice">
                   <i className="fa fa-flag mx-1"></i> Notices
                 </Link>
               </li>
               <li className="nav-item" onClick={handleClick}>
-                <Link className="nav-link text-teal" to="/">
+                <Link className="nav-link text-teal" to="/notes">
                   <i className="fa fa-book mx-1"></i> Notes
                 </Link>
               </li>

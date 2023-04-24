@@ -62,7 +62,7 @@ const getQuestions = async (req, res) => {
 
   const adminUsers = await User.find({ role: 'admin' }, '_id'); // retrieve ids of admin users
   let adminUserIds = adminUsers.map(user => user._id); // get array of admin user ids
-  console.log(adminUserIds);
+  // console.log(adminUserIds);
   
 
   let questions = {};
@@ -76,7 +76,7 @@ const getQuestions = async (req, res) => {
       $or : [
 
         { uploadBy : {$in: adminUserIds} },
-        { "department.id": user.department.id },
+        { depeartment: user.department },
       ]
 
       })
@@ -91,21 +91,24 @@ const getQuestions = async (req, res) => {
     if (!user) {
       throw new customError("Not authorized ", StatusCodes.UNAUTHORIZED);
     }
+    console.log(user);
+   
+    
      questions = await Question.find({
       $or : [
 
+        { department : user.department },
         { uploadBy : {$in: adminUserIds} },
-        { "department.id": user.department.id },
       ]
 
       })
      .populate('uploadBy', '-password')
      .sort({ _id: -1 });
 
-    
-  } 
+     } 
   //  if user is admin 
   else if (userData.role === "admin") {
+
      questions = await Question.find({})
       .populate("uploadBy", " -password ")
       .sort({ _id: -1 });

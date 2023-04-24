@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Tabs, {Tab} from 'react-best-tabs';
 import 'react-best-tabs/dist/index.css';
-import axios  from 'axios';
 import AllQuestion from '../components/community/AllQuestion'
 import AddQuestion from '../components/community/AddQuestion';
 

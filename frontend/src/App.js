@@ -20,6 +20,8 @@ import SingleQuestion from "./components/community/SingleQuestion";
 import NotFound from "./Pages/NotFound";
 import User from "./Pages/User";
 import Logout from "./components/Authentication/Logout";
+import Notice from "./Pages/Notice";
+import SingleNotice from "./components/Notices/SingleNotice";
 
 
 
@@ -67,10 +69,13 @@ function App() {
             {/* community page routes */}
             <Route  path="/community" element={<Community/>} />
             <Route path = "/community/singlequestion/:id" element= {<SingleQuestion/>} />
-            <Route path = "*" element= {<NotFound/>} />
             {/*  user routes */}
-
             <Route path = "/user" element= {<User/>} />
+            {/* notice routes */}
+            <Route path = "/notice" element={<Notice/>} />
+            <Route path ="/notice/singlenotice/:id" element={<SingleNotice/>} />
+            {/* not found custom page */}
+            <Route path = "*" element= {<NotFound/>} />
           </Routes>
          {show && <Footer/>}
           

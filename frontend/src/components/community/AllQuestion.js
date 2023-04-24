@@ -2,7 +2,7 @@ import React , {useEffect, useState} from "react";
 import ReactPaginate from 'react-paginate';
 import axios from "axios";
 import {  toast } from "react-toastify";
-
+import moment from 'moment'
 import { Link } from "react-router-dom";
 
 const AllQuestion = ({endpoint , showTrash , fetchAgain}) => {
@@ -177,7 +177,7 @@ const handleDelete = async (e)=>{
                <p className="card-text  d-inline-block">
                     <small className="text-body-secondary">
                       {" "}
-                      {setLocalTime(item.createdAt)} 
+                      {moment(new Date(item.createdAt).toLocaleString()).fromNow()} 
                     </small>
                   </p>
                  { showTrash &&  <i className="fa fa-trash mx-3 fs-5 text-danger" id={item._id} onClick={handleDelete} style={{cursor: "pointer"}}></i>}

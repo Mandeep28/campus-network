@@ -8,32 +8,18 @@ const createNotice = async (req, res) => {
   const {
     title,
     body,
-    attachment_url,
-    departmentName,
-    departmentId,
-    courseType,
-    type,
-    notice_for,
+   File,
+    noticefor,
   } = req.body;
 
   let data = {
-    title,
-    department: {
-      name: departmentName,
-      id: departmentId,
-    },
-    courseType,
-    type,
-    notice_for,
-    uploadBy: {
-      name: adminInfo.name,
-      id: adminInfo._id,
-    },
+   title ,noticefor , uploadBy : adminInfo._id 
   };
   if (body) {
     data.body = body;
-  } else if (attachment_url) {
-    data.attachment_url = attachment_url;
+  }
+  if(File) {
+    data.attachment_url = File;
   }
   const notice = await Notices.create(data);
   res.status(StatusCodes.CREATED).json(notice);
@@ -44,22 +30,16 @@ const latestNotice = async (req, res) => {
   const userData = req.data;
   let data = {};
   if (userData.role === "student") {
-    const user = await Student.findOne({ email: userData.email });
-    if (!user) {
-      throw new customError("Not authorized ", StatusCodes.UNAUTHORIZED);
-    }
+   
     data = await Notices.find({
-      $or: [{ notice_for: userData.role }, { notice_for: "both" }],
+      $or: [{ noticefor: "student" }, { noticefor: "both" }],
     })
       .sort({ _id: -1 })
       .limit(5);
   } else if (userData.role === "teacher") {
-    const user = await Teacher.findOne({ email: userData.email });
-    if (!user) {
-      throw new customError("Not authorized ", StatusCodes.UNAUTHORIZED);
-    }
+    
     data = await Notices.find({
-      $or: [{ notice_for: userData.role }, { notice_for: "both" }],
+      $or: [{ noticefor: userData.role }, { noticefor: "both" }],
     })
       .sort({ _id: -1 })
       .limit(5);
@@ -68,9 +48,9 @@ const latestNotice = async (req, res) => {
   } else {
     throw new customError("Not authorized ", StatusCodes.UNAUTHORIZED);
   }
-  // console.log("role is ", userData.role);
+  console.log("role is ", userData.role);
 
-  // console.log(data);
+  console.log(data);
   res.status(StatusCodes.OK).json({ data, length: data.length });
 };
 
@@ -78,35 +58,38 @@ const latestNotice = async (req, res) => {
 
 const getAllNotices = async (req, res) => {
   const userData = req.data;
+  let data = {};
   if (userData.role === "student") {
     const user = await Student.findOne({ email: userData.email });
     if (!user) {
       throw new customError("Not authorized ", StatusCodes.UNAUTHORIZED);
     }
-    const data = await Notices.find({
-      $or: [{ notice_for: userData.role }, { notice_for: "both" }],
-    });
-    res.status(StatusCodes.OK).json({ data, length: data.length });
+     data = await Notices.find({
+      $or: [{ noticefor: userData.role }, { noticefor: "both" }],
+    }).populate("uploadBy", "-password");
+  
   } else if (userData.role === "teacher") {
-    const user = await Teacher.findOne({ email: userData.email });
+    const  user = await Teacher.findOne({ email: userData.email });
     if (!user) {
       throw new customError("Not authorized ", StatusCodes.UNAUTHORIZED);
     }
-    const data = await Notices.find({
+     data = await Notices.find({
       $or: [{ notice_for: userData.role }, { notice_for: "both" }],
-    });
-    res.status(StatusCodes.OK).json({ data, length: data.length });
+    }).populate("uploadBy", "-password");
+  
   } else if (userData.role === "admin") {
-    const data = await Notices.find({});
-    res.status(StatusCodes.OK).json({ data, length: data.length });
+     data = await Notices.find({}).populate("uploadBy", "-password");
+   
   } else {
     throw new customError("Not authorized ", StatusCodes.UNAUTHORIZED);
   }
+
+  res.status(StatusCodes.OK).json({ data, length: data.length });
 };
 
 const getSingleNotice = async (req, res) => {
   const noticeId = req.params.id;
-  const data = await Notices.findById(noticeId);
+  const data = await Notices.findById(noticeId).populate("uploadBy", "-password");
   if (!data) {
     throw new customError(
       `no data found with id : ${noticeId}`,
@@ -120,7 +103,7 @@ const getSingleNotice = async (req, res) => {
 
 const getNotices = async (req, res) => {
   const adminInfo = req.user;
-  const data = await Notices.find({ uploadBy: { id: adminInfo._id } });
+  const data = await Notices.find({ uploadBy: adminInfo._id }).populate("uploadBy", "-password");
   res.status(StatusCodes.OK).json({ data, length: data.length });
 };
 
@@ -154,7 +137,7 @@ const deleteNotice = async (req, res) => {
       StatusCodes.NOT_FOUND
     );
   }
-  if (!data.uploadBy.id.equals(adminInfo._id)) {
+  if (!data.uploadBy.equals(adminInfo._id)) {
     throw new customError("Not authorized ", StatusCodes.UNAUTHORIZED);
   }
   await data.remove();

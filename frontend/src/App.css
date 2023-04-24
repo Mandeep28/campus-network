@@ -117,7 +117,7 @@ color: white
   background: var(--background);
 }
 
-/*  media query  */
+ /* media query  */
 @media screen and (max-width: 900px) {
  .col {
   width: 100%;
@@ -212,4 +212,20 @@ text-decoration: none;
  thead:nth-child(1){
   display: none;
 }
+
+
+/*  drap and drop css */
+.drag_zone{
+  height: 100px !important;
+}
+
+
+.fDoQYg {
+    justify-content: start !important;
+    gap: 22px;
+}
+.fDoQYg .file-types {
+  overflow: visible !important;
+}
+
 

@@ -7,10 +7,13 @@ const NoticeSchema = new Schema({
         required: [true, "Title must be required"],
         minlength: 3,
       },
+    body : {
+        type: String,
+      },
  
       attachment_url : {
         type : String, 
-        required: [true, "url must be required"],
+        default: "https://dummyimage.com/600x400/696969/fff"
 
       },
       uploadBy: {
@@ -18,17 +21,14 @@ const NoticeSchema = new Schema({
         ref: 'User',
       },
      
-      department : {
-        type: mongoose.Schema.ObjectId,
-        ref: 'Department',
-    },
+    
     type: {
       type: String, 
       enum : ['notice', 'event', 'news'], 
       default : 'notice'
      
   },
-    notice_for: {
+    noticefor: {
       type: String, 
       enum : ['teacher', 'student', 'both'], 
       default : 'both'
