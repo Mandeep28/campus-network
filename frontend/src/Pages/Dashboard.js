@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { ChatState } from "../Context/ChatProvider";
 import {  toast } from "react-toastify";
 import axios from "axios";
+import moment from 'moment';
+import { Link } from "react-router-dom";
 
 const Dashboard = () => {
   const updatref = useRef(null);
@@ -20,6 +22,7 @@ const Dashboard = () => {
   const [oldpassword, setOldpassword] = useState("");
   const [passloading, setPassloading] = useState(false);
   const [departmentName, setDepartmentName] = useState("");
+  const [courseName , setCourseName] = useState("");
 
 
   useEffect(() => {
@@ -40,7 +43,15 @@ const Dashboard = () => {
       const { data } = await axios.get("/api/v1/auth/getDetail", config);
       console.log(data);
       setDetails(data.details);
-      setDepartmentName(data.details.department.name);
+      if(user.role === "student") {
+
+        setDepartmentName(data.details.course.department.name);
+      }
+      else if(user.role ==="teacher") {
+        setDepartmentName(data.details.department.name);
+
+      }
+      setCourseName(data.details.course.name);
 
       // setLoading(false);
     } catch (error) {
@@ -384,7 +395,7 @@ const postDetails = (pics) => {
                           <div className="col-sm-9">
                             <p className="text-muted mb-0">
                               {" "}
-                              {details ? details.course : "null"}
+                              {details ? courseName : "null"}
                             </p>
                           </div>
                         </div>{" "}
@@ -444,26 +455,26 @@ const postDetails = (pics) => {
                 {LatestNotice &&
                   LatestNotice.map((item, index) => {
                     return (
-                      <a
-                        href="#!"
-                        className="text-decoration-none text-dark"
+                      <Link
+                        to={`/notice/singlenotice/${item._id}`}
+                        className=" text-dark"
                         key={item._id}
                       >
                         <article>
                           <p>{item.title} </p>
                           <div className="d-flex justify-content-between fs-6">
                             <p style={{ fontSize: "9px" }}>
-                              By - {item.uploadBy}
+                              By - {`${item.uploadBy.name}`}
                             </p>
                             <p
                               className="text-end"
-                              style={{ fontSize: "8px " }}
+                              style={{ fontSize: "9px " }}
                             >
-                              {getTimeForNotice(item.updatedAt)}
+                              {moment(new Date(item.createdAt).toLocaleString()).fromNow()}
                             </p>
                           </div>
                         </article>
-                      </a>
+                      </Link>
                     );
                   })}
 

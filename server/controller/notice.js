@@ -34,6 +34,7 @@ const latestNotice = async (req, res) => {
     data = await Notices.find({
       $or: [{ noticefor: "student" }, { noticefor: "both" }],
     })
+    .populate("uploadBy", "-password")
       .sort({ _id: -1 })
       .limit(5);
   } else if (userData.role === "teacher") {
@@ -41,10 +42,11 @@ const latestNotice = async (req, res) => {
     data = await Notices.find({
       $or: [{ noticefor: userData.role }, { noticefor: "both" }],
     })
+    .populate("uploadBy", "-password")
       .sort({ _id: -1 })
       .limit(5);
   } else if (userData.role === "admin") {
-    data = await Notices.find({}).sort({ _id: -1 }).limit(5);
+    data = await Notices.find({}).populate("uploadBy", "-password").sort({ _id: -1 }).limit(5);
   } else {
     throw new customError("Not authorized ", StatusCodes.UNAUTHORIZED);
   }

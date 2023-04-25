@@ -10,6 +10,7 @@ const ChatProvider = (props) => {
   const [selectedChat, setSelectedChat] = useState();
   const [chats, setChats] = useState([]);
   const [notification, setNotification] = useState([]);
+  const abortController = new AbortController();
 
   const navigate = useNavigate();
 
@@ -22,7 +23,8 @@ const ChatProvider = (props) => {
 
         getUserDetails();
       }
-    // }
+     
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
 
@@ -53,6 +55,7 @@ const getUserDetails = async ()=>{
     console.log(error.response.data);
    
   }
+
 }
 
 

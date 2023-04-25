@@ -13,7 +13,8 @@ const {
     updateSemester,
     adminRegister,
     addDepartment , 
-    getDepartments
+    getDepartments ,
+    addCourse, getcourse
   } = require("../controller/admin");
   const  {
     createNotice,
@@ -44,6 +45,8 @@ router.get('/mynotice', getNotices);
 
 //  department routes (add and get)
 router.route("/department").post(addDepartment).get(getDepartments)
+router.route("/course").post(addCourse).get(getcourse);
+
 
 
 

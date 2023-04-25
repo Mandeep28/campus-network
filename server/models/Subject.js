@@ -12,16 +12,13 @@ const SubjectSchema = new Schema(
     createdBy: {
       type: mongoose.Schema.ObjectId,
       ref: "User",
+      required: [true, "createdBy must be required"]
     },
-    department: {
-      type: mongoose.Schema.ObjectId,
-      ref: "Department",
-    },
+   
     course: {
-      type: String,
-      required: [true, " course must be required"],
-      minlength: 3,
-      maxlength: 70,
+      type: mongoose.Schema.ObjectId,
+      ref: "Course",
+      required: [true, "course must be required"]
     },
     semester: {
       type: Number,

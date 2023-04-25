@@ -17,23 +17,11 @@ const NotesSchema = new Schema(
       ref: "User",
     },
 
-    department: {
+   
+    subject: {
       type: mongoose.Schema.ObjectId,
-      ref: "Department",
-      required: true,
-    },
-    course: {
-      type: String,
-      required: [true, " course must be required"],
-    },
-    semester: {
-      type: Number,
-      required: [true, "Semester must be required"],
-    },
-    subjectId: {
-      type: mongoose.Schema.ObjectId,
-      ref: "subject",
-      required: true,
+      ref: "Subject",
+      required: [true, "subject must be required"],
     },
   },
   { timestamps: true }

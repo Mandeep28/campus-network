@@ -2,9 +2,12 @@ import React, { useEffect , useState } from "react";
 import "./App.css";
 
 import ChatPage from "./Pages/ChatPage";
-import {BrowserRouter, Routes, Route, useLocation  } from "react-router-dom";
+import {BrowserRouter, Routes, Route  } from "react-router-dom";
 import Dashboard from "./Pages/Dashboard";
 import Community from "./Pages/Community";
+import Notice from "./Pages/Notice";
+import Notes from "./Pages/Notes";
+import NotFound from "./Pages/NotFound";
 import Login from "./components/Authentication/Login";
 import ChatProvider from "./Context/ChatProvider";
 import { ChakraProvider } from "@chakra-ui/react";
@@ -17,11 +20,9 @@ import SendResetMail from "./components/Authentication/SendResetMail";
 import Sidebar from "./components/mainApp/Header";
 import Footer from "./components/mainApp/Footer";
 import SingleQuestion from "./components/community/SingleQuestion";
-import NotFound from "./Pages/NotFound";
 import User from "./Pages/User";
-import Logout from "./components/Authentication/Logout";
-import Notice from "./Pages/Notice";
 import SingleNotice from "./components/Notices/SingleNotice";
+import AllNotes from "./components/notes/AllNotes";
 
 
 
@@ -74,6 +75,11 @@ function App() {
             {/* notice routes */}
             <Route path = "/notice" element={<Notice/>} />
             <Route path ="/notice/singlenotice/:id" element={<SingleNotice/>} />
+            {/* notes routes  */}
+            <Route path = "/notes" element={<Notes/>} />
+            <Route path = "/notes/allnotes" element={<AllNotes/>} />
+
+
             {/* not found custom page */}
             <Route path = "*" element= {<NotFound/>} />
           </Routes>

@@ -94,11 +94,11 @@ const userData = ()=>{
         name: item.name, 
         email: item.email,
         rollno: item.rollno,
-        course: item.course,
+        course: item.course.name,
         semester: item.semester,
         degreetype: item.degreeType,
         createdby : item.createdBy.name,
-        departmentname: item.department.name,
+        departmentname: item.course.department.name,
         actions:
         <>
         <div>

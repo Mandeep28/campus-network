@@ -4,40 +4,23 @@ const Notes = require("../models/Notes");
 const Teacher = require("../models/Teacher");
 const Student = require("../models/Student");
 const Subject = require("../models/Subject");
+const ObjectId = require('mongoose').Types.ObjectId;
 
 const postNote = async (req, res) => {
-  const teacherData = req.user;
+  const teacherData = req.data;
 
   const {
     title,
-    attachment_url,
-    departmentName,
-    departmentId,
-    course,
-    semester,
+   File,
     subjectId,
   } = req.body;
 
-  if (teacherData.department.id !== departmentId) {
-    throw new customError(
-      "Notes can only be upload for same department. ",
-      StatusCodes.UNAUTHORIZED
-    );
-  }
+ 
   const notes = await Notes.create({
     title,
-    attachment_url,
-    department: {
-      name: departmentName,
-      id: departmentId,
-    },
-    course,
-    semester,
-    subjectId,
-    uploadBy: {
-      name: teacherData.name,
-      id: teacherData._id,
-    },
+    attachment_url : File,
+    subject : subjectId,
+    uploadBy:teacherData._id
   });
   res.status(StatusCodes.CREATED).json(notes);
 };
@@ -45,29 +28,20 @@ const postNote = async (req, res) => {
 //  ----------------------- Get notes to student , teacher , admin  ---------------------
 const getNotes = async (req, res) => {
   const userData = req.data;
+  const subjectId = req.query.id;
   if (userData.role === "student") {
     const findUser = await Student.findOne({ email: userData.email });
     if (!findUser) {
       throw new customError("Not authorized", StatusCodes.UNAUTHORIZED);
     }
-    const data = await Notes.find({
-      department: {
-        id: findUser.department.id,
-      },
-      course: findUser.course,
-      semester: findUser.semester,
-    });
+    const data = await Notes.find({subject : subjectId}).populate("uploadBy", "-password");
     res.status(StatusCodes.OK).json({ data, length: data.length });
   } else if (userData.role === "teacher") {
     const findUser = await Teacher.findOne({ email: userData.email });
     if (!findUser) {
       throw new customError("Not authorized", StatusCodes.UNAUTHORIZED);
     }
-    const data = await Notes.find({
-      uploadBy: {
-        id: findUser._id,
-      },
-    });
+    const data = await Notes.find({uploadBy : ObjectId(userData._id) }).populate("uploadBy", "-password");
     res.status(StatusCodes.OK).json({ data, length: data.length });
   } else if (userData.role === "admin") {
     const data = await Notes.find({});
@@ -103,7 +77,7 @@ const getSingleNote = async (req, res) => {
 //  ------------------- update notes ----------------------------
 const updateNote = async (req, res) => {
   const notesId = req.params.id;
-  const teacherData = req.user;
+  const teacherData = req.data;
   const data = await Notes.findById(notesId);
   if (!data) {
     throw new customError(
@@ -126,7 +100,7 @@ const updateNote = async (req, res) => {
 
 const deleteNote = async (req, res) => {
   const notesId = req.params.id;
-  const teacherData = req.user;
+  const teacherData = req.data;
   const data = await Notes.findById(notesId);
   if (!data) {
     throw new customError(
@@ -144,26 +118,14 @@ const deleteNote = async (req, res) => {
 
 //  ------------------- add , delete , update subject -------------------------------
 const postSubject = async (req, res) => {
-  const teacherData = req.user;
-  const { name, departmentName, departmentId, course, semester } = req.body;
-  if (teacherData.department.id !== departmentId) {
-    throw new customError(
-      "Subject can only be upload for same department. ",
-      StatusCodes.UNAUTHORIZED
-    );
-  }
+  const teacherData = req.data;
+  const { name, course, semester } = req.body;
+ 
   const subject = await Subject.create({
     name,
-    department: {
-      name: departmentName,
-      id: departmentId,
-    },
     course,
     semester,
-    createdBy: {
-      name: teacherData.name,
-      id: teacherData._id,
-    },
+    createdBy:teacherData._id
   });
   res.status(StatusCodes.CREATED).json(subject);
 };
@@ -171,18 +133,16 @@ const postSubject = async (req, res) => {
 // ------------------------ get all subject ------------------------------
 const getSubject = async (req, res) => {
   const userData = req.data;
+  console.log(userData);
+  
   if (userData.role === "student") {
     const findUser = await Student.findOne({ email: userData.email });
+    console.log("find user is " , findUser);
+    
     if (!findUser) {
       throw new customError("Not authorized", StatusCodes.UNAUTHORIZED);
     }
-    const data = await Subject.find({
-      department: {
-        id: findUser.department.id,
-      },
-      course: findUser.course,
-      semester: findUser.semester,
-    });
+    const data = await Subject.find({course: findUser.course, semester : findUser.semester });
     res.status(StatusCodes.OK).json({data, length: data.length});
   }
   else if (userData.role === "teacher") {
@@ -190,11 +150,7 @@ const getSubject = async (req, res) => {
     if (!findUser) {
       throw new customError("Not authorized", StatusCodes.UNAUTHORIZED);
     }
-    const data = await Subject.find({
-        uploadby : {
-            id : findUser._id
-        }
-    })
+    const data = await Subject.find({ createdBy : userData._id})
     res.status(StatusCodes.OK).json({data, length: data.length});
 
   }

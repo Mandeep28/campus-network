@@ -23,7 +23,6 @@ const {
   deleteSubject,
   updateSubject,
 }= require("../controller/notes");
-const authTeacher = require("../middleware/authTeacher");
 
 const {allUsers} = require("../controller/auth");
 
@@ -53,12 +52,12 @@ router.get("/notes", getNotes);
 router.get("/notes/:id", getSingleNote);
 
 //  notes routes - for teacher only 
-router.post("/notes", authTeacher, postNote);
-router.route("/mynotes/:id").put(authTeacher, updateNote).delete(authTeacher, deleteNote);
+router.post("/notes", postNote);
+router.route("/mynotes/:id").put(updateNote).delete( deleteNote);
 
 // subject routes - (teacher can create , update , delete) , subject can get subject only 
-router.route("/subject").post(authTeacher, postSubject).get(getSubject);
-router.route("/subject/:id").put(authTeacher, updateSubject).delete(authTeacher, deleteSubject);
+router.route("/subject").post( postSubject).get(getSubject);
+router.route("/subject/:id").put( updateSubject).delete( deleteSubject);
 
 
 

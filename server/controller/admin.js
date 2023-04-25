@@ -6,6 +6,7 @@ const crypto = require("crypto");
 const User = require("../models/User");
 const Alumini = require("../models/Alumini");
 const Department = require("../models/Department");
+const Course = require("../models/Course");
 
 // Client Url
 const origin = "http://localhost:3000";
@@ -26,7 +27,6 @@ const createUser = async (req, res) => {
       name,
       email,
       rollno,
-      department,
       semester,
       course,
       degreeType,
@@ -40,7 +40,6 @@ const createUser = async (req, res) => {
       name,
       email,
       rollno,
-      department,
       semester,
       course,
       degreeType,
@@ -79,7 +78,11 @@ const getAllUser = async (req, res) => {
 
   // }
   if (type === "student") {
-    data = await Student.find({}).populate("department", "name").populate("createdBy", "-password");
+    data = await Student.find({}).populate({
+      path: 'course',
+      populate: {
+        path: 'department'
+    }}).populate("createdBy", "-password");
   }
   if (type === "teacher") {
     data = await Teacher.find({}).populate("department", "name").populate("createdBy", "-password");
@@ -257,6 +260,26 @@ const getDepartments = async (req, res) =>{
 }
 
 
+//  ------------------ add course -------------------------------
+const addCourse = async (req, res) =>{
+  const {name, department, totalSemester}= req.body;
+  const adminInfo = req.user;
+
+  const course = await Course.create({
+    name, 
+    department, totalSemester,
+    createdBy: adminInfo._id
+  })
+  res.status(StatusCodes.CREATED).json(course);
+
+}
+
+
+//  ------------------------ Get all course -------------------------
+const getcourse = async (req, res) =>{
+  const course = await Course.find({});
+  res.status(StatusCodes.OK).json({course, length: course.length});
+}
 
 
 
@@ -275,5 +298,6 @@ module.exports = {
   updateSemester,
   adminRegister,
   addDepartment , 
-  getDepartments
+  getDepartments,
+  addCourse, getcourse
 };

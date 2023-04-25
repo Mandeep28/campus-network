@@ -11,7 +11,6 @@ const AddStudent = () => {
     rollno: "",
     semester: "",
     course: "",
-    department: "",
     degreeType: "",
     // add more fields as needed
   });
@@ -25,7 +24,7 @@ const AddStudent = () => {
     // console.log(e);
     setLoading(true);
     console.log(formValues);
-    if(!formValues.Uname || !formValues.rollno || !formValues.course || !formValues.email || !formValues.semester || !formValues.degreeType || !formValues.department) {
+    if(!formValues.Uname || !formValues.rollno || !formValues.course || !formValues.email || !formValues.semester || !formValues.degreeType ) {
         toast.warn("please fill all values", {
             position: "top-right",
             autoClose: 5000,
@@ -75,7 +74,7 @@ const AddStudent = () => {
       setLoading(false);
     } catch (error) {
       console.log(error.response);
-      toast.error(error.response.data.msg, {
+      toast.error(error.msg, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -105,9 +104,9 @@ const AddStudent = () => {
         headers: { "Content-type": "application/json", "auth-token": token },
       };
 
-      const { data } = await axios.get(`/api/v1/admin/department`, config);
+      const { data } = await axios.get(`/api/v1/admin/course`, config);
       console.log(data);
-      setDepartment(data.departments);
+      setDepartment(data.course);
       // setLoading(false);
     } catch (error) {
       console.log(error.response.data);
@@ -152,20 +151,7 @@ const AddStudent = () => {
           />
         </div>
         <div className="row">
-          <div className="col mb-3 w-100">
-            <label htmlFor="course" className="form-label">
-              Enter Course
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              id="course"
-              name="course"
-              placeholder="Msc IT"
-              value={formValues.course}
-              onChange={handleOnChange}
-            />
-          </div>
+        
           <div className=" col mb-3">
             <label htmlFor="semester" className="form-label">
               Enter Semester
@@ -183,17 +169,17 @@ const AddStudent = () => {
         </div>
         <div className="row row-cols-1 row-cols-md-3 row-cols-sm-2">
           <div className="col">
-            <label htmlFor="" className="form-label">
+            <label htmlFor="course" className="form-label">
               {" "}
-              Select Department
+              Select Course
             </label>
             <select
               className="form-select"
-              name="department"
-              value={formValues.department}
+              name="course"
+              value={formValues.course}
               onChange={handleOnChange}
             >
-                <option >Choose Department ....</option>
+                <option >Choose Course ....</option>
               {department &&
                 department.map((item , index) => {
                     // console.log(index)
@@ -233,7 +219,7 @@ const AddStudent = () => {
               onChange={handleOnChange}
             >
               <option >Choose Depree Type ....</option>
-              <option selected  value="ug_3">under graduate(3 year)</option>
+              <option   value="ug_3">under graduate(3 year)</option>
               <option value="ug_4">under graduate(4 year)</option>
               <option value="pg_2">post graduate(2 year)</option>
               <option value="pg_3">post graduate(3year)</option>

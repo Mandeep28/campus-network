@@ -2,11 +2,13 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Link, useParams } from "react-router-dom";
 import moment from 'moment'
+import NotFound from '../../Pages/NotFound';
 
 
 const SingleNotice = () => {
     const params = useParams();
     const [notice , setNotice] = useState();
+    const [found, setFound] = useState(true);
     useEffect(()=>{
         const noticeId = params.id;
         fetchSingleNotice(noticeId);
@@ -31,7 +33,14 @@ const SingleNotice = () => {
           // setLoading(false);
         } catch (error) {
           console.log(error.response.data);
+          setFound(false);
         }
+    }
+
+    if(!found) {
+        return (
+            <NotFound/>
+        )
     }
 
 

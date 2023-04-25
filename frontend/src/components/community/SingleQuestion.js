@@ -6,6 +6,8 @@ import parse from "html-react-parser";
 import {  toast } from "react-toastify";
 import axios from "axios";
 import { ChatState } from "../../Context/ChatProvider";
+import moment from 'moment';
+import NotFound from "../../Pages/NotFound";
 
 const SingleQuestion = () => {
     const params = useParams();
@@ -15,6 +17,7 @@ const SingleQuestion = () => {
     const [pic, setPic] = useState("");
     const [loading, setLoading] = useState(false);
     const [userId, setUserId] =useState("");
+    const [found, setFound] = useState(true);
 
     const {user} = ChatState();
     useEffect(()=>{
@@ -44,6 +47,7 @@ const SingleQuestion = () => {
       // setLoading(false);
     } catch (error) {
       console.log(error.response.data);
+      setFound(false);
     }
   };
 
@@ -161,30 +165,6 @@ const postAnswer = async ()=>{
 
 
 
-function setLocalTime(utcTimeString) {
-    const utcTime = new Date(utcTimeString);
-    const now = new Date();
-    const differenceInMs = now.getTime() - utcTime.getTime();
-    const hours = Math.floor(differenceInMs / 3600000);
-    const minutes = Math.floor((differenceInMs % 3600000) / 60000);
-    // console.log("hours is ", hours, "minutes is :", minutes);
-
-    if (hours >= 0 && minutes >= 0) {
-      let returnVal = `${hours} hrs ${minutes} min ago`;
-      // console.log(returnVal);
-
-      return returnVal;
-    } else if (hours >= 0 && minutes <= 0) {
-      let returnVal = `${hours} hrs  ago`;
-      // console.log(returnVal);
-      return returnVal;
-    } else if (hours <= 0 && minutes >= 0) {
-      let returnVal = ` ${minutes} min ago`;
-      // console.log(returnVal);
-      return returnVal;
-    }
-  }
-
   const handleDelete = async (e)=>{
     const questionId = params.id;
     console.log("delted", e.target.id);
@@ -227,6 +207,12 @@ function setLocalTime(utcTimeString) {
     
   }
 
+  if(!found) {
+    return (
+        <NotFound/>
+    )
+}
+
 
 
 
@@ -244,7 +230,7 @@ function setLocalTime(utcTimeString) {
  {question && <div className="container my-3 py-3">
     <h4>{question ? question.title : ""}</h4>
     <div>
-        <p>Asked <span className="text-secondary me-3">{question ?  new Date(question.createdAt).toLocaleString() : ""}</span> </p>
+        <p>Asked At - <span className="text-secondary me-3">{question ?  moment(new Date(question.createdAt).toLocaleString()).format('LLL') : ""}</span> </p>
     </div>
     <div>{question ? parse(`${question.body}`): ""}</div>   
     <div className='text-end'>
@@ -268,7 +254,7 @@ function setLocalTime(utcTimeString) {
         <div className='text-end'>
         <img src={item.uploadBy.image} alt="" className='img-thumbnail rounded' style={{width: "45px" , height: "50px", objectFit: "cover"}} />
     <p className='d-inline '><a href="#!" className='text-dark'>{item.uploadBy.name}</a></p>
-    <p>{setLocalTime(item.createdAt)} </p>
+    <p>{moment(new Date(item.createdAt).toLocaleString()).fromNow()} </p>
     {(user._id === item.uploadBy._id) ? <i className="fa fa-trash text-danger fs-5" id={item._id} onClick={handleDelete}></i> : ""}
     </div>
     </div>

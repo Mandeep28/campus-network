@@ -27,16 +27,11 @@ const StudentSchema = new mongoose.Schema(
       type: Number,
       default: 1
     },
-    department : {
-      type: mongoose.Schema.ObjectId,
-    ref: 'Department',
-  },
+
 
     course: {
-        type: String,
-        required: [true, "course name must be required"],
-        minlength: 3,
-        maxlength: 60,
+      type: mongoose.Schema.ObjectId,
+      ref: 'Course',
     
     },
     degreeType: {

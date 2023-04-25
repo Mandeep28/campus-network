@@ -218,9 +218,13 @@ const getDetails = async (req, res) => {
   const { email, role } = req.data;
   let details = {};
   if (role === "student") {
-    details = await Student.findOne({ email }).populate("department", "name");
+    details = await Student.findOne({ email }).populate({
+      path: 'course',
+      populate: {
+        path: 'department'
+      }});
   } else if (role === "teacher") {
-    details = await Teacher.findOne({ email });
+    details = await Teacher.findOne({ email }).populate("department", "name");
   }
   if (!details) {
     throw new customError("No details found", StatusCodes.NOT_FOUND);
