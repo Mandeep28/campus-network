@@ -100,7 +100,13 @@ const getStudent = async (req, res) => {
   }
   res.status(StatusCodes.OK).json({ student });
 };
+
+//  update 
+
+
 const updateStudent = async (req, res) => {
+  console.log(req.body);
+  
   const id = req.params.id;
   let student = await Student.findOne({ _id: id });
   if (!student) {
@@ -113,7 +119,13 @@ const updateStudent = async (req, res) => {
   res
     .status(StatusCodes.OK)
     .json({ msg: "Student update successfully", student });
+    console.log("new student is ", student);
 };
+
+
+// delete 
+
+
 const delteStudent = async (req, res) => {
   const id = req.params.id;
   console.log("id in params is :", id);
@@ -125,9 +137,7 @@ const delteStudent = async (req, res) => {
     throw new customError(`No user found with id ${id}`, StatusCodes.NOT_FOUND);
   }
   student = await Student.findOneAndDelete({ _id: id });
-  res
-    .status(StatusCodes.OK)
-    .json({ msg: "student delete successsfully", student });
+  res.status(StatusCodes.OK).json({ msg: "student delete successsfully", student });
 };
 
 // ----------------------- Teacher -------------------------------------

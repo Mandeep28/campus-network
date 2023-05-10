@@ -7,6 +7,7 @@ import { getSender } from "../config/ChatLogics";
 import ChatLoading from "./ChatLoading";
 import GroupChatModal from "./miscellaneous/GroupChatModal";
 //import { useHelper } from '../config/helper-hook';
+import moment from 'moment'
 
 const MyChats = ({ fetchAgain, userDetails }) => {
   const [loggedUser, setLoggedUser] = useState();
@@ -110,7 +111,15 @@ const MyChats = ({ fetchAgain, userDetails }) => {
               >
                 <Text>
                   {!chat.isGroupChat ? getSender(user, chat.users) : chat.chatName}
-                  {/* <span className="d-block text-muted" style={{fontSize: "10px"}}>{chat.latestMessage.content}</span> */}
+                  <div className='d-flex justify-content-between my-1' style={{fontSize: "12px"}}>
+                  <span >
+                {(chat.latestMessage.content).slice(0,25)}
+                {((chat.latestMessage.content).length > 25) ?  '.....' : ""}
+                  
+                  </span>
+                  <span >{moment(chat.latestMessage.createdAt).calendar()}</span>
+                  </div>
+                  
                 </Text>
               </Box>
             ))}

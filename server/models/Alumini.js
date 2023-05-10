@@ -53,4 +53,4 @@ const AluminiSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("alumini", AluminiSchema);
+module.exports = mongoose.model("Alumini", AluminiSchema);

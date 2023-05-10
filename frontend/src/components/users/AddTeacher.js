@@ -8,7 +8,6 @@ const AddTeacher = () => {
   const [formValues, setFormValues] = useState({
     Uname: "",
     email: "",
-    
     department: "",
    
     // add more fields as needed
@@ -112,8 +111,9 @@ const AddTeacher = () => {
   };
 
   return (
-    <div className="container">
-      <h4>Add Student Details : </h4>
+    <div className="container pb-2">
+      <h3 className="text-teal text-center">Add Teacher Details  </h3>
+      <div className="underline-1"></div>
       <form>
         <div className="mb-3">
           <label htmlFor="Uname" className="form-label">
@@ -145,7 +145,7 @@ const AddTeacher = () => {
           />
         </div>
      
-        <div className="col">
+        <div className="col my-1">
             <label htmlFor="" className="form-label">
               {" "}
               Select Department

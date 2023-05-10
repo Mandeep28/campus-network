@@ -1,4 +1,4 @@
-const asyncHandler = require("express-async-handler");
+
 const Message = require("../models/messageModel");
 const User = require("../models/User");
 const Chat = require("../models/chatModel");
@@ -10,7 +10,7 @@ const allMessages = async (req, res) => {
 
  
     const messages = await Message.find({ chat: req.params.chatId })
-      .populate("sender", "name email")
+      .populate("sender", "-password")
       .populate("chat");
 
     res.json(messages);

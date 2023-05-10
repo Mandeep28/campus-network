@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { FileUploader } from "react-drag-drop-files";
 import { toast } from "react-toastify";
+import UploadWidget from "../mainApp/UploadWidget";
 
 
 const AddNotice = ({setFetchAgain}) => {
@@ -12,35 +13,32 @@ const AddNotice = ({setFetchAgain}) => {
   const [noticefor, setNoticefor] = useState("");
   const [btnLabel, setBtnLabel] = useState("Add Notice");
   const [loading, setLoading] = useState(false);
+  const [url, updateUrl] = useState();
 
 
-  const handleChange = (file) => {
-    console.log("inside on change");
-    console.log(file);
 
-    setLoading(true);
-    setBtnLabel("file uplaoding ...");
-    const data = new FormData();
-    data.append("file", file[0]);
-    data.append("upload_preset", "campus_Network");
-    data.append("cloud_name", "dyk8ixmrn");
-    fetch("https://api.cloudinary.com/v1_1/dyk8ixmrn/image/upload", {
-      method: "post",
-      body: data,
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        setFile(data.secure_url);
-        setBtnLabel("Add Notice");
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setBtnLabel("Add Notice");
-        setLoading(false);
+
+  function handleOnUpload(error, result, widget) {
+    if ( error ) {
+      console.log(error);
+      
+      toast.error("something went wrong, try again later!", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: 0,
+            theme: "colored",
+          });
+      widget.close({
+        quiet: true
       });
-  };
+      return;
+    }
+    updateUrl(result?.info?.secure_url);
+  }
 
   const postNotice = async (e) => {
     e.preventDefault();
@@ -57,8 +55,11 @@ const AddNotice = ({setFetchAgain}) => {
       });
       return;
     }
+    console.log(url, title, body, noticefor);
+    
     let token = localStorage.getItem("userToken");
     setLoading(true);
+
     try {
       const config = {
         headers: { "Content-type": "application/json", "auth-token": token },
@@ -66,7 +67,7 @@ const AddNotice = ({setFetchAgain}) => {
 
       const { data } = await axios.post(
         "/api/v1/admin/notice",
-        { title, body, File , noticefor},
+        { title, body, url , noticefor},
         config
       );
       console.log(data);
@@ -81,7 +82,7 @@ const AddNotice = ({setFetchAgain}) => {
         theme: "colored",
       });
       setTitle("");
-      setFile("");
+      updateUrl("");
       setNoticefor("");
       setBody("");
       setLoading(false);
@@ -99,7 +100,7 @@ const AddNotice = ({setFetchAgain}) => {
         theme: "colored",
       });
       setTitle("");
-      setFile("");
+      updateUrl("");
       setNoticefor("");
       setBody("");
       setLoading(false);
@@ -107,10 +108,14 @@ const AddNotice = ({setFetchAgain}) => {
     }
   };
 
+
+
+
+
   return (
     <div>
       <div className="container">
-        <h5>Add Notice</h5>
+       
         <form action="">
           <div className="mb-3">
             <label htmlFor="title" className="form-label">
@@ -160,15 +165,20 @@ const AddNotice = ({setFetchAgain}) => {
             <label htmlFor="file" className="form-label">
               choose attachment file <span className="text-danger mx-1">*</span>
             </label>
-            <FileUploader
-              multiple={true}
-              handleChange={handleChange}
-              ondrop={handleChange}
-              name="file"
-              classes="drag_zone"
-              types={fileTypes}
-              hoverTitle={"drop here"}
-            />
+           
+             <UploadWidget onUpload={handleOnUpload}>
+          {({ open }) => {
+            function handleOnClick(e) {
+              e.preventDefault();
+              open();
+            }
+            return (
+              <button className="btn btn-teal btn-sm" onClick={handleOnClick}>
+                Upload an Image
+              </button>
+            )
+          }}
+        </UploadWidget>
           </div>
         
 

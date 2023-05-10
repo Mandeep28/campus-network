@@ -3,8 +3,9 @@ import ReactPaginate from 'react-paginate';
 import axios from "axios";
 import {  toast } from "react-toastify";
 import moment from 'moment'
-import { Link, useLocation } from "react-router-dom";
+import {  useLocation } from "react-router-dom";
 import NotFound from '../../Pages/NotFound'
+import { saveAs } from 'file-saver'
 
 const AllNotes = ({endpoint , showTrash , fetchAgain}) => {
 
@@ -14,11 +15,13 @@ const AllNotes = ({endpoint , showTrash , fetchAgain}) => {
   const params = new URLSearchParams(search);
 const [found, setFound] = useState(true);
 const [currentPage, setCurrentPage] = useState(0);
+const [subjectName, setSubjectName] = useState("");
 
 
   useEffect(()=>{
     const id = params.get('id');
       fetchQuestion(id);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
   },[fetchAgain])
 
 
@@ -31,8 +34,9 @@ const [currentPage, setCurrentPage] = useState(0);
         };
   
         const { data } = await axios.get(`/api/v1/user/notes?id=${id}`, config);
-        console.log(data.data);
+        console.log(data);
         setQuestion(data.data);
+        setSubjectName(data.subject.name);
   
         // setLoading(false);
       } catch (error) {
@@ -46,12 +50,17 @@ const [currentPage, setCurrentPage] = useState(0);
             <NotFound/>
         )
     }
+    if(question && (question.length  <= 0) ) {
+      return (
+        <div className="container d-flex align-items-center justify-content-center" style={{minHeight : "60vh"} }>
+          <h5>No Notes to show ....</h5>
+        </div>
+      )
+    }
    
 
     const filteredItems = question.filter(
-      item =>
-        item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.body.toLowerCase().includes(searchQuery.toLowerCase()) 
+      item => item.title.toLowerCase().includes(searchQuery.toLowerCase()) 
         //  || item.uploadBy.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
     //  pagination logic start
@@ -125,7 +134,9 @@ const handleDelete = async (e)=>{
 
   return (
     <>
-      <div className="container my-5" style={{minHeight : "60vh"}}>
+      <div className="container py-3" style={{minHeight : "60vh"}}>
+        <h2 className="text-teal my-2 text-center text-capitalize">{ subjectName} Notes</h2>
+        <div className="underline-1 mb-4"></div>
       <form className="d-flex" role="search">
   <input
     className="form-control me-2"
@@ -142,7 +153,7 @@ const handleDelete = async (e)=>{
         {/* single item start */}
         { itemsToDisplay && itemsToDisplay.map ((item , index)=>{
                 return (
-                    <div className="card my-3" key={item._id}>
+                    <div className="card my-3 shadow" key={item._id}>
             <div className="card-body">
               <h5 className="card-title my-2">
                     {item.title}
@@ -171,9 +182,9 @@ const handleDelete = async (e)=>{
                   </p>
                  { showTrash &&  <i className="fa fa-trash mx-3 fs-5 text-danger" id={item._id} onClick={handleDelete} style={{cursor: "pointer"}}></i>}
                </div>
-               <a href={item.attachment_url} download={item.attachment_url} className="text-decoration-none text-teal" >
-               <i className="fa fa-download mx-3 mt-2 fs-5"></i>
-               </a>
+               {/* <a href={item.attachment_url} download={item.attachment_url} className="text-decoration-none text-teal" > */}
+               <i className="fa fa-download mx-3 mt-2 fs-5 text-teal" style={{cursor:"pointer"}}  onClick={()=>{ saveAs(item.attachment_url, item.attachment_url)}}></i>
+               {/* </a> */}
                   
                  
               

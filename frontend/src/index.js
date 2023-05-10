@@ -3,6 +3,9 @@ import { StrictMode } from 'react';
 import { render } from 'react-dom';
 import "./index.css";
 import App from "./App";
+import { BrowserRouter } from "react-router-dom";
+import ChatProvider from "./Context/ChatProvider";
+
 
 /* import { extendTheme } from "@chakra-ui/react"
 
@@ -20,8 +23,11 @@ const theme = extendTheme({
 
 const rootElement = document.getElementById('root');
 render(
-	<StrictMode>
+  <BrowserRouter>
+  <ChatProvider>
+
 		<App />
-	</StrictMode>,
-	rootElement
+  </ChatProvider>
+  </BrowserRouter>
+  ,	rootElement
 );

@@ -14,7 +14,8 @@ const AllNotice = ({ endpoint, showTrash, fetchAgain }) => {
 
   useEffect(() => {
     fetchNotice();
-  }, [fetchAgain]);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   //  fetch latest notice
   const fetchNotice = async () => {
@@ -68,7 +69,7 @@ const AllNotice = ({ endpoint, showTrash, fetchAgain }) => {
       };
 
       const { data } = await axios.delete(
-        "/api/v1/admin/notice/" + noticeId,
+        "/api/v1/admin/notice/"+noticeId,
         config
       );
       // console.log(data);
@@ -98,13 +99,13 @@ const AllNotice = ({ endpoint, showTrash, fetchAgain }) => {
       fetchNotice();
   };
 
-  // if(question.length > 0 ) {
-  //   return (
-  //     <div className="container d-flex align-items-center justify-content-center" style={{minHeight : "60vh"} }>
-  //       <h5>No question to show ... You can add question anytime.</h5>
-  //     </div>
-  //   )
-  // }
+  if(notice && (notice.length  <= 0) ) {
+    return (
+      <div className="container d-flex align-items-center justify-content-center" style={{minHeight : "60vh"} }>
+        <h5>No notice to show ....</h5>
+      </div>
+    )
+  }
 
   return (
     <>
@@ -143,13 +144,13 @@ const AllNotice = ({ endpoint, showTrash, fetchAgain }) => {
                    </h6>
                    <div className="d-flex justify-content-between my-3 align-item-center">
                     <div className="d-flex align-items-center ">
-                    <img src={item.uploadBy.image} alt="user profile image" style={{width : "30px"}}  className="rounded-circle"/>
-                    <p className="d-inline-block mx-1" style={{fontSize: "12px"}}>By <a href="#!" className="text-decoration-none text-dark">{item.uploadBy.name}</a></p>
+                    <img src={item.uploadBy.image} alt="user profile" style={{width : "30px"}}  className="rounded-circle"/>
+                    <p className="d-inline-block mx-1 m-auto" style={{fontSize: "12px"}}>By <a href="#!" className="text-decoration-none text-dark">{item.uploadBy.name}</a></p>
                     </div>
                     <p style={{fontSize: "12px"}} className="my-2 text-center" >{moment( new Date(item.createdAt).toDateString()).fromNow()}</p>
                    </div>
                 {showTrash ? <div className="text-end">
-                    <i className="fa fa-trash text-danger fs-5" id={item._id} onClick={handleDelete}></i>
+                    <i className="fa fa-trash text-danger fs-5 cursor-pointer" id={item._id} onClick={handleDelete}></i>
                 </div> : ""} 
                 </div>
               </div>

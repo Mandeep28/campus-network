@@ -3,7 +3,6 @@ import ReactPaginate from 'react-paginate';
 import axios from "axios";
 import {  toast } from "react-toastify";
 import moment from 'moment'
-import { Link, useLocation } from "react-router-dom";
 import NotFound from '../../Pages/NotFound'
 
 const Mynotes = ({endpoint , showTrash , fetchAgain}) => {
@@ -74,16 +73,17 @@ const endIndex = startIndex + itemsPerPage;
 
 const handleDelete = async (e)=>{
   // console.log("delted", e.target.id);
-  const answerId = e.target.id;
+  const notesId = e.target.id;
+  console.log(notesId)
   let token = localStorage.getItem("userToken");
   try {
     const config = {
       headers: { "Content-type": "application/json", "auth-token": token },
     };
 
-    const { data } = await axios.delete("/api/v1/user/community/question/"+answerId, config);
-    // console.log(data);
-    toast.success("Question deleted successfully", {
+    const { data } = await axios.delete("/api/v1/user/mynotes/"+notesId, config);
+    console.log(data);
+    toast.success("Notes deleted successfully", {
       position: "top-right",
       autoClose: 5000,
       hideProgressBar: false,
@@ -112,18 +112,18 @@ const handleDelete = async (e)=>{
 }
 
 
-// if(question.length > 0 ) {
-//   return (
-//     <div className="container d-flex align-items-center justify-content-center" style={{minHeight : "60vh"} }>
-//       <h5>No question to show ... You can add question anytime.</h5>
-//     </div>
-//   )
-// }
+if(question.length < 0 ) {
+  return (
+    <div className="container d-flex align-items-center justify-content-center" style={{minHeight : "60vh"} }>
+      <h5>No Notes to show....</h5>
+    </div>
+  )
+}
 
 
   return (
     <>
-      <div className="container my-5" style={{minHeight : "60vh"}}>
+      <div className="container my-3 " style={{minHeight : "60vh"}}>
       <form className="d-flex" role="search">
   <input
     className="form-control me-2"
@@ -140,7 +140,7 @@ const handleDelete = async (e)=>{
         {/* single item start */}
         { itemsToDisplay && itemsToDisplay.map ((item)=>{
                 return (
-                    <div className="card my-3" key={item._id}>
+                    <div className="card my-3 shadow " key={item._id}>
             <div className="card-body">
               <h5 className="card-title my-2">
                     {item.title}
@@ -148,7 +148,7 @@ const handleDelete = async (e)=>{
               {/* <p>{parse(item.body.slice(0, 150))}...</p> */}
               
 
-              <div className="d-flex  align-items-center  px-2">
+              <div className="d-flex  align-items-center  justify-content-between px-2 flex-wrap ">
                <div>
                <img src={item.uploadBy.image} alt="" className="rounded-circle image-fluid" style={{width: "30px" , height: "30px"}} />
                   <a href="#!" className="text-decoration-none d-inline-block mx-3 text-secondary">
@@ -159,19 +159,20 @@ const handleDelete = async (e)=>{
                   </a>
                </div>
               
-               <div>
-               <p className="card-text  d-inline-block">
+                  <div>
+                  <a href={item.attachment_url} download={item.attachment_url} className="text-decoration-none text-teal" >
+               <i className="fa fa-download mx-3 mt-2 fs-5"></i>
+               </a>
+               <i className="fa fa-trash mx-1 fs-5 text-danger cursor-pointer" id={item._id} onClick={handleDelete}></i>
+                  </div>
+             
+              
+               <p className="card-text  d-inline-block mx-1">
                     <small className="text-body-secondary">
                       {moment(item.createdAt).fromNow()} 
                       {/* {item.createdAt} */}
                     </small>
                   </p>
-                 { showTrash &&  <i className="fa fa-trash mx-3 fs-5 text-danger" id={item._id} onClick={handleDelete} style={{cursor: "pointer"}}></i>}
-               </div>
-               <a href={item.attachment_url} download={item.attachment_url} className="text-decoration-none text-teal" >
-               <i className="fa fa-download mx-3 mt-2 fs-5"></i>
-               </a>
-               <i className="fa fa-trash mx-1 fs-5 text-danger" id={item._id} onClick={handleDelete}></i>
                   
                  
               

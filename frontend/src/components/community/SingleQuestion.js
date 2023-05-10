@@ -8,6 +8,7 @@ import axios from "axios";
 import { ChatState } from "../../Context/ChatProvider";
 import moment from 'moment';
 import NotFound from "../../Pages/NotFound";
+import WithAuth from "../Authentication/WithAuth";
 
 const SingleQuestion = () => {
     const params = useParams();
@@ -16,7 +17,7 @@ const SingleQuestion = () => {
     const [name, setName] = useState("");
     const [pic, setPic] = useState("");
     const [loading, setLoading] = useState(false);
-    const [userId, setUserId] =useState("");
+    // const [userId, setUserId] =useState("");
     const [found, setFound] = useState(true);
 
     const {user} = ChatState();
@@ -26,7 +27,7 @@ const SingleQuestion = () => {
         
         fetchQuestion(questionId);
         fetchAnswer(questionId);
-        
+          // eslint-disable-next-line react-hooks/exhaustive-deps
     },[]);
 
   //  fetch single question 
@@ -69,7 +70,7 @@ const SingleQuestion = () => {
     } catch (error) {
       console.log(error.response.data);
     }
-    setUserId(user._id)
+    // setUserId(user._id)
   };
 
 
@@ -215,16 +216,6 @@ const postAnswer = async ()=>{
 
 
 
-
-
-
-
-
-
-
-
-
-
   return (
     <>
  {question && <div className="container my-3 py-3">
@@ -294,4 +285,4 @@ const postAnswer = async ()=>{
   )
 }
 
-export default SingleQuestion
+export default WithAuth(SingleQuestion)

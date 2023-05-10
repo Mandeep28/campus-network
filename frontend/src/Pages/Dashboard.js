@@ -4,13 +4,14 @@ import {  toast } from "react-toastify";
 import axios from "axios";
 import moment from 'moment';
 import { Link } from "react-router-dom";
+import WithAuth from "../components/Authentication/WithAuth";
 
-const Dashboard = () => {
+const Dashboard = ({setShow}) => {
   const updatref = useRef(null);
   const updateRefClose = useRef(null);
   const passwordRef = useRef(null);
   const passwordRefClose = useRef(null);
-  const { user , getUserDetails } = ChatState();
+
   const [details, setDetails] = useState({});
   const [LatestNotice, setLatestNotice] = useState([]);
   const [name, setName] = useState("");
@@ -24,14 +25,22 @@ const Dashboard = () => {
   const [departmentName, setDepartmentName] = useState("");
   const [courseName , setCourseName] = useState("");
 
+  const { user , getUserDetails } = ChatState();
+
 
   useEffect(() => {
-    fetchDetails();
-    fetchLatestNotice();
-    // console.log(details);
-    
-    
-  }, []);
+    setShow(true);
+    if (!user) {
+      getUserDetails();
+    } else {
+      console.log("user details", user);
+      fetchDetails();
+      fetchLatestNotice();
+    }
+   
+  }, [user, getUserDetails]);
+
+
 
   const fetchDetails = async () => {
     let token = localStorage.getItem("userToken");
@@ -41,17 +50,12 @@ const Dashboard = () => {
       };
 
       const { data } = await axios.get("/api/v1/auth/getDetail", config);
-      console.log(data);
+      // console.log(data.details);
       setDetails(data.details);
-      if(user.role === "student") {
-
-        setDepartmentName(data.details.course.department.name);
-      }
-      else if(user.role ==="teacher") {
-        setDepartmentName(data.details.department.name);
-
-      }
-      setCourseName(data.details.course.name);
+      setdepartment(data);
+      // console.log(data.details.course.name);
+      
+      
 
       // setLoading(false);
     } catch (error) {
@@ -75,38 +79,41 @@ const Dashboard = () => {
     } catch (error) {
       console.log(error.response.data);
     }
-  };
+  }; 
 
-  // change time
-  function getTimeForNotice(utcTimeString) {
-    const utcTime = new Date(utcTimeString);
-    const now = new Date();
-    const differenceInMs = now.getTime() - utcTime.getTime();
-    const hours = Math.floor(differenceInMs / 3600000);
-    const minutes = Math.floor((differenceInMs % 3600000) / 60000);
-    // console.log("hours is ", hours, "minutes is :", minutes);
 
-    if (hours > 0 && minutes > 0) {
-      let returnVal = `${hours} hrs ${minutes} min ago`;
-      // console.log(returnVal);
 
-      return returnVal;
-    } else if (hours > 0 && minutes < 0) {
-      let returnVal = `${hours} hrs  ago`;
-      // console.log(returnVal);
-      return returnVal;
-    } else if (hours < 0 && minutes > 0) {
-      let returnVal = ` ${minutes} min ago`;
-      // console.log(returnVal);
-      return returnVal;
+  const setdepartment = (data)=>{
+  
+      if(user.role === "student") {
+        // console.log(data.details.course.department.name);
+        
+      setDepartmentName(data.details.course.department.name);
+      setCourseName(data.details.course.name);
     }
+    else if(user.role ==="teacher") {
+      // console.log(data.details.department.name)
+      setDepartmentName(data.details.department.name);
+
+    }
+  
   }
 
 //  handle pic upload to cloudinary
 const postDetails = (pics) => {
   setLoading(true);
   if (pics === undefined) {
-    console.log("please select an image");
+    // console.log("please select an image");
+    toast.warn("please select an image", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: 0,
+      theme: "colored",
+    });
     
     return;
   }
@@ -124,15 +131,35 @@ const postDetails = (pics) => {
       .then((data) => {
         setPic(data.url.toString());
         // setUrl(data.url.toString());
-        console.log(data);
+        // console.log(data);
         setLoading(false);
       })
       .catch((err) => {
         console.log(err);
+        toast.error("Someting went wrong , try again later", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: 0,
+          theme: "colored",
+        });
         setLoading(false);
       });
   } else {
-    console.log("please select image of type jpeg , png, jpg only");
+    // console.log("please select image of type jpeg , png, jpg only");
+    toast.warn("please select image of type jpeg , png, jpg only", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: 0,
+        theme: "colored",
+      });
     
     setLoading(false);
     return;
@@ -148,7 +175,7 @@ const postDetails = (pics) => {
   const handlUpdateProfile = async (e) => {
     e.preventDefault();
     setLoading(true);
-    console.log("image url is", pic, "name is ", name);
+    // console.log("image url is", pic, "name is ", name);
     
     
     if(!pic || !name ) {
@@ -169,9 +196,6 @@ const postDetails = (pics) => {
    let token = localStorage.getItem("userToken");
    
     try {
-
-
-
       const config = {
         headers: { "Content-type": "application/json", "auth-token": token },
       };
@@ -216,8 +240,34 @@ const postDetails = (pics) => {
   //  peform change password 
   const handleChangePassword = async (e)=>{
     e.preventDefault();
-    console.log(password , confirmpassword , oldpassword);
-    
+    // console.log(password , confirmpassword , oldpassword);
+    if(!password || !oldpassword || !confirmpassword) {
+      toast.warn("Please fill all fields", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: 0,
+        theme: "colored",
+      });
+      return;
+    }
+
+    if(password !== confirmpassword) {
+      toast.warn("new password not match with confirm password", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: 0,
+        theme: "colored",
+      });
+      return;
+    }
    
     setPassloading(true);
    
@@ -234,7 +284,7 @@ const postDetails = (pics) => {
         { oldpassword, password },
         config
       );
-      console.log(data);
+      // console.log(data);
 
       toast.success(data.msg, {
         position: "top-right",
@@ -250,7 +300,7 @@ const postDetails = (pics) => {
 
       setPassloading(false);
     } catch (error) {
-      console.log(error.response.data);
+      console.log(error.response);
       toast.error(error.response.data.msg, {
         position: "top-right",
         autoClose: 5000,
@@ -274,6 +324,19 @@ const postDetails = (pics) => {
     passwordRefClose.current.click();
   }
 
+
+  const showHide = (item) => {
+    let icon = item.currentTarget;
+    if (icon.classList.contains("fa-eye")) {
+      icon.classList.remove("fa-eye");
+      icon.classList.add("fa-eye-slash");
+      icon.previousElementSibling.type = "text";
+    } else {
+      icon.classList.remove("fa-eye-slash");
+      icon.classList.add("fa-eye");
+      icon.previousElementSibling.type = "password";
+    }
+  };
 
 
 
@@ -455,26 +518,26 @@ const postDetails = (pics) => {
                 {LatestNotice &&
                   LatestNotice.map((item, index) => {
                     return (
-                      <Link
-                        to={`/notice/singlenotice/${item._id}`}
-                        className=" text-dark"
-                        key={item._id}
-                      >
-                        <article>
-                          <p>{item.title} </p>
+                     
+                        <article key={item._id}>
+                          <p> <Link to={`/notice/singlenotice/${item._id}`}> {item.title}</Link> </p>
                           <div className="d-flex justify-content-between fs-6">
-                            <p style={{ fontSize: "9px" }}>
+                            <div>
+                            <img src={item.uploadBy.image} alt="upload by profile" style={{width:"24px"}} />
+                            <p  className="d-inline-block mx-1" style={{fontSize: "12px"}}>
                               By - {`${item.uploadBy.name}`}
                             </p>
+                            </div>
+                            
                             <p
-                              className="text-end"
-                              style={{ fontSize: "9px " }}
+                              className="text-end text-de"
+                              style={{ fontSize: "9px "}}
                             >
-                              {moment(new Date(item.createdAt).toLocaleString()).fromNow()}
+                              {moment(item.createdAt).fromNow()}
                             </p>
                           </div>
                         </article>
-                      </Link>
+                     
                     );
                   })}
 
@@ -526,11 +589,7 @@ const postDetails = (pics) => {
               noValidate=""
             >
               <div className="modal-body">
-                <input
-                  type="hidden"
-                  name="action"
-                  defaultValue="updateProfile"
-                />
+               
                 <div className="mb-3 mx-2">
                   <label htmlFor="email" className="form-label">
                     <i className="fa fa-camera mx-1" />
@@ -567,32 +626,7 @@ const postDetails = (pics) => {
                     This field is required .
                   </div>
                 </div>
-                {user && user.role === "student" ? (
-                  !user.rollNo ? (
-                    <div className="mb-3 mx-2">
-                      <label htmlFor="email" className="form-label">
-                        <i className="fa fa-id-card mx-1"></i>
-                        Roll No
-                      </label>
-                      <input
-                        type="number"
-                        className="form-control  border border-secondary"
-                        id="rollNo"
-                        name="rollNo"
-                        required
-                        maxLength={4}
-                        minLength={4}
-                      />
-                      <div className="invalid-feedback">
-                        This field is required .
-                      </div>
-                    </div>
-                  ) : (
-                    ""
-                  )
-                ) : (
-                  ""
-                )}
+               
               </div>
               <div className="modal-footer text-start justify-content-center">
               <button
@@ -669,57 +703,66 @@ const postDetails = (pics) => {
 
                 <div className="mb-3 mx-2">
                   <label htmlFor="email" className="form-label">
-                    <i className="fa fa-user mx-1" />
+                    <i className="fa fa-lock mx-1" />
                     Old Password
                   </label>
+                  <div className="input-group mb-4 border border-1 ">
                   <input
                     type="password"
-                    className="form-control  border border-secondary"
-                    id="oldpassword"
-                    name="oldpassword"
-                    required
-                    // minLength={6}
+                    className="form-control border-none"
+                    style={{ outline: "none", border: "none" }}
+                    placeholder=" password"
                     value={oldpassword}
-                    onChange={(e)=> setOldpassword(e.target.value)}
+                    onChange={(e) => {
+                      setOldpassword(e.currentTarget.value);
+                    }}
                   />
+                  <i className="m-auto mx-1 fa fa-eye " onClick={showHide} />
+                </div>
                   <div className="invalid-feedback">
                     This field is required .
                   </div>
                 </div>
                 <div className="mb-3 mx-2">
                   <label htmlFor="email" className="form-label">
-                    <i className="fa fa-id-card mx-1"></i>
+                    <i className="fa fa-lock mx-1"></i>
                     New Password
                   </label>
+                  <div className="input-group mb-4 border border-1 ">
                   <input
                     type="password"
-                    className="form-control  border border-secondary"
-                    id="password"
-                    name="password"
-                    required
-                    // maxLength={6}
+                    className="form-control border-none"
+                    style={{ outline: "none", border: "none" }}
+                    placeholder=" password"
                     value={password}
-                    onChange={(e)=> setPassword(e.target.value)}
+                    onChange={(e) => {
+                      setPassword(e.currentTarget.value);
+                    }}
                   />
+                  <i className="m-auto mx-1 fa fa-eye " onClick={showHide} />
+                </div>
                   <div className="invalid-feedback">
                     This field is required .
                   </div>
                 </div>
                 <div className="mb-3 mx-2">
                   <label htmlFor="email" className="form-label">
-                    <i className="fa fa-id-card mx-1"></i>
+                    <i className="fa fa-lock mx-1"></i>
                     Re-Enter new Password
                   </label>
+                  <div className="input-group mb-4 border border-1 ">
                   <input
                     type="password"
-                    className="form-control  border border-secondary"
-                    id="confirmpassword"
-                    name="confirmpassword"
-                    required
-                    // maxLength={6}
+                    className="form-control border-none"
+                    style={{ outline: "none", border: "none" }}
+                    placeholder=" password"
                     value={confirmpassword}
-                    onChange={(e)=> setConfirmpassword(e.target.value)}
+                    onChange={(e) => {
+                      setConfirmpassword(e.currentTarget.value);
+                    }}
                   />
+                  <i className="m-auto mx-1 fa fa-eye " onClick={showHide} />
+                </div>
                   <div className="invalid-feedback">
                     This field is required .
                   </div>
@@ -758,4 +801,4 @@ const postDetails = (pics) => {
   );
 };
 
-export default Dashboard;
+export default WithAuth(Dashboard);

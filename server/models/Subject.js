@@ -28,4 +28,4 @@ const SubjectSchema = new Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("subject", SubjectSchema);
+module.exports = mongoose.model("Subject", SubjectSchema);

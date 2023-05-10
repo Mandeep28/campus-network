@@ -16,6 +16,7 @@ const QuestionSchema = new Schema(
     uploadBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
+      required: [true, "please provide the uploadBy"],
     },
     department: {
       type: mongoose.Schema.ObjectId,
@@ -26,4 +27,4 @@ const QuestionSchema = new Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("question", QuestionSchema);
+module.exports = mongoose.model("Question", QuestionSchema);

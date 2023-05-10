@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Avatar } from "@chakra-ui/avatar";
 import { Tooltip } from "@chakra-ui/tooltip";
 import ScrollableFeed from "react-scrollable-feed";
@@ -9,25 +9,23 @@ import {
   isSameUser,
 } from "../config/ChatLogics";
 import { ChatState } from "../Context/ChatProvider";
+import moment from "moment";
 
 const ScrollableChat = ({ messages }) => {
-
+  useEffect(()=>{
+    console.log(messages);
+    
+  },[])
 
   const { user } = ChatState();
-  function newTime(utcTimeString) {
-    const utcTime = new Date(utcTimeString);
-    const now = new Date();
-    const differenceInMs = utcTime.getTime() - now.getTime();
-    const localTime = new Date(now.getTime() + differenceInMs);
-    const localTimeString = localTime.toLocaleTimeString();
-    return localTimeString;
-  }
+
 
   return (
     <ScrollableFeed>
       {messages &&
         messages.map((message, i) => (
-          <div style={{ display: "flex" }} key={message._id}>
+          
+          <div className="d-flex align-items-center gap-2" key={message._id}>
             {(isSameSender(messages, message, i, user._id) ||
               isLastMessage(messages, i, user._id)) && (
               <Tooltip
@@ -35,13 +33,14 @@ const ScrollableChat = ({ messages }) => {
                 placement="bottom-start"
                 hasArrow
               >
-                <Avatar
+                {/* <Avatar
                   mt="7px"
                   mr={1}
                   size="sm"
                   cursor="pointer"
                   name={message.sender.name}
-                />
+                /> */}
+                <img src={message.sender.image} alt={message.sender.name} style={{width: "25px", height: "25px", borderRadius: "50%"}} />
               </Tooltip>
             )}
             <span
@@ -64,7 +63,7 @@ const ScrollableChat = ({ messages }) => {
                  textAlign : message.sender._id === user._id ? "right" : "left"
                }}
               >
-                {newTime(message.createdAt)}
+                {moment(message.createdAt).format('LT')}
               </span>
             </span>
           </div>

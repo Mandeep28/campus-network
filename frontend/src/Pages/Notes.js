@@ -1,43 +1,68 @@
-import React from 'react'
-import Tabs, {Tab} from 'react-best-tabs';
-import AllSubject from '../components/notes/AllSubject';
-import AllNotes from '../components/notes/AllNotes';
-import AddNotes from '../components/notes/AddNotes';
-import Mynotes from '../components/notes/Mynotes';
-import { ChatState } from '../Context/ChatProvider';
+import React from "react";
+import Tabs, { Tab } from "react-best-tabs";
+import AllSubject from "../components/notes/AllSubject";
+import AddNotes from "../components/notes/AddNotes";
+import Mynotes from "../components/notes/Mynotes";
+import { ChatState } from "../Context/ChatProvider";
+import WithAuth from "../components/Authentication/WithAuth";
+import { Link, Routes , Route } from "react-router-dom";
 
 const Notes = () => {
-  const {user} = ChatState();
+  const { user } = ChatState();
+  const updateActive = (e)=>{
+    console.log(e.target);
+    const id = e.target.dataset.id;
+    let links = document.querySelectorAll(".link");
+    links.forEach((link)=>{
+      console.log(link);
+      
+      if(link.dataset.id === id) {
+        link.classList.add("active");
+      }
+      else {
+        link.classList.remove("active");
+
+      }
+    })
+    
+  }
+
   return (
-    <div>
-     {user && (user.role ==="student") ? 
-     <div className="container">
-      <h2 className='mt-5 mb-2 text-teal text-center'>All Subject </h2>
-       <AllSubject/>
-     </div>
-
-          : 
+    <>
+      {user && (user.role !== "student") ? (
+        <>
+       
+       
+          <ul className="my-2 pt-2 fs-4 ">
+            <li><Link to="/notes/mynotes" className="link  text-teal active" data-id="1" onClick={updateActive}>All Notes</Link> </li>
+            <li> <Link to="/notes/addnotes" className="link text-teal " data-id="2" onClick={updateActive}> Add Notes</Link></li>
+          </ul>
           
-     <Tabs
-            activeTab="1"
-            className="my-3 mx-5"
-            ulClassName=""
-            activityClassName="bg-teal"
-            // onClick={(event, tab) => console.log(event, tab)}
-          >
-          <Tab title="My Notes" className="mr-3">
-                  <div className="mt-3">
-                <Mynotes/>
-                  </div>
-              </Tab>
-              <Tab title="Add notes" className="mr-3">
-                  <div className="mt-3">
-                    <AddNotes/>
-                  </div>
-              </Tab>
-          </Tabs>}
-    </div>
-  )
-}
+        
 
-export default Notes
+          <div className="my-4 pb-3">
+    
+     <Routes>
+          <Route path="/"  element={<Mynotes/>} />
+          <Route path="/mynotes"  element={<Mynotes/>} />
+          <Route path="/addnotes"  element={<AddNotes/>} />
+        </Routes>
+    
+        </div>
+        </>
+     
+      ) :
+
+      <div className="container">
+          <h2 className="pt-3 pb-1 text-teal text-center  text-uppercase"> Subject </h2>
+          <div className="underline-1"></div>
+          <AllSubject />
+        </div>
+      
+     }
+
+    </>
+  );
+};
+
+export default WithAuth(Notes);

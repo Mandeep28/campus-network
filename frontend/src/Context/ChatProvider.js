@@ -1,6 +1,4 @@
-import React, { useState, useEffect , createContext, useContext } from "react";
-import { useNavigate } from "react-router-dom";
-// import ChatContext from "./chat-context";
+import React, { useState, createContext, useContext } from "react";
 import axios from "axios";
 
 const ChatContext = createContext();
@@ -10,26 +8,9 @@ const ChatProvider = (props) => {
   const [selectedChat, setSelectedChat] = useState();
   const [chats, setChats] = useState([]);
   const [notification, setNotification] = useState([]);
-  const abortController = new AbortController();
+  const {show , setshow} = useState(false);
 
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    // if(!localStorage.getItem("userToken")) {
-    //   navigate("/login");
-    // }
-    // else {
-      if(localStorage.getItem("userToken")){
-
-        getUserDetails();
-      }
-     
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [navigate]);
-
-
-
+ 
 
 const getUserDetails = async ()=>{
   let token = localStorage.getItem("userToken")
@@ -73,7 +54,9 @@ const getUserDetails = async ()=>{
           setChats,
           notification,
           setNotification,
-          getUserDetails
+          getUserDetails, 
+          show, 
+          setshow
         }}
       >
         {props.children}

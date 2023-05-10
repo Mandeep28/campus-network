@@ -28,14 +28,14 @@ const ProfileModal = ({ user, children }) => {
       )}
       <Modal size="lg" onClose={onClose} isOpen={isOpen} isCentered >
         <ModalOverlay />
-        <ModalContent h="380px" bg="purple.800">
+        <ModalContent h="380px" bg="white">
           <ModalHeader
-            fontSize="40px"
+            fontSize="30px"
             fontFamily="Work sans"
             d="flex"
             justifyContent="center"
             fontWeight="bold"
-            color="yellow.400"
+            color="teal"
           >
             {user.name}
           </ModalHeader>
@@ -46,9 +46,10 @@ const ProfileModal = ({ user, children }) => {
             alignItems="center"
             justifyContent="space-between"
           >
-            <Avatar size="2xl" name={user.name} borderColor="black" borderWidth="2px" bg="yellow.400" color="black"/>
+            {/* <Avatar size="2xl" name={user.name} borderColor="black" borderWidth="2px" bg="white" color="black"/> */}
+            <img src={user.image} alt={user.name} style={{width: "180px", height:"170px"}} className='img-thumbnail rounded-circle' />
             <Text
-              fontSize={{ base: "28px", md: "30px" }} fontWeight="bold" color="yellow.400"
+              fontSize={{ base: "28px", md: "30px" }} fontWeight="bold" color="teal"
               fontFamily="Work sans"
             >
               Email: {user.email}

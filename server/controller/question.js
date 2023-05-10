@@ -1,7 +1,8 @@
 const Student = require("../models/Student");
 const Question = require("../models/Question");
 const Teacher = require("../models/Teacher");
-const User = require("../models/User")
+const Course = require("../models/Course");
+const User = require("../models/User");
 const { StatusCodes } = require("http-status-codes");
 const customError = require("../error/customError");
 const Answer = require("../models/Answer");
@@ -17,21 +18,23 @@ const postQuestion = async (req, res) => {
 
   if (userData.role === "student") {
     //...
-    const user = await Student.findOne({ email: userData.email });
+    const user = await Student.findOne({ email: userData.email }).populate(
+      "course",
+      "name, department"
+    );
+
     // console.log(user);
 
-     question = await Question.create({
+    question = await Question.create({
       title,
       body,
       uploadBy: userData._id,
-      department: user.department,
+      department: user.course.department,
     });
     // console.log(question);
-
-   
   } else if (userData.role === "teacher") {
     const user = await Teacher.findOne({ email: userData.email });
-     question = Question.create({
+    question = Question.create({
       title,
       body,
       uploadBy: userData._id,
@@ -40,13 +43,11 @@ const postQuestion = async (req, res) => {
 
     //....
   } else if (userData.role === "admin") {
-     question = await Question.create({
+    question = await Question.create({
       title,
       body,
       uploadBy: userData._id,
-    
     });
-
   } else {
     throw new customError("Something Went Wrong", StatusCodes.BAD_REQUEST);
   }
@@ -60,65 +61,55 @@ const getQuestions = async (req, res) => {
   const userData = req.data;
   // console.log(userData);
 
-  const adminUsers = await User.find({ role: 'admin' }, '_id'); // retrieve ids of admin users
-  let adminUserIds = adminUsers.map(user => user._id); // get array of admin user ids
+  const adminUsers = await User.find({ role: "admin" }, "_id"); // retrieve ids of admin users
+  let adminUserIds = adminUsers.map((user) => user._id); // get array of admin user ids
   // console.log(adminUserIds);
-  
 
   let questions = {};
 
   if (userData.role === "teacher") {
-    const user = await Teacher.findOne({ email: userData.email });
+    const user = await Teacher.findOne({ email: userData.email })
     if (!user) {
       throw new customError("Not authorized ", StatusCodes.UNAUTHORIZED);
     }
-     questions =await Question.find({
-      $or : [
-
-        { uploadBy : {$in: adminUserIds} },
+    // console.log(user.course.department)
+    questions = await Question.find({
+      $or: [
+        { uploadBy: { $in: adminUserIds } },
         { depeartment: user.department },
-      ]
-
-      })
-     .populate('uploadBy', '-password')
-     .sort({ _id: -1 });
+      ],
+    })
+      .populate("uploadBy", "-password")
+      .sort({ _id: -1 });
     //  console.log(questions)
- 
-  } 
+  }
   //  if user is student
   else if (userData.role === "student") {
-    const user = await Student.findOne({ email: userData.email });
+    const user = await Student.findOne({ email: userData.email }).populate("course", "name, department");
     if (!user) {
       throw new customError("Not authorized ", StatusCodes.UNAUTHORIZED);
     }
-    console.log(user);
-   
-    
-     questions = await Question.find({
-      $or : [
+    // console.log(user);
 
-        { department : user.department },
-        { uploadBy : {$in: adminUserIds} },
-      ]
-
-      })
-     .populate('uploadBy', '-password')
-     .sort({ _id: -1 });
-
-     } 
-  //  if user is admin 
+    questions = await Question.find({
+      $or: [
+        { department: user.course.department },
+        { uploadBy: { $in: adminUserIds } },
+      ],
+    })
+      .populate("uploadBy", "-password")
+      .sort({ _id: -1 });
+  }
+  //  if user is admin
   else if (userData.role === "admin") {
-
-     questions = await Question.find({})
+    questions = await Question.find({})
       .populate("uploadBy", " -password ")
       .sort({ _id: -1 });
-
   } else {
     throw new customError("User type not exits", StatusCodes.UNAUTHORIZED);
   }
- 
-  res.status(StatusCodes.OK).json({ questions, length: questions.length });
 
+  res.status(StatusCodes.OK).json({ questions, length: questions.length });
 };
 
 //  ------------------- get single question ------------------------------------
@@ -181,10 +172,6 @@ const postAnswer = async (req, res) => {
   res.status(StatusCodes.CREATED).json(data);
 };
 
-
-
-
-
 const getAnswers = async (req, res) => {
   const questionId = req.query.id;
 
@@ -195,12 +182,12 @@ const getAnswers = async (req, res) => {
       StatusCodes.NOT_FOUND
     );
   }
-  const data = await Answer.find({ question_id: questionId }).populate( "uploadBy","-password" );
-  res.status(StatusCodes.OK).json({ data , length: data.length });
+  const data = await Answer.find({ question_id: questionId }).populate(
+    "uploadBy",
+    "-password"
+  );
+  res.status(StatusCodes.OK).json({ data, length: data.length });
 };
-
-
-
 
 const deleteAnswer = async (req, res) => {
   const answerId = req.params.id;
@@ -220,19 +207,14 @@ const deleteAnswer = async (req, res) => {
   res.status(StatusCodes.OK).json({ msg: "Answer delted successfully" });
 };
 
-
 //  ------------------- my question -----------------------------------
-const getMyQuestion = async (req, res) =>{
-
+const getMyQuestion = async (req, res) => {
   const userData = req.data;
-  const questions = await Question.find({uploadBy : userData._id
-  })
+  const questions = await Question.find({ uploadBy: userData._id })
     .populate("uploadBy", "-password")
     .sort({ _id: -1 });
-  res.status(StatusCodes.OK).json({questions , length: questions.length}) ;
-
-}
-
+  res.status(StatusCodes.OK).json({ questions, length: questions.length });
+};
 
 const vote = async (req, res) => {
   const answerId = req.query.id;
@@ -264,9 +246,6 @@ const vote = async (req, res) => {
   }
 };
 
-
-
-
 module.exports = {
   postQuestion,
   getQuestions,
@@ -276,5 +255,5 @@ module.exports = {
   getAnswers,
   deleteAnswer,
   vote,
-  getMyQuestion
+  getMyQuestion,
 };

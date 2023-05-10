@@ -1,21 +1,21 @@
-import React, { useRef, useContext, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import NotificationBadge from "react-notification-badge";
 import { Effect } from "react-notification-badge";
 import { getSender } from "../../config/ChatLogics";
 // import { ChatState } from "../../Context/ChatProvider";
-import { useDisclosure } from "@chakra-ui/hooks";
+// import { useDisclosure } from "@chakra-ui/hooks";
 import { Box } from "@chakra-ui/layout";
 
 import {  toast } from "react-toastify";
 import { ChatState } from "../../Context/ChatProvider";
 import axios from "axios";
 // import { useToast } from "@chakra-ui/toast";
-import {  Spinner } from "@chakra-ui/react";
+// import {  Spinner } from "@chakra-ui/react";
 import ChatLoading from "../ChatLoading";
 import UserListItem from "../userAvatar/UserListItem";
 
-const Header = ({setShow}) => {
+const Header = ({setShow , setUser}) => {
   const refClose = useRef(null);
   const refSearchModalClose = useRef(null);
   const [padding, setPadding] = useState(5); // set initial padding to 0px
@@ -246,10 +246,10 @@ const navigate = useNavigate();
 
 
     {/* header  */}
-    <nav className={`navbar bg-body-tertiary positon-static  px-${padding} shadow shadow-md`}>
+    <nav className={`navbar bg-body-tertiary positon-static  px-${padding} `}>
       <div className="container-fluid">
         <div className="d-flex justify-content-between w-100">
-        <Link className="navbar-brand text-uppercase text-teal logo" to="/">
+        <Link className="navbar-brand text-uppercase text-teal logo" to="/dashboard">
           Campus Network
         </Link>
         <div className="d-flex align-items-center"> 
@@ -335,7 +335,7 @@ const navigate = useNavigate();
                 <Link
                   className="nav-link text-teal  "
                   aria-current="page"
-                  to="/"
+                  to="/dashboard"
                 >
                   <i className="fa fa-home mx-1"></i> Home
                 </Link>
@@ -360,14 +360,20 @@ const navigate = useNavigate();
                   <i className="fa fa-users mx-1"></i> Users
                 </Link>
               </li> : ""}
+             {user && (user.role !=="student") ? <li className="nav-item" onClick={handleClick} >
+                <Link className="nav-link text-teal" to="/addons">
+                  <i className="fa fa-users mx-1"></i> Addons
+                </Link>
+              </li> : ""}
               <li className="nav-item" onClick={handleClick}>
-                <Link className="nav-link text-teal" to="/login" onClick={()=>{
+                <button className="nav-link text-teal cursor-pointer w-100 text-start"  onClick={()=>{
                   localStorage.clear();
-                  navigate("/login");
                   setShow(false);
+                  // setUser({});
+                  navigate("/login");
                 }}>
                   <i className="fa fa-sign-out mx-1"></i> Logout
-                </Link>
+                </button>
               </li>
             </ul>
           </div>

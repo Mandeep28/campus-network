@@ -33,7 +33,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const toast = useToast();
   useEffect(()=>{
     console.log("user details (from single chat) is :", user);
-    
+      // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
   const { selectedChat, setSelectedChat, user, notification, setNotification } = ChatState();

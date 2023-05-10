@@ -12,6 +12,7 @@ const AllQuestion = ({endpoint , showTrash , fetchAgain}) => {
 
   useEffect(()=>{
       fetchQuestion();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
   },[fetchAgain])
 
 
@@ -24,38 +25,15 @@ const AllQuestion = ({endpoint , showTrash , fetchAgain}) => {
         };
   
         const { data } = await axios.get(`/api/v1/user/${endpoint}`, config);
-        // console.log(data);
+        console.log(data);
         setQuestion(data.questions);
   
         // setLoading(false);
       } catch (error) {
-        console.log(error.response.data);
+        console.log(error.response);
       }
     };
-    function setLocalTime(utcTimeString) {
-      const utcTime = new Date(utcTimeString);
-      const now = new Date();
-      const differenceInMs = now.getTime() - utcTime.getTime();
-      const hours = Math.floor(differenceInMs / 3600000);
-      const minutes = Math.floor((differenceInMs % 3600000) / 60000);
-      // console.log("hours is ", hours, "minutes is :", minutes);
-  
-      if (hours > 0 && minutes > 0) {
-        let returnVal = `${hours} hrs ${minutes} min ago`;
-        // console.log(returnVal);
-  
-        return returnVal;
-      } else if (hours > 0 && minutes <= 0) {
-        let returnVal = `${hours} hrs  ago`;
-        // console.log(returnVal);
-        return returnVal;
-      } else if (hours <= 0 && minutes > 0) {
-        let returnVal = ` ${minutes} min ago`;
-        // console.log(returnVal);
-        return returnVal;
-      }
-    }
-
+   
     const filteredItems = question.filter(
       item =>
         item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -91,7 +69,7 @@ const handleDelete = async (e)=>{
     };
 
     const { data } = await axios.delete("/api/v1/user/community/question/"+answerId, config);
-    // console.log(data);
+    console.log(data);
     toast.success("Question deleted successfully", {
       position: "top-right",
       autoClose: 5000,
@@ -121,13 +99,13 @@ const handleDelete = async (e)=>{
 }
 
 
-// if(question.length > 0 ) {
-//   return (
-//     <div className="container d-flex align-items-center justify-content-center" style={{minHeight : "60vh"} }>
-//       <h5>No question to show ... You can add question anytime.</h5>
-//     </div>
-//   )
-// }
+if(question && (question.length  <= 0) ) {
+  return (
+    <div className="container d-flex align-items-center justify-content-center" style={{minHeight : "60vh"} }>
+      <h5>No question to show ... You can add question anytime.</h5>
+    </div>
+  )
+}
 
 
   return (
@@ -168,7 +146,7 @@ const handleDelete = async (e)=>{
                <img src={item.uploadBy.image} alt="" className="rounded-circle image-fluid" style={{width: "30px" , height: "30px"}} />
                   <a href="#!" className="text-decoration-none d-inline-block mx-3 text-secondary">
                   <p className="card-text">
-                      By {item.uploadBy.name}
+                      By {item && item.uploadBy.name}
                    
                   </p>
                   </a>

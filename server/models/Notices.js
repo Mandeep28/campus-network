@@ -35,4 +35,4 @@ const NoticeSchema = new Schema({
   },
 }, {timestamps: true});
 
-module.exports = mongoose.model("notices", NoticeSchema);
+module.exports = mongoose.model("Notices", NoticeSchema);

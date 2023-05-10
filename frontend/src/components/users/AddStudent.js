@@ -118,8 +118,9 @@ const AddStudent = () => {
   };
 
   return (
-    <div className="container">
-      <h4>Add Student Details : </h4>
+    <div className="container pb-2">
+      <h3 className="text-teal text-center">Add Student Details  </h3>
+      <div className="underline-1"></div>
       <form>
         <div className="mb-3">
           <label htmlFor="Uname" className="form-label">
@@ -150,7 +151,6 @@ const AddStudent = () => {
             onChange={handleOnChange}
           />
         </div>
-        <div className="row">
         
           <div className=" col mb-3">
             <label htmlFor="semester" className="form-label">
@@ -166,7 +166,6 @@ const AddStudent = () => {
               onChange={handleOnChange}
             />
           </div>
-        </div>
         <div className="row row-cols-1 row-cols-md-3 row-cols-sm-2">
           <div className="col">
             <label htmlFor="course" className="form-label">

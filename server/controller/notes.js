@@ -11,14 +11,14 @@ const postNote = async (req, res) => {
 
   const {
     title,
-   File,
+   url,
     subjectId,
   } = req.body;
 
  
   const notes = await Notes.create({
     title,
-    attachment_url : File,
+    attachment_url : url,
     subject : subjectId,
     uploadBy:teacherData._id
   });
@@ -34,8 +34,14 @@ const getNotes = async (req, res) => {
     if (!findUser) {
       throw new customError("Not authorized", StatusCodes.UNAUTHORIZED);
     }
+
+    const subject = await Subject.findById(subjectId);
+    if(!subject) {
+      throw new customError(`No subject found with id ${subjectId}`, StatusCodes.UNAUTHORIZED);
+    }
+
     const data = await Notes.find({subject : subjectId}).populate("uploadBy", "-password");
-    res.status(StatusCodes.OK).json({ data, length: data.length });
+    res.status(StatusCodes.OK).json({ data, length: data.length , subject });
   } else if (userData.role === "teacher") {
     const findUser = await Teacher.findOne({ email: userData.email });
     if (!findUser) {
@@ -44,7 +50,7 @@ const getNotes = async (req, res) => {
     const data = await Notes.find({uploadBy : ObjectId(userData._id) }).populate("uploadBy", "-password");
     res.status(StatusCodes.OK).json({ data, length: data.length });
   } else if (userData.role === "admin") {
-    const data = await Notes.find({});
+    const data = await Notes.find({}).populate("uploadBy", "-password");
     res.status(StatusCodes.OK).json({ data, length: data.length });
   } else {
     throw new customError("User type not exits", StatusCodes.UNAUTHORIZED);
@@ -100,7 +106,8 @@ const updateNote = async (req, res) => {
 
 const deleteNote = async (req, res) => {
   const notesId = req.params.id;
-  const teacherData = req.data;
+  const userInfo = req.data;
+
   const data = await Notes.findById(notesId);
   if (!data) {
     throw new customError(
@@ -108,8 +115,15 @@ const deleteNote = async (req, res) => {
       StatusCodes.NOT_FOUND
     );
   }
+  if(userInfo.role === "admin") {
+    await data.remove();
+    res.status(StatusCodes.OK).json({ msg: "note deleted successfully" });
+    return ;
+  }
 
-  if (!data.uploadBy.id.equals(teacherData._id)) {
+
+
+  if (!data.uploadBy.equals(userInfo._id)) {
     throw new customError("Not authorized ", StatusCodes.UNAUTHORIZED);
   }
   await data.remove();

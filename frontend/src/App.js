@@ -1,15 +1,14 @@
-import React, { useEffect , useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 
 import ChatPage from "./Pages/ChatPage";
-import {BrowserRouter, Routes, Route  } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Dashboard from "./Pages/Dashboard";
 import Community from "./Pages/Community";
 import Notice from "./Pages/Notice";
 import Notes from "./Pages/Notes";
 import NotFound from "./Pages/NotFound";
 import Login from "./components/Authentication/Login";
-import ChatProvider from "./Context/ChatProvider";
 import { ChakraProvider } from "@chakra-ui/react";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -23,73 +22,80 @@ import SingleQuestion from "./components/community/SingleQuestion";
 import User from "./Pages/User";
 import SingleNotice from "./components/Notices/SingleNotice";
 import AllNotes from "./components/notes/AllNotes";
+import HomePage from "./Pages/HomePage";
+import Addons from "./Pages/Addons";
 
 
 
 function App() {
-  // const location = useLocation();
-  const [show, setShow] = useState(true);
-  const baseName = window.location.pathname.split("/")[1];
-  const baseName2 = window.location.pathname.split("/")[0];
+  const unprotectedRoutes = ['/verify-email', '/reset-password', '/login', '/register', '/sendResetMail', '/'];
+  const [show , setShow] = useState(false);
+  let pathname = window.location.pathname;
 
   useEffect(()=>{
-
-    console.log("location from app.js", baseName);
-    if(baseName === "login" ||baseName === "register" ||baseName === "verify-email" ||baseName === "reset-password" ||baseName === "sendResetMail" ) {
+    if(unprotectedRoutes.includes(pathname)){
       setShow(false);
     }
     else {
       setShow(true);
     }
     
-  },[baseName ])
-
+  },[pathname]);
 
 
 
   return (
-    <BrowserRouter >
-    <ChatProvider>
+   <>
     <div >
          {show &&  <Sidebar setShow={setShow} />}
           {/* auth routes  start*/}
           <Routes>
-            <Route  path="/login" element={<Login setShow={setShow} />} />
-            <Route  path="/register" element={<Signup />} />
-            <Route  path="/verify-email" element={<VerifyEmail />} />
-            <Route  path="/reset-password" element={<ResetPassword />} />
-            <Route  path="/sendResetMail" element={<SendResetMail />} />
-        
+            <Route  exact path="/login" element={<Login setShow={setShow} />} />
+            <Route  exact path="/register" element={<Signup />} />
+            <Route  exact path="/verify-email" element={<VerifyEmail />} />
+            <Route  exact path="/reset-password" element={<ResetPassword />} />
+            <Route  exact path="/sendResetMail" element={<SendResetMail />} />
+          </Routes>
           {/* auth routes end */}
-      
+        <section className="background px-3 py-2">
+          <div className="bg-light rounded" style={{padding: "1px 0"}}>
+          <Routes>
+
+         
        
-            <Route exact path="/" element={<Dashboard/>} />
+            <Route  exact path="/" element={<HomePage setShow={setShow}/>} />
+            <Route  exact path="/dashboard" element={<Dashboard setShow={setShow}/>} />
 
             {/* chats routes */}
-            <Route exact  path="/chats" element={<ChakraProvider><ChatPage /></ChakraProvider>} />
+            <Route  exact path="/chats" element={<ChakraProvider><ChatPage /></ChakraProvider>} />
             {/* community page routes */}
-            <Route  path="/community" element={<Community/>} />
+            <Route  exact path="/community" element={<Community/>} />
+            {/* <Route  exact path="/community/*" element={<Community/>} /> */}
             <Route path = "/community/singlequestion/:id" element= {<SingleQuestion/>} />
             {/*  user routes */}
-            <Route path = "/user" element= {<User/>} />
+            <Route exact path= "/user/*" element= {<User/>} />
             {/* notice routes */}
-            <Route path = "/notice" element={<Notice/>} />
-            <Route path ="/notice/singlenotice/:id" element={<SingleNotice/>} />
+            <Route exact path= "/notice/*" element={<Notice/>} />
+            <Route exact path="/notice/singlenotice/:id" element={<SingleNotice/>} />
             {/* notes routes  */}
-            <Route path = "/notes" element={<Notes/>} />
-            <Route path = "/notes/allnotes" element={<AllNotes/>} />
+            <Route exact path= "/notes/*" element={<Notes/>} />
+            <Route exact path= "/notes/allnotes" element={<AllNotes/>} />
+            {/*  add-ons routes */}
+            <Route exact path="/addons/*" element={<Addons/>} />
 
 
             {/* not found custom page */}
-            <Route path = "*" element= {<NotFound/>} />
+            <Route exact path= "*" element= {<NotFound/>} />
           </Routes>
+          </div>
+        </section>
          {show && <Footer/>}
           
     </div>
 
       <ToastContainer />
-    </ChatProvider>
-  </BrowserRouter>
+      </>
+
   );
 }
 

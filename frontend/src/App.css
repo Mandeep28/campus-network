@@ -6,8 +6,8 @@
   --color-primary-hover : rgb(1, 106, 106);
   --transition : 0.3s linear all;
   /* --color-primary1 : linear-gradient(-135deg,#899fd4,#a389d4); */
-  --color-primary1 : linear-gradient(-135deg,#0ecf9f,#11b1d5);
-  --color-primary2 : #0ecf9f;
+  --color-primary1 : linear-gradient(-135deg,#09a780,#11b1d5);
+  --color-primary2 : #09ab83;
   --background: linear-gradient(to left,#d0fef3,#d7f8ff);
   --background-dark : linear-gradient(to left,#032e23,#02171c);
   --color-primary1-hover: linear-gradient(-135deg,#0c8c6c,#105565);
@@ -30,11 +30,22 @@ h1,h2,h3,h4,h5,h6 {
   margin: 0 !important;
 }
 
-
+.cursor-pointer {
+  cursor: pointer;
+}
 
 p{
   font-size: 1rem;
 }
+
+a {
+  /* text-decoration: none; */
+  color: #000;
+}
+a:hover {
+  color: var(--color-primary2)
+}
+
 
 
 
@@ -81,6 +92,12 @@ p{
 }
 
 
+
+.navbar-brand:focus, .navbar-brand:hover {
+    color: var(--color-primary2);
+}
+
+
 /*  custom classes  */
 .text-teal {
   color: var(--color-primary2);
@@ -106,15 +123,19 @@ p{
   background: white;
 }
 
-.btn-outline-teal:focus , .btn-outline-teal:hover .btn-outline-teal:active {
+.btn-outline-teal:focus , .btn-outline-teal:hover ,  .btn-outline-teal:active {
 background: var(--color-primary1);
-color: white
+color: white;
 }
 
 
 /*  dashboard section  */
 .background {
   background: var(--background);
+  padding: .9rem, 0.6rem;
+}
+.background:nth-child(1) {
+  border-radius: 8px;
 }
 
  /* media query  */
@@ -165,13 +186,14 @@ text-decoration: none;
 /*  tabs css  */
 .rb-tabs .rb-tabs-header .rb-tabs-items {
   justify-content: center;
+  border: none !important ;
 
 }
 .rb-tabs-item {
   font-size: 1.2rem;
   margin: 0 7px;
-  border-bottom: none;
 }
+
 
 
 /*  data Tables pagination  */
@@ -228,4 +250,25 @@ text-decoration: none;
   overflow: visible !important;
 }
 
+
+/*  custom tabs */
+.link {
+  padding: 9px 8px;
+}
+.active {
+  border-bottom: 2px solid var(--color-primary2);
+}
+
+.underline-1 {
+  background: var(--color-primary1);
+  height: 2px;
+  width: 15%;
+  /* margin: 0px 0px; */
+  margin: 0 auto;
+}
+.underline-2 {
+  background: var(--color-primary1);
+  height: 2px;
+  width: 15%;
+}
 

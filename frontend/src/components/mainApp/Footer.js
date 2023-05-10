@@ -4,8 +4,8 @@ const Footer = () => {
   return (
     <>
     {/* Footer */}
-    <footer className="text-center text-lg-start text-muted ">
-      <hr  className='bg-teal' style={{ display: "block", margin: "1.2rem auto", width: "95%", height: "2px"}} />
+    <footer className="text-center text-lg-start text-muted mt-3">
+     
       {/* Section: Social media */}
       <section className="d-flex justify-content-center justify-content-lg-between pb-4 border-bottom ">
         {/* Left */}

@@ -7,7 +7,7 @@ import "./auth.css";
 const Login = ({setShow}) => {
 
 // if user Token is present in localStorage then no need to show the login page (redirect user to dashboard)
-const abortController = new AbortController();
+// const abortController = new AbortController();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -69,15 +69,12 @@ const abortController = new AbortController();
       });
       localStorage.setItem("userToken", data.token);
       setShow(true);
-      navigate("/");
-
-      return () => {
-        abortController.abort();
-      };
-
       setLoading(false);
+      setEmail("");
+      setPassword("");
+      navigate("/dashboard");
     } catch (error) {
-      console.log(error.response);
+      console.log(error);
       toast.error(error.response.data.msg, {
         position: "top-right",
         autoClose: 5000,
@@ -89,9 +86,11 @@ const abortController = new AbortController();
         theme: "colored",
       });
       setLoading(false);
+      setEmail("");
+      setPassword("");
     }
-    setEmail("");
-    setPassword("");
+    
+   
   };
 
   return (
