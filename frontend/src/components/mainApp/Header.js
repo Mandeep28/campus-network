@@ -6,7 +6,7 @@ import { getSender } from "../../config/ChatLogics";
 // import { ChatState } from "../../Context/ChatProvider";
 // import { useDisclosure } from "@chakra-ui/hooks";
 import { Box } from "@chakra-ui/layout";
-
+import logo from '../../assets/images/logo.png'
 import {  toast } from "react-toastify";
 import { ChatState } from "../../Context/ChatProvider";
 import axios from "axios";
@@ -233,8 +233,9 @@ const navigate = useNavigate();
       <div className="container-fluid">
         <div className="d-flex justify-content-between w-100">
         <Link className="navbar-brand text-uppercase text-teal logo" to="/dashboard">
-          Campus Network
+          <img src={logo} className="logo" alt="logo" />
         </Link>
+      
         <div className="d-flex align-items-center"> 
        
      {showSearch &&  <i className="fa fa-search mx-1 text-teal fs-5"  type="button"
@@ -298,12 +299,9 @@ const navigate = useNavigate();
           aria-labelledby="offcanvasNavbarLabel"
         >
           <div className="offcanvas-header">
-            <h5
-              className="offcanvas-title text-uppercase text-teal"
-              id="offcanvasNavbarLabel"
-            >
-              Canpus Network
-            </h5>
+            
+            <img src={logo} alt="logo" className="logo" />
+          
             <button
               type="button"
               className="btn-close"
@@ -320,7 +318,7 @@ const navigate = useNavigate();
                   aria-current="page"
                   to="/dashboard"
                 >
-                  <i className="fa fa-home mx-1"></i> Home
+                  <i className="fa fa-home mx-1"></i> Dashboard
                 </Link>
               </li>
               <li className="nav-item" onClick={handleClick}>
@@ -343,7 +341,7 @@ const navigate = useNavigate();
                   <i className="fa fa-users mx-1"></i> Users
                 </Link>
               </li> : ""}
-             {user && (user.role !=="student") ? <li className="nav-item" onClick={handleClick} >
+             {user && (user.role ==="admin") ? <li className="nav-item" onClick={handleClick} >
                 <Link className="nav-link text-teal" to="/addons">
                   <i className="fa fa-users mx-1"></i> Addons
                 </Link>

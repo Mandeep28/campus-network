@@ -6,6 +6,8 @@ import AddStudent from '../components/users/AddStudent';
 import AddTeacher from '../components/users/AddTeacher';
 import WithAuth from '../components/Authentication/WithAuth';
 import { Link , Routes, Route } from 'react-router-dom';
+import Alumini from '../components/users/Alumini';
+import RegisterUser from '../components/users/RegisterUser';
 
 const User = () => {
 
@@ -40,6 +42,10 @@ const User = () => {
         <div>
         <Routes>
             <Route path = "/*" element={<AllUser/>} />
+
+            <Route exact path="/registeruser" element={<RegisterUser/>}/>
+            <Route exact path="/alumini" element={<Alumini/>}/>
+
             <Route exact path="/student/addnew" element={<AddStudent/>}/>
             <Route exact path="/teacher/addnew" element={<AddTeacher/>}/>
         </Routes>
@@ -48,31 +54,7 @@ const User = () => {
         </>
 
 
-    //    <Tabs
-    //       activeTab="1"
-    //       className="my-3 px-2"
-    //       ulClassName=""
-    //       activityClassName="bg-teal"
-    //       // onClick={(event, tab) => console.log(event, tab)}
-    //     >
-    //         <Tab title="All User" className="mr-3">
-    //             <div className="mt-3">
-    //                 <AllUser/>
-    //             </div>
-    //         </Tab>
-        
-    //         <Tab title="Add student" className="mr-3">
-    //             <div className="mt-3">
-    //                 <AddStudent/>
-    //             </div>
-    //         </Tab>
-    //         <Tab title="Add Teacher" className="mr-3">
-    //             <div className="mt-3">
-    //                <AddTeacher/>
-    //             </div>
-    //         </Tab>
-           
-    //     </Tabs>
+  
    
 
   )

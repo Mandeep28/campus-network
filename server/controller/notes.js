@@ -171,7 +171,7 @@ const getSubject = async (req, res) => {
 
   }
   else if(userData.role === "admin") {
-    const data = await Subject.find({})
+    const data = await Subject.find({}).populate("course", "name").populate("createdBy", "name email")
     res.status(StatusCodes.OK).json({data, length: data.length});
   }
   else {

@@ -15,10 +15,19 @@ const CourseSchema = new Schema(
       ref: "Department",
     },
    
-    totalSemester: {
+    maxStudent: {
       type: Number,
-      required: [true, "Semester must be required"],
+      required: [true, "total student  must be required"],
     },
+    degreeType : {
+      type: String, 
+      required: [true, "degree type must be required"]
+    },
+    rollnoSeries : {
+      type : [Number] , 
+      required : [true, "roll no series must be required"]
+    } ,
+
     createdBy: {
         type: mongoose.Schema.ObjectId,
         ref: "User",

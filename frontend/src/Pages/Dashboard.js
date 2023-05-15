@@ -182,6 +182,18 @@ const postDetails = (pics) => {
 };
 
 
+const [time, setTime] = useState("");
+
+useEffect(() => {
+  const timer = setInterval(() => {
+    setTime(new Date().toLocaleTimeString());
+  }, 1000);
+
+  return () => {
+    clearInterval(timer);
+  };
+}, []);
+
 
 
 
@@ -363,7 +375,7 @@ const postDetails = (pics) => {
         id="dashborad-section"
         className="background section"
       >
-        <div className=" row py-5 px-5">
+        <div className=" row p-1">
           <div className="col col-9">
             {/* photo section */}
             <div>
@@ -517,7 +529,19 @@ const postDetails = (pics) => {
                 </div>
               </div>
             ) : (
-              ""
+              <div>
+              <div className="card mb-4">
+                <div className="card-body py-3 shadow shadow-md">
+                  <h2 className="h2 my-3 mb-4 text-teal text-capitalize text-center">
+                  {moment(new Date()).format("ll")} {time}
+                  </h2>
+                  <div className="text-center">
+                    <button className="btn btn-teal">Update Semester</button>
+                  </div>
+                 
+                </div>
+              </div>
+            </div>
             )}
             {/*  end of user detials sections */}
           </div>

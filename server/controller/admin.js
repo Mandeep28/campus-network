@@ -151,18 +151,24 @@ const getTeacher = async (req, res) => {
 };
 const updateTeacher = async (req, res) => {
   const id = req.params.id;
+
+  
   let teacher = await Teacher.findOne({ _id: id });
   if (!teacher) {
     throw new customError(`No user found with id ${id}`, StatusCodes.NOT_FOUND);
   }
-  teacher = await Student.findOneAndUpdate({ _id: id }, req.body, {
+  teacher = await Teacher.findOneAndUpdate({ _id: id }, req.body, {
     new: true,
     runValidators: true,
   });
+ 
   res
     .status(StatusCodes.OK)
     .json({ msg: "Teacher updated successfullly", teacher });
 };
+
+
+//  ------------------- delete teacher -----------------------
 const deleteTeacher = async (req, res) => {
   const id = req.params.id;
   let teacher = await Teacher.findOne({ _id: id });
@@ -286,15 +292,19 @@ const deleteDepartment = async (req, res) =>{
 
 //  ------------------ add course -------------------------------
 const addCourse = async (req, res) =>{
-  const {name, department, totalSemester}= req.body;
+  const {name, department, degreeType, rollno , maxStudent}= req.body;
+  console.log(req.body);
+  
   const adminInfo = req.user;
 
   const course = await Course.create({
     name, 
-    department, totalSemester,
+    department, degreeType , maxStudent, rollnoSeries : rollno,
     createdBy: adminInfo._id
   })
-  res.status(StatusCodes.CREATED).json(course);
+  res.status(StatusCodes.CREATED).json({course , msg: "course added successfully"});
+console.log(course);
+
 
 }
 

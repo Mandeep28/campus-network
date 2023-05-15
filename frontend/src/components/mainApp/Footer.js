@@ -1,4 +1,5 @@
 import React from 'react'
+import logo from '../../assets/images/logo.png'
 
 const Footer = () => {
   return (
@@ -46,7 +47,7 @@ const Footer = () => {
             <div className="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
               {/* Content */}
               <h6 className="text-uppercase fw-bold mb-4 text-teal">
-                <i className="fas fa-globe me-3 " />
+             <img src={logo} alt="logo" className='logo2 m-1' />
                 Campus Network
               </h6>
               <p>
@@ -110,13 +111,19 @@ const Footer = () => {
       {/* Section: Links  */}
       {/* Copyright */}
       <div
-        className="text-center p-4"
+        className="text-center p-4 text-capitalize"
         style={{ backgroundColor: "rgba(0, 0, 0, 0.025)" }}
         
       >
-        © 2023 Copyright:
-        <a className="text-decoration-none text-teal fw-bold" href="/">
-          campusnetwork.com
+        &copy; 2023 Copyright 
+        <a className="text-decoration-none text-teal fw-bold mx-1" href="/">
+        campusnetwork.com
+        </a>
+        
+        Design & developed by  <a className="text-decoration-none text-teal fw-bold mx-1" target='_blank' href="https://github.com/kapoor08">
+      lakshay Kapoor
+        </a> &   <a className="text-decoration-none text-teal fw-bold mx-1" target='_blank' href="https://github.com/mandeep28">
+          Mandeep Singh
         </a>
       </div>
       {/* Copyright */}
