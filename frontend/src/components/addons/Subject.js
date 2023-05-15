@@ -7,10 +7,13 @@ const Subject = () => {
   const [subject, setSubject] = useState();
   const [deptName, setDeptName] = useState("");
   const [loading, setLoading] = useState(false);
-  const [deptId, setDeptId] = useState();
   const closeRef = useRef();
   const closeRef2 = useRef();
   const [course, SetCourse] = useState();
+  const [name, setName] = useState("")
+  const [department, setDepartment] = useState("")
+  const [semester , setSemester ] = useState("")
+  
   useEffect(() => {
     fetchSubjectData();
     fetchCourse();
@@ -80,7 +83,7 @@ const Subject = () => {
       subject.forEach((item) => {
         data.rows.push({
           name: item.name,
-          course: item.course.name,
+        //   course: item.course.name,
           sem: item.semester,
           createdby: item.createdBy.name,
           actions: (
@@ -89,12 +92,8 @@ const Subject = () => {
                 <i
                   className="fa fa-trash fs-5 text-danger mx-1 cursor-pointer"
                   data-itemid={item._id}
-                  data-bs-toggle="modal"
-                  data-bs-target="#deleteDeptModal"
-                  onClick={(e) => {
-                    setDeptId(e.target.dataset.itemid);
-                  }}
-                  // onClick={handleDelete}
+                 
+                  onClick={handleDelete}
                 ></i>
               </div>
             </>
@@ -109,7 +108,7 @@ const Subject = () => {
   const handleDelete = async (e) => {
     // console.log(" I am handle delete");
     // const id = e.target.dataset.itemid;
-    console.log(deptId);
+    // console.log(deptId);
 
     const token = localStorage.getItem("userToken");
     try {
@@ -118,7 +117,7 @@ const Subject = () => {
       };
 
       const { data } = await axios.delete(
-        `/api/v1/admin/department/${deptId}`,
+        `/api/v1/user/subject/${e.target.dataset.itemid}`,
         config
       );
       // console.log(data);
@@ -146,12 +145,13 @@ const Subject = () => {
       });
     }
     closeRef2.current.click();
+    fetchSubjectData();
   };
 
   const handleSubmit = async () => {
-    console.log(deptName);
+    // console.log(deptName);
 
-    if (!deptName) {
+    if (!name || !department || !semester) {
       toast.warn("Depatment Name is required", {
         position: "top-right",
         autoClose: 5000,
@@ -173,8 +173,8 @@ const Subject = () => {
       };
 
       const { data } = await axios.post(
-        `/api/v1/admin/department`,
-        { name: deptName.toUpperCase() },
+        `/api/v1/user/subject`,
+        { name , course : department, semester },
         config
       );
       console.log(data);
@@ -205,7 +205,10 @@ const Subject = () => {
     closeRef.current.click();
     // fetchDepartmentData();
     setLoading(false);
-    setDeptName("");
+   setName("")
+   setDepartment("")
+   setSemester("")
+   fetchSubjectData();
   };
 
   return (
@@ -265,10 +268,10 @@ const Subject = () => {
                       type="text"
                       className="form-control"
                       placeholder="subject Name ...."
-                      name="deptName"
-                      value={deptName}
+                      name="name"
+                      value={name}
                       onChange={(e) => {
-                        setDeptName(e.target.value);
+                        setName(e.target.value);
                       }}
                       aria-describedby="basic-addon1"
                     />
@@ -278,11 +281,11 @@ const Subject = () => {
                 <div className="mb-3">
             <select
               className="form-select"
-              name="department"
-            //   value={dept}
-            //   onChange={(e) => {
-            //     setDept(e.target.value);
-            //   }}
+              name="course"
+              value={department}
+              onChange={(e) => {
+                setDepartment(e.target.value);
+              }}
             >
               <option>Choose Course ....</option>
               {course &&
@@ -306,6 +309,8 @@ const Subject = () => {
                     name="semester"
                     className="form-control"
                     placeholder="1"
+                    value={semester}
+                    onChange={(e) => setSemester(e.target.value)}
                   />
                 </div>
               </div>

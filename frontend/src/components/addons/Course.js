@@ -30,6 +30,13 @@ const [touched, setTouched] = useState({
 });
 
 
+const handleInputChange = (index, event) => {
+  const newInputValues = [...formValues.inputValues];
+  newInputValues[index] = event.target.value;
+  setFormValues({inputValues : newInputValues});
+};
+
+
   useEffect(() => {
     fetchCourseData();
     // console.log(depData);
@@ -81,6 +88,11 @@ const [touched, setTouched] = useState({
       });
     }
   };
+  const handleOnChange = (e) => {
+    setFormValues({ ...formValues, [e.target.name]: [e.target.value] });
+
+    setTouched({...touched , [e.target.name]: true});
+  };
 
   const CourseData = () => {
     const data = {
@@ -122,14 +134,14 @@ const [touched, setTouched] = useState({
       courseData.forEach((item) => {
         data.rows.push({
           name: item.name,
-          department: item.department.name,
+          department:(<p id={item.department._id}>{item.department.name}</p>),
           semester: item.degreeType,
           totalstudent: item.maxStudent,
           rollseries: (
             <ul className="d-flex flex-column">
-           { item.rollnoSeries.map(item =>{
+           { item.rollnoSeries.map((item,index) =>{
               return (
-                <li key={item._id}> {item}</li>
+                <li key={index}> {item}</li>
               )
            })}
             </ul>
@@ -143,10 +155,12 @@ const [touched, setTouched] = useState({
                   data-itemid={item._id}
                   data-bs-toggle="modal"
                   data-bs-target="#editModal"
+                  onClick={handleEditClick}
                 ></i>
                 <i
                   className="fa fa-trash fs-5 text-danger mx-1 cursor-pointer"
                   data-itemid={item._id}
+                  
                   data-bs-toggle="modal"
                   data-bs-target="#deleteDeptModal"
                   // onClick={handleDelete}
@@ -160,6 +174,99 @@ const [touched, setTouched] = useState({
     // console.log("data row ", data.rows);
 
     return data;
+  };
+
+
+
+  const handleEditClick = (e)=>{
+    const Userdata = e.target.parentElement.parentElement.parentElement.children;
+  //   console.log(Userdata[2].children[0].id);
+    // setUserid(e.target.dataset.itemid);
+    console.log(Userdata);
+
+    
+ 
+    
+    setFormValues({
+      name : Userdata[0].innerText,
+      department : Userdata[1].children[0].id,
+      degreeType : Userdata[2].innerText,
+      maxStudent : Userdata[3].innerText,
+      inputValues :  Userdata[4].innerText.split("\n")
+      
+    
+      // department : Userdata[2].children[0].id,
+     
+    })
+  }
+
+  const saveChanges = async (e) => {
+    e.preventDefault();
+
+    const updatedValues = {};
+    Object.keys(formValues).forEach((key) => {
+      if (touched[key]) {
+        updatedValues[key] = formValues[key][0];
+      } else {
+        updatedValues[key] = formValues[key];
+      }
+    });
+    console.log("update values is ", updatedValues);
+    console.log("name is ", formValues.name);
+    console.log("name is(2) ", formValues.name[0]);
+    
+    
+    
+
+    // if (!name || !dept || !selectedOption || !maxStudent || (inputValues.length !== inputCount)) {
+    //   toast.warn("please fill all values", {
+    //     position: "top-right",
+    //     autoClose: 5000,
+    //     hideProgressBar: false,
+    //     closeOnClick: true,
+    //     pauseOnHover: true,
+    //     draggable: true,
+    //     progress: 0,
+    //     theme: "colored",
+    //   });
+    //   setLoading(false);
+    //   return;
+    // }
+    let token = localStorage.getItem("userToken");
+    // try {
+    //   const config = {
+    //     headers: { "Content-type": "application/json", "auth-token": token },
+    //   };
+
+    //   const { data } = await axios.post(`/api/v1/admin/course`, {
+    //     name : name.toUpperCase(), department : dept, maxStudent, degreeType : selectedOption , rollno: inputValues
+    //   }, config);
+    //   // console.log(data);
+    //   toast.success(data.msg, {
+    //     position: "top-right",
+    //     autoClose: 5000,
+    //     hideProgressBar: false,
+    //     closeOnClick: true,
+    //     pauseOnHover: true,
+    //     draggable: true,
+    //     progress: 0,
+    //     theme: "colored",
+    //   });
+    //   setLoading(false);
+    // } catch (error) {
+    //   console.log(error.response);
+    //   toast.error(error.response.data.msg, {
+    //     position: "top-right",
+    //     autoClose: 5000,
+    //     hideProgressBar: false,
+    //     closeOnClick: true,
+    //     pauseOnHover: true,
+    //     draggable: true,
+    //     progress: 0,
+    //     theme: "colored",
+    //   });
+    //   setLoading(false);
+    // }
   };
 
   const handleDelete = async() => {
@@ -320,11 +427,10 @@ const [touched, setTouched] = useState({
               type="text"
               className="form-control"
               id="name"
+              name="name"
               placeholder="Enter name ..."
-              // value={name}
-              // onChange={(e) => {
-              //   setName(e.target.value);
-              // }}
+              value={formValues.name}
+              onChange={handleOnChange}
             />
           </div>
           <div className="mb-3">
@@ -337,21 +443,18 @@ const [touched, setTouched] = useState({
               required
               onInput={(e) => e.target.value = e.target.value.slice(0, 3)}
               id="maxStudent"
+              name="maxStudent"
               placeholder="Enter Maximum student limit  ..."
-              // value={maxStudent}
-              // onChange={(e) => {
-              //   setMaxStudent(e.target.value);
-              // }}
+              value={formValues.maxStudent}
+              onChange={handleOnChange}
             />
           </div>
           <div className="mb-3">
             <select
               className="form-select"
               name="department"
-              // value={dept}
-              // onChange={(e) => {
-              //   setDept(e.target.value);
-              // }}
+              value={formValues.department}
+            onChange={handleOnChange}
             >
               <option>Choose department ....</option>
               {department &&
@@ -368,10 +471,11 @@ const [touched, setTouched] = useState({
 
           <div className="mb-3">
             <select
-              // value={selectedOption}
-              name="semesterType"
+           
+              name="degreeType"
               className="form-select"
-              // onChange={handleOptionChange}
+              value={formValues.degreeType}
+            onChange={handleOnChange}
             >
               <option>Choose Depree Type ....</option>
               <option value="ug_3">under graduate(3 year)</option>
@@ -380,11 +484,32 @@ const [touched, setTouched] = useState({
               <option value="pg_3">post graduate(3year)</option>
             </select>
           </div>
-          {/* <div className="mb-3">{renderInputTags()}</div> */}
-          <button
+           <div className="mb-3">
+            {
+              formValues.inputValues.map((item , index) =>{
+                return (
+                  <input
+                  key={index}
+                  type="number"
+                  name="inputValues[]"
+                  className="form-control my-2"
+                  onInput={(e) => e.target.value = e.target.value.slice(0, 7)}
+                  placeholder={`Enter roll number series for ${index + 1} year`}
+                  value={formValues.inputValues[index] || ""}
+                  onChange={(event) => handleInputChange(index, event)}
+                />
+              )
+              })
+            }
+           </div>
+         
+        </form>
+              </div>
+              <div className="modal-footer ">
+              <button
             type="submit"
             className="btn btn-teal my-2 mx-1"
-            // onClick={saveChanges}
+            onClick={saveChanges}
             disabled={loading}
           >
             <span
@@ -392,28 +517,13 @@ const [touched, setTouched] = useState({
             ></span>{" "}
             Save Changes
           </button>
-        </form>
-              </div>
-              <div className="modal-footer ">
-                <button
-                  className="btn btn-teal my-2 mx-1 "
-                  onClick={handleDelete}
-                  disabled={loading}
-                >
-                  <span
-                    className={
-                      loading ? "spinner-border spinner-border-sm" : ""
-                    }
-                  ></span>{" "}
-                  yes
-                </button>
                 <button
                   type="button"
                   className="btn btn-secondary"
                   data-bs-dismiss="modal"
                   ref={closeRef2}
                 >
-                  No
+                  Close
                 </button>
               </div>
             </div>
