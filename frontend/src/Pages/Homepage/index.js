@@ -3,7 +3,10 @@ import { Link } from "react-router-dom";
 // import '../assets/css/homepage.css'
 import './index.css'
 import logo from '../../assets/images/logo.png'
-
+import about from "../../assets/images/about-us.png";
+import contact from "../../assets/images/image.jpg";
+import features from "../../assets/images/features.png";
+import learn from "../../assets/images/learn.png";
 const HomePage = ({setShow}) => {
 
   useEffect(() => {
@@ -141,8 +144,7 @@ const HomePage = ({setShow}) => {
       <div className="container">
         <h1>Campus Network</h1>
         <p>
-          Make you college work easy and maintainalbe Lorem ipsum dolor sit amet
-          consectetur adipisicing elit. Cupiditate, quisquam?.
+          Empowering Education, Connecting Minds: Your Campus Network Hub
         </p>
         <Link to="/dashboard" className=" btn btn-white">Join Now</Link>
       </div>
@@ -154,6 +156,18 @@ const HomePage = ({setShow}) => {
       <h2>
         about <span>us</span>
       </h2>
+      <div className="content1">
+        <img src={contact} className="aboutimg"/>
+        <p>
+        Welcome to Campus Network, your premier online platform designed exclusively for our campus community, where students and teachers come together to foster knowledge exchange and seamless communication.&nbsp;
+        <br/>
+        <br/>
+        With a user-friendly interface and robust features, Campus Network aims to streamline the learning experience for both teachers and students, enabling them to connect, collaborate, and thrive academically.&nbsp;
+        <br/>
+        <br/>
+        We prioritize your privacy and security. Rest assured that we have implemented stringent measures to protect your personal information, creating a safe and trusted online environment for our entire campus community.
+        </p>
+      </div>
     </div>
   </section>
   {/* services */}
@@ -162,14 +176,47 @@ const HomePage = ({setShow}) => {
       <h2>
        Advance <span>Features</span>
       </h2>
+      <div className="content2">
+        <img src={features} className="featureimg"/>
+        <p>
+        • Effortless Note Management&nbsp;
+        <br/>
+        • Seamless Communication.&nbsp;
+        <br/>
+        • Centralized Resource Hub.&nbsp;
+        <br/>
+        • Real-time Notifications.&nbsp;
+        <br/>
+        • User-Friendly Interface.&nbsp;
+        <br/>
+        • Quick and Easy Access&nbsp;
+        <br/>
+        • Customized Notifications.&nbsp;
+        </p>
+      </div>
     </div>
   </section>
   {/* contact */}
   <section id="contactus" className="section">
     <div className="title">
       <h2>
-        Contact <span>Us</span>
+        Learning made <span>more Easier</span>
       </h2>
+      <div className="content3"> 
+        <img src={learn} className="learnimg"/>
+        <p>
+        • Easy to Upload Notes as well as Delete notes.&nbsp;
+        <br/>
+        • Easy to access the Notices circulated by the college.&nbsp;
+        <br/>
+        • Easy to ask a Question and can also Answer anyone's question as well.&nbsp;
+        <br/>
+        • Easy to chat with teachers and users in the Chats section.&nbsp;
+        <br/>
+        • Can create Group Chats as well and can also chat with a single User.&nbsp;
+        </p>
+      </div>
+      <i class="fa-solid fa-notes"></i>
     </div>
   </section>
   {/* footer */}
