@@ -141,7 +141,7 @@ const postSubject = async (req, res) => {
     semester,
     createdBy:teacherData._id
   });
-  res.status(StatusCodes.CREATED).json(subject);
+  res.status(StatusCodes.CREATED).json({subject , msg: "subject added successfully"});
 };
 
 // ------------------------ get all subject ------------------------------
@@ -206,7 +206,7 @@ const deleteSubject = async (req, res) => {
     );
   }
   await data.remove();
-  res.status(StatusCodes.OK).json(data);
+  res.status(StatusCodes.OK).json({data, msg: "Subject Deleted Successfully."});
 };
 
 module.exports = {
