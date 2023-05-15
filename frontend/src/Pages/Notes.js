@@ -40,7 +40,7 @@ const Notes = () => {
           
         
 
-          <div className="my-4 pb-3">
+          <div className="my-2 pb-3">
     
      <Routes>
           <Route path="/"  element={<Mynotes/>} />

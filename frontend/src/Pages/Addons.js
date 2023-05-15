@@ -1,13 +1,16 @@
 import React from 'react'
 import { Link , Routes, Route } from 'react-router-dom';
+import Department from '../components/addons/Department';
+import Course from '../components/addons/Course';
+import Addcourse from '../components/addons/Addcourse';
 
 const Addons = () => {
   const updateActive = (e)=>{
-    console.log(e.target);
+    // console.log(e.target);
     const id = e.target.dataset.id;
     let links = document.querySelectorAll(".link");
     links.forEach((link)=>{
-      console.log(link);
+      // console.log(link);
       
       if(link.dataset.id === id) {
         link.classList.add("active");
@@ -31,9 +34,10 @@ const Addons = () => {
           <div className="my-4 pb-3">
     
     <Routes>
-         <Route path="/"  element={<div> I am department</div>} />
-         <Route path="/department"  element={<div> I am department</div>} />
-         <Route path="/course"  element={<div> I am course</div>} />
+         <Route path="/"  element={<Department/>} />
+         <Route path="/department"  element={<Department/>} />
+         <Route path="/course"  element={<Course/>} />
+         <Route path="/addcourse"  element={<Addcourse/>} />
        </Routes>
    
        </div>

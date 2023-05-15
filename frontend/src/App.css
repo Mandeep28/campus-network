@@ -132,11 +132,8 @@ color: white;
 /*  dashboard section  */
 .background {
   background: var(--background);
-  padding: .9rem, 0.6rem;
 }
-.background:nth-child(1) {
-  border-radius: 8px;
-}
+
 
  /* media query  */
 @media screen and (max-width: 900px) {
@@ -250,6 +247,11 @@ text-decoration: none;
   overflow: visible !important;
 }
 
+ul {
+  display: flex;
+  gap: 1rem;
+}
+
 
 /*  custom tabs */
 .link {
@@ -271,4 +273,3 @@ text-decoration: none;
   height: 2px;
   width: 15%;
 }
-

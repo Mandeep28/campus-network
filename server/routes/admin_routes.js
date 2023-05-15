@@ -14,7 +14,7 @@ const {
     adminRegister,
     addDepartment , 
     getDepartments ,
-    addCourse, getcourse
+    addCourse, getcourse, deleteDepartment , deleteCourse
   } = require("../controller/admin");
   const  {
     createNotice,
@@ -45,7 +45,9 @@ router.get('/mynotice', getNotices);
 
 //  department routes (add and get)
 router.route("/department").post(addDepartment).get(getDepartments)
+router.route("/department/:id").delete(deleteDepartment)
 router.route("/course").post(addCourse).get(getcourse);
+router.route("/course/:id").delete(deleteCourse)
 
 
 

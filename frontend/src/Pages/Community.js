@@ -29,22 +29,8 @@ const Community = () => {
 
 
   return (
-    <>
-    {/* <ul className="my-2 py-2 pb-3 fs-5">
-        <li>
-            <Link onClick={updateActive} to="/community/" className='link mx-2 active' data-id="1" >All Questions</Link>
-            <Link onClick={updateActive} to="/community/myquestion" className='link mx-2 ' data-id="2" >My Questions</Link>
-            <Link onClick={updateActive} to="/community/addquestion" className='link mx-2 ' data-id="3" >Ask Questions</Link>
-        </li>
-    </ul>
-    <div className='my-4 pb-2'> 
-        <Routes>
-            <Route path="/" element={<AllQuestion endpoint="community" showTrash={false}  fetchAgain={fetchagain} />}/>
-            <Route path="/myquestion" element={ <AllQuestion endpoint="community/my/question" showTrash={true} fetchAgain={fetchagain} />}/>
-            <Route path="/addquestion" element={<AddQuestion fetchagain={fetchagain} setFetchAgain={setFetchAgain}/>}/>
-          
-        </Routes>
-    </div> */}
+    <div className='py-2 my-1'>
+ 
 
        <Tabs
           activeTab="1"
@@ -70,7 +56,7 @@ const Community = () => {
             </Tab>
         </Tabs>
     
-    </>
+    </div>
   )
 }
 

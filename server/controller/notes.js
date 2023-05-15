@@ -147,7 +147,7 @@ const postSubject = async (req, res) => {
 // ------------------------ get all subject ------------------------------
 const getSubject = async (req, res) => {
   const userData = req.data;
-  console.log(userData);
+  // console.log(userData);
   
   if (userData.role === "student") {
     const findUser = await Student.findOne({ email: userData.email });
@@ -158,6 +158,8 @@ const getSubject = async (req, res) => {
     }
     const data = await Subject.find({course: findUser.course, semester : findUser.semester });
     res.status(StatusCodes.OK).json({data, length: data.length});
+    console.log("data is ", data);
+    
   }
   else if (userData.role === "teacher") {
     const findUser = await Teacher.findOne({ email: userData.email });

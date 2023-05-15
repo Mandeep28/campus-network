@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Student = require("./Student");
 const { Schema } = mongoose;
 
 const CourseSchema = new Schema(
@@ -25,5 +26,14 @@ const CourseSchema = new Schema(
   },
   { timestamps: true }
 );
+
+// Department Schema
+CourseSchema.pre('remove', { document: true }, async function (next) {
+  const course = this;
+
+  await Student.deleteMany({course: course._id});
+  next();
+});
+
 
 module.exports = mongoose.model("Course", CourseSchema);

@@ -30,6 +30,9 @@ const userSchema = new mongoose.Schema({
         enum : ['student', 'teacher', 'admin'], 
         default : 'student'
     },
+    deviceToken : {
+      type: String
+    },
     image: {
       type: String,
       default:

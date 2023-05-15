@@ -19,7 +19,7 @@ const MyChats = ({ fetchAgain, userDetails }) => {
   const toast = useToast();
   
   const fetchChats = async () => {
-    console.log("user details is (from my chats)",userDetails);
+    // console.log("user details is (from my chats)",userDetails);
     try {
       const config = {
         headers: { Authorization: `Bearer ${user.token}`}
@@ -47,7 +47,7 @@ const MyChats = ({ fetchAgain, userDetails }) => {
 
   useEffect(() => {
     setLoggedUser(user); //chatLogics 
-    console.log("logged use from my chats", loggedUser);
+    // console.log("logged use from my chats", loggedUser);
     
     fetchChats();
     // eslint-disable-next-line
@@ -106,21 +106,21 @@ const MyChats = ({ fetchAgain, userDetails }) => {
                 color={selectedChat === chat ? "white" : "black"}
                 px={3}
                 py={2}
-                borderRadius="lg"
+                borderRadius="lg" 
                 key={chat._id}
               >
-                <Text>
+                <div>
                   {!chat.isGroupChat ? getSender(user, chat.users) : chat.chatName}
                   <div className='d-flex justify-content-between my-1' style={{fontSize: "12px"}}>
                   <span >
-                {(chat.latestMessage.content).slice(0,25)}
-                {((chat.latestMessage.content).length > 25) ?  '.....' : ""}
+                {chat.latestMessage ? (chat.latestMessage.content).slice(0,25) : ""}
+                {chat.latestMessage ? ((chat.latestMessage.content).length > 25) ?  '.....' : "" : ""}
                   
                   </span>
-                  <span >{moment(chat.latestMessage.createdAt).calendar()}</span>
+                  <span >{chat.latestMessage  ? moment(chat.latestMessage.createdAt).calendar() : ""}</span>
                   </div>
                   
-                </Text>
+                </div>
               </Box>
             ))}
           </Stack>

@@ -61,7 +61,7 @@ const AddStudent = () => {
         course: formValues.course[0],
       }, config);
       console.log(data);
-      toast.success("Student Added successfully", {
+      toast.success("Student added successfully", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -73,8 +73,8 @@ const AddStudent = () => {
       });
       setLoading(false);
     } catch (error) {
-      console.log(error.response);
-      toast.error(error.msg, {
+      console.log(error);
+      toast.error("something went wrong", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,

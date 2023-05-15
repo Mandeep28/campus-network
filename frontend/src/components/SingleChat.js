@@ -19,7 +19,6 @@ import movieHand from '../assets/images/movieHand.gif'
 import io from "socket.io-client";
 
 const ENDPOINT = "http://localhost:5000"; //development
-// const ENDPOINT = "https://textalot.herokuapp.com"; //for deployment -production
 var socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
@@ -32,7 +31,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
   const toast = useToast();
   useEffect(()=>{
-    console.log("user details (from single chat) is :", user);
+    // console.log("user details (from single chat) is :", user);
       // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
@@ -61,11 +60,11 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       const { data } = await axios.get(
         `/api/message/${selectedChat._id}`,
         config
-      );
+      ); 
 
       setMessages(data);
       setLoading(false);
-      console.log(data, "fetched messsages of the selected chat data");
+      // console.log(data, "fetched messsages of the selected chat data");
 
       socket.emit("join chat", selectedChat._id);
     } catch (error) {

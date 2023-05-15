@@ -66,7 +66,7 @@ const createUser = async (req, res) => {
   } else {
     throw new customError("Something Went Wrong", StatusCodes.BAD_REQUEST);
   }
-  console.log(user);
+  // console.log(user);
   
   res.status(StatusCodes.CREATED).json(user);
 };
@@ -105,7 +105,7 @@ const getStudent = async (req, res) => {
 
 
 const updateStudent = async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   
   const id = req.params.id;
   let student = await Student.findOne({ _id: id });
@@ -119,7 +119,7 @@ const updateStudent = async (req, res) => {
   res
     .status(StatusCodes.OK)
     .json({ msg: "Student update successfully", student });
-    console.log("new student is ", student);
+    // console.log("new student is ", student);
 };
 
 
@@ -128,10 +128,10 @@ const updateStudent = async (req, res) => {
 
 const delteStudent = async (req, res) => {
   const id = req.params.id;
-  console.log("id in params is :", id);
+  // console.log("id in params is :", id);
 
   let student = await Student.findById(id);
-  console.log("student details is : ", student);
+  // console.log("student details is : ", student);
 
   if (!student) {
     throw new customError(`No user found with id ${id}`, StatusCodes.NOT_FOUND);
@@ -264,9 +264,23 @@ const addDepartment = async (req, res) =>{
 
 //  --------------------- Get all department -------------------------------
 const getDepartments = async (req, res) =>{
-  const departments = await Department.find({});
+  const departments = await Department.find({}).populate("createdBy", "name");
+  // console.log("department are", departments);
+  
 
-  res.status(StatusCodes.OK).json({departments})
+  res.status(StatusCodes.OK).json({departments , msg: "department added successfully"})
+} 
+
+
+//  -------------------- delete department --------------------
+const deleteDepartment = async (req, res) =>{
+  const deptId = req.params.id;
+  const findDepartment = await Department.findById(deptId);
+  if(!findDepartment) {
+    throw new customError(`No department found with id - ${deptId}`, StatusCodes.NOT_FOUND); 
+  }
+  await findDepartment.remove();  
+  res.status(StatusCodes.OK).json({msg: "department deleted successfully"});
 }
 
 
@@ -287,8 +301,25 @@ const addCourse = async (req, res) =>{
 
 //  ------------------------ Get all course -------------------------
 const getcourse = async (req, res) =>{
-  const course = await Course.find({});
+  const course = await Course.find({}).populate("department", "name").populate("createdBy", "name");
   res.status(StatusCodes.OK).json({course, length: course.length});
+}
+
+
+//  -------------------- delete course -----------------------------
+const deleteCourse = async (req, res) =>{
+  const courseId = req.params.id;
+  const findCourse = await Course.findById(courseId);
+
+  if(!findCourse) {
+    throw new customError(`No course found with id - ${courseId}`, StatusCodes.NOT_FOUND); 
+  }
+
+  await findCourse.remove();
+
+  res.status(StatusCodes.OK).json({msg: "Course deleted Successfully."})
+
+
 }
 
 
@@ -309,5 +340,6 @@ module.exports = {
   adminRegister,
   addDepartment , 
   getDepartments,
-  addCourse, getcourse
+  deleteDepartment,
+  addCourse, getcourse , deleteCourse
 };

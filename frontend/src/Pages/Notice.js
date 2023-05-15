@@ -42,7 +42,7 @@ const Notice = () => {
         }
       </ul>
 
-      <div className="my-5 pb-3">
+      <div className="my-2 pb-3">
         <Routes>
           <Route path="/" element={<AllNotice endpoint="user/notice" showTrash={false} fetchAgain={fetchAgain} />} />
           <Route path="/mynotice" element={ <AllNotice endpoint="admin/mynotice" showTrash={true} fetchAgain={fetchAgain} />}/>

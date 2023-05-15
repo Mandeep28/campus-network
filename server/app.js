@@ -79,7 +79,7 @@ const io = require("socket.io")(server, {
     // origin: "https://textalot.herokuapp.com", //deployment
     credentials: true,
   },
-});
+});  
 
 io.on("connection", (socket) => {
   console.log("Connected to socket.io");
@@ -89,15 +89,15 @@ io.on("connection", (socket) => {
     console.log(`Logged in user ${userData.name} joined the created room`);
     socket.emit("connected");
   });
-
-  socket.on("join chat", (room) => {
-    socket.join(room);
+    
+  socket.on("join chat", (room) => {    
+    socket.join(room); 
     console.log("User Joined the selectedChat Room: " + room);//room-selectedChatId
   });
   
   socket.on("typing", (room) => socket.in(room).emit("typing"));
   socket.on("stop typing", (room) => socket.in(room).emit("stop typing"));
-
+ 
   socket.on("new message", (newMessageRecieved) => {
     var chat = newMessageRecieved.chat;
 

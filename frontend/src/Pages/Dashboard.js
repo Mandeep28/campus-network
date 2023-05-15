@@ -5,6 +5,10 @@ import axios from "axios";
 import moment from 'moment';
 import { Link } from "react-router-dom";
 import WithAuth from "../components/Authentication/WithAuth";
+// import io from "socket.io-client";
+
+// const ENDPOINT = "http://localhost:5000"; //development
+// var socket, selectedChatCompare;
 
 const Dashboard = ({setShow}) => {
   const updatref = useRef(null);
@@ -28,6 +32,7 @@ const Dashboard = ({setShow}) => {
   const { user , getUserDetails } = ChatState();
 
 
+
   useEffect(() => {
     setShow(true);
     if (!user) {
@@ -36,9 +41,19 @@ const Dashboard = ({setShow}) => {
       console.log("user details", user);
       fetchDetails();
       fetchLatestNotice();
+    
     }
    
   }, [user, getUserDetails]);
+
+
+  // useEffect(()=>{
+  //   console.log("user is this (from single chats)", user)
+  //   socket = io(ENDPOINT);
+  //   socket.emit("setup", user);
+  // })
+
+
 
 
 
