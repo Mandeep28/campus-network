@@ -7,7 +7,7 @@ import { useLocation } from "react-router-dom";
 import NotFound from "../../Pages/NotFound";
 import { saveAs } from "file-saver";
 
-const AllNotes = ({ endpoint, showTrash, fetchAgain }) => {
+const AllNotes = ({  fetchAgain }) => {
   const [question, setQuestion] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const { search } = useLocation();
@@ -45,7 +45,7 @@ const AllNotes = ({ endpoint, showTrash, fetchAgain }) => {
   if (!found) {
     return <NotFound />;
   }
-  if (question && question.length <= 0) {
+  if ( question?.length === 0) {
     return (
       <div
         className="container d-flex align-items-center justify-content-center"
@@ -75,55 +75,9 @@ const AllNotes = ({ endpoint, showTrash, fetchAgain }) => {
     setCurrentPage(0); // reset to first page when search query changes
   };
 
-  //  handle delete
 
-  const handleDelete = async (e) => {
-    // console.log("delted", e.target.id);
-    const answerId = e.target.id;
-    let token = localStorage.getItem("userToken");
-    try {
-      const config = {
-        headers: { "Content-type": "application/json", "auth-token": token },
-      };
 
-      const { data } = await axios.delete(
-        "/api/v1/user/community/question/" + answerId,
-        config
-      );
-      // console.log(data);
-      toast.success("Question deleted successfully", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: 0,
-        theme: "colored",
-      });
-    } catch (error) {
-      console.log(error.response.data);
-      toast.error(error.response.data.msg, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: 0,
-        theme: "colored",
-      });
-    }
-    fetchQuestion();
-  };
 
-  // if(question.length > 0 ) {
-  //   return (
-  //     <div className="container d-flex align-items-center justify-content-center" style={{minHeight : "60vh"} }>
-  //       <h5>No question to show ... You can add question anytime.</h5>
-  //     </div>
-  //   )
-  // }
 
   return (
     <>
@@ -179,14 +133,7 @@ const AllNotes = ({ endpoint, showTrash, fetchAgain }) => {
                           {moment(item.createdAt).fromNow()}
                         </small>
                       </p>
-                      {showTrash && (
-                        <i
-                          className="fa fa-trash mx-3 fs-5 text-danger"
-                          id={item._id}
-                          onClick={handleDelete}
-                          style={{ cursor: "pointer" }}
-                        ></i>
-                      )}
+                      
                     </div>
                     {/* <a href={item.attachment_url} download={item.attachment_url} className="text-decoration-none text-teal" > */}
                     <i

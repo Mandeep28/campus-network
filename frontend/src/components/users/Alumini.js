@@ -2,8 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import { MDBDataTable } from "mdbreact";
 import axios from "axios";
 import { toast } from "react-toastify";
+import moment from 'moment'
 
-const Alumini = () => {
+const RegisterUser = () => {
   const [depData, setDepdata] = useState();
   const [deptName, setDeptName] = useState("");
   const [loading, setLoading] = useState(false);
@@ -11,7 +12,7 @@ const Alumini = () => {
   const closeRef = useRef();
   const closeRef2 = useRef();
   useEffect(() => {
-    // fetchDepartmentData();
+    fetchDepartmentData();
     // console.log(depData);
   }, []);
 
@@ -22,9 +23,9 @@ const Alumini = () => {
         headers: { "Content-type": "application/json", "auth-token": token },
       };
 
-      const { data } = await axios.get(`/api/v1/admin/department`, config);
-      console.log(data.departments);
-      setDepdata(data.departments);
+      const { data } = await axios.get(`/api/v1/admin/registeruser`, config);
+      console.log(data);
+      setDepdata(data);
     } catch (error) {
       console.log(error.response.data);
     }
@@ -37,11 +38,24 @@ const Alumini = () => {
           label: "Name",
           field: "name",
         },
-
         {
-          label: "CreatedBy",
-          field: "createdby",
+          label: "Email",
+          field: "email",
         },
+        {
+          label: "Role",
+          field: "role",
+        },
+        {
+          label: "Verified At",
+          field: "verified",
+        },
+        {
+          label: "Image",
+          field: "image",
+        },
+
+       
         {
           label: "Actions",
           field: "actions",
@@ -54,32 +68,34 @@ const Alumini = () => {
       depData.forEach((item) => {
         data.rows.push({
           name: item.name,
-          createdby: item.createdBy.name,
+          email : item.email,
+          role : item.role,
+          verified : moment(item.verified).format("LLL"),
+          image : (<img style={{width: "40px", height : "40px"}} src= {item.image} alt ="user phone"/>),
+       
           actions: (
             <>
               <div>
                 <i
                   className="fa fa-trash fs-5 text-danger mx-1 cursor-pointer"
                   data-itemid={item._id}
-                  data-bs-toggle="modal"
-                  data-bs-target="#deleteDeptModal"
-                  onClick={(e)=>{setDeptId(e.target.dataset.itemid)}}
-                  // onClick={handleDelete}
+                  
+                  onClick={handleDelete}
                 ></i>
               </div>
             </>
           ),
         });
       });
-    // console.log("data row ", data.rows);
+    console.log("data row ", data.rows);
 
     return data;
   };
 
   const handleDelete = async (e) => {
     // console.log(" I am handle delete");
-    // const id = e.target.dataset.itemid;
-    console.log(deptId);
+    const id = e.target.dataset.itemid;
+    // console.log(deptId);
     
     const token = localStorage.getItem("userToken");
     try {
@@ -88,7 +104,7 @@ const Alumini = () => {
       };
 
       const { data } = await axios.delete(
-        `/api/v1/admin/department/${deptId}`,
+        `/api/v1/admin/registeruser/${id}`,
         config
       );
       // console.log(data);
@@ -116,64 +132,9 @@ const Alumini = () => {
       });
     }
     closeRef2.current.click();
+    fetchDepartmentData();
   };
 
-  const handleSubmit = async () => {
-    console.log(deptName);
-
-    if (!deptName) {
-      toast.warn("Depatment Name is required", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: 0,
-        theme: "colored",
-      });
-
-      return;
-    }
-
-    let token = localStorage.getItem("userToken");
-    try {
-      const config = {
-        headers: { "Content-type": "application/json", "auth-token": token },
-      };
-
-      const { data } = await axios.post(
-        `/api/v1/admin/department`,
-        { name: deptName.toUpperCase() },
-        config
-      );
-      console.log(data);
-      toast.success(data.msg, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: 0,
-        theme: "colored",
-      });
-    } catch (error) {
-      console.log(error.response);
-      toast.error(error.response.data.msg, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: 0,
-        theme: "colored",
-      });
-      setLoading(false);
-    }
-   
-  };
 
   return (
     <>
@@ -183,7 +144,7 @@ const Alumini = () => {
           striped
           bordered
           hover
-        //   data={departmentData()}
+          data={departmentData()}
           className="px-3"
           responsive
           paging={true}
@@ -196,4 +157,4 @@ const Alumini = () => {
   );
 };
 
-export default Alumini;
+export default RegisterUser;

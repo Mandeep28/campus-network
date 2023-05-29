@@ -11,7 +11,7 @@ const AddStudent = () => {
     rollno: "",
     semester: "",
     course: "",
-    degreeType: "",
+
     // add more fields as needed
   });
 
@@ -24,7 +24,7 @@ const AddStudent = () => {
     // console.log(e);
     setLoading(true);
     console.log(formValues);
-    if(!formValues.Uname || !formValues.rollno || !formValues.course || !formValues.email || !formValues.semester || !formValues.degreeType ) {
+    if(!formValues.Uname || !formValues.rollno || !formValues.course || !formValues.email || !formValues.semester  ) {
         toast.warn("please fill all values", {
             position: "top-right",
             autoClose: 5000,
@@ -55,8 +55,6 @@ const AddStudent = () => {
         name: formValues.Uname[0],
         rollno: formValues.rollno[0],
         email: formValues.email[0],
-        degreeType: formValues.degreeType[0],
-        department: formValues.department[0],
         semester: formValues.semester[0],
         course: formValues.course[0],
       }, config);
@@ -93,8 +91,8 @@ const AddStudent = () => {
         rollno: "",
         semester: "",
         course: "",
-        department: "",
-        degreeType: "",})
+     
+       })
   };
 
   const fetchDepartment = async () => {
@@ -206,24 +204,7 @@ const AddStudent = () => {
               onChange={handleOnChange}
             />
           </div>
-          <div className="col">
-            <label htmlFor="" className="form-label">
-              {" "}
-              Degree Type
-            </label>
-            <select
-              className="form-select"
-              name="degreeType"
-              value={formValues.degreeType}
-              onChange={handleOnChange}
-            >
-              <option >Choose Depree Type ....</option>
-              <option   value="ug_3">under graduate(3 year)</option>
-              <option value="ug_4">under graduate(4 year)</option>
-              <option value="pg_2">post graduate(2 year)</option>
-              <option value="pg_3">post graduate(3year)</option>
-            </select>
-          </div>
+
         </div>
         <button
           type="submit"

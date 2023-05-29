@@ -75,13 +75,13 @@ const getQuestions = async (req, res) => {
     // console.log(user.course.department)
     questions = await Question.find({
       $or: [
-        { uploadBy: { $in: adminUserIds } },
+        // { uploadBy: { $in: adminUserIds } },
         { depeartment: user.department },
       ],
     })
       .populate("uploadBy", "-password")
-      .sort({ _id: -1 });
-    //  console.log(questions)
+      .sort({ _id: -1 }); 
+     console.log(questions)
   }
   //  if user is student
   else if (userData.role === "student") {

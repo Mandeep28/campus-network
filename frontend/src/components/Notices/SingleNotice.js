@@ -61,7 +61,7 @@ const SingleNotice = () => {
     <h5 className='mb-3'>{notice && notice.title}</h5>
     <h4 className='text-uppercase text-teal my-2'>Description</h4>
     <p className='mb-3'>{notice && notice.body} </p>
-    <img src={notice && notice.attachment_url} alt="" className="img-thumbnail" />
+    <img src={ notice?.attachment_url} alt="" className="img-thumbnail" />
     <div>
 
     {/* <a href={notice && notice.attachment_url} download={notice && notice.attachment_url}  className="btn btn-teal d-inline-block my-3 mx-2">Download <i className="fa fa-download mx-1 fs-5"></i></a> */}

@@ -7,7 +7,7 @@ const VerifyEmail = () => {
   const navigate = useNavigate();
   const queryParameters = new URLSearchParams(window.location.search);
   const [msg, setMsg] = useState();
-  const [result, setResult] = useState(false);
+  const [result, setResult] = useState(true);
   useEffect(() => {
     const token = queryParameters.get("token");
     const email = queryParameters.get("email");

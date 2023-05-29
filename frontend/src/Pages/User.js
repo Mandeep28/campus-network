@@ -35,7 +35,7 @@ const User = () => {
             <li>
                 <Link to="/user" onClick={updateActive} className="link mx-2 active" data-id="1"> AllUser</Link>
                 <Link to="/user/registeruser" onClick={updateActive} className="link mx-2 " data-id="2"> Register User</Link>
-                <Link to="/user/alumini" onClick={updateActive} className="link mx-2 " data-id="3"> Alumini</Link>
+                {/* <Link to="/user/alumini" onClick={updateActive} className="link mx-2 " data-id="3"> Alumini</Link> */}
             </li>
         </ul>
 
@@ -44,7 +44,7 @@ const User = () => {
             <Route path = "/*" element={<AllUser/>} />
 
             <Route exact path="/registeruser" element={<RegisterUser/>}/>
-            <Route exact path="/alumini" element={<Alumini/>}/>
+            {/* <Route exact path="/alumini" element={<Alumini/>}/> */}
 
             <Route exact path="/student/addnew" element={<AddStudent/>}/>
             <Route exact path="/teacher/addnew" element={<AddTeacher/>}/>

@@ -114,10 +114,10 @@ const Signup = () => {
     }
   };
   const handleRadio = (e) => {
-    console.log(e.currentTarget.checked);
+    // console.log(e.currentTarget.checked);
 
     setRole(e.currentTarget.value);
-    console.log(e.currentTarget.value);
+    // console.log(e.currentTarget.value);
   };
 
   return (

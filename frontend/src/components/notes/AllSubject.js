@@ -27,6 +27,17 @@ useEffect(()=>{
     }
   };
 
+  if (subject?.length === 0) {
+    return (
+      <div
+        className="container d-flex align-items-center justify-content-center"
+        style={{ minHeight: "60vh" }}
+      >
+        <h5>No Subject to show ....</h5>
+      </div>
+    );
+  }
+
 
 
   return (

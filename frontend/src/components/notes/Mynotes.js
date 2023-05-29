@@ -43,6 +43,17 @@ const [currentPage, setCurrentPage] = useState(0);
             <NotFound/>
         )
     }
+
+    if ( question?.length === 0) {
+      return (
+        <div
+          className="container d-flex align-items-center justify-content-center"
+          style={{ minHeight: "60vh" }}
+        >
+          <h5>No Notes to show ....</h5>
+        </div>
+      );
+    }
    
 
     const filteredItems = question.filter(

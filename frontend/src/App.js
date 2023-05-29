@@ -47,7 +47,7 @@ function App() {
 
     if(window !== undefined) {
       // document.querySelector("background").style.padding = "10px 15px"
-      console.log("hello");
+   
       document.querySelector(".background").style.padding = "1rem !important"
       console.log();
       

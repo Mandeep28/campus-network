@@ -365,6 +365,51 @@ useEffect(() => {
     }
   };
 
+  //  update semester 
+  const updateSemester = async () =>{
+    const token = localStorage.getItem("userToken");
+    console.log(token);
+    
+    try {
+      const config = {
+        headers: { "Content-type": "application/json", "auth-token": token },
+      };
+
+      const { data } = await axios.get(
+        "/api/v1/admin/updateSemester",
+        
+        config
+      );
+      console.log(data);
+
+      toast.success("Semester Updated successfully", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: 0,
+        theme: "colored",
+      });
+
+
+      setLoading(false);
+    } catch (error) {
+      console.log(error.response.data);
+      toast.error(error.response.data.msg, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: 0,
+        theme: "colored",
+      });
+    }
+  }
+
 
 
 
@@ -536,7 +581,7 @@ useEffect(() => {
                   {moment(new Date()).format("ll")} {time}
                   </h2>
                   <div className="text-center">
-                    <button className="btn btn-teal">Update Semester</button>
+                    <button className="btn btn-teal" onClick={updateSemester}>Update Semester</button>
                   </div>
                  
                 </div>

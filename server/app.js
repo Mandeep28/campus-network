@@ -34,9 +34,9 @@ app.use(cors());
 
 const port = process.env.PORT || 5000;
 const hostname = "localhost"; 
-// const uri = process.env.MONGO_ALTAS_URI;
-const uri = "mongodb://127.0.0.1:27017/test-db1";
-
+const uri = process.env.MONGO_ATLAS_URI;
+// const uri = "mongodb://127.0.0.1:27017/test-db1";
+console.log(uri)
 //  db connected 
 
 

@@ -219,10 +219,10 @@ const postAnswer = async ()=>{
   return (
     <>
  {question && <div className="container my-3 py-3">
-    <h4>{question ? question.title : ""}</h4>
     <div>
         <p>Asked At - <span className="text-secondary me-3">{question ?  moment(new Date(question.createdAt).toLocaleString()).format('LLL') : ""}</span> </p>
     </div>
+    <h3 className="my-2 mb-4">{question ? question.title : ""}</h3>
     <div>{question ? parse(`${question.body}`): ""}</div>   
     <div className='text-end'>
         <img src={pic} alt="" className='img-thumbnail rounded' style={{width: "45px" , height: "50px", objectFit: "cover"}} />

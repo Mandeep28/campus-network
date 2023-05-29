@@ -83,7 +83,7 @@ const Subject = () => {
       subject.forEach((item) => {
         data.rows.push({
           name: item.name,
-        //   course: item.course.name,
+          course: item.course.name,
           sem: item.semester,
           createdby: item.createdBy.name,
           actions: (

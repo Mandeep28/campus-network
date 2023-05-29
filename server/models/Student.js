@@ -48,5 +48,13 @@ const StudentSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+StudentSchema.pre('remove', { document: true }, async function (next) {
+  const student = this;
+
+  // Find and delete related courses
+  await User.findOne({email : student.email});
+
+  next();
+});
 
 module.exports = mongoose.model("Student", StudentSchema);

@@ -162,13 +162,28 @@ const getSubject = async (req, res) => {
     
   }
   else if (userData.role === "teacher") {
-    const findUser = await Teacher.findOne({ email: userData.email });
+    const findUser = await Teacher.findOne({ email: userData.email }).lean();
     if (!findUser) {
       throw new customError("Not authorized", StatusCodes.UNAUTHORIZED);
     }
-    const data = await Subject.find({ createdBy : userData._id})
-    res.status(StatusCodes.OK).json({data, length: data.length});
+    console.log(findUser.department);
+    
+    const data = await Subject.find({}).populate("course").lean();
+    const newData = data.filter((item)=>{
+      console.log("hello",item.course.department);
+      console.log(findUser.department);
+      
+      if((item.course.department.toString()) === (findUser.department.toString())){
 
+        return item
+      }
+      
+    })
+
+    console.log(newData);
+    
+    res.status(StatusCodes.OK).json({data: newData, length: data.length});
+// 6444cf36248ec54c389b0223
   }
   else if(userData.role === "admin") {
     const data = await Subject.find({}).populate("course", "name").populate("createdBy", "name email")

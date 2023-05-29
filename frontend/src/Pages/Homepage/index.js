@@ -101,7 +101,7 @@ const HomePage = ({setShow}) => {
     <>
     
     <>
-  <header id="home">
+  <section id="home" className="header">
     {/* navbar */}
     <nav id="nav">
       <div className="nav-center">
@@ -149,7 +149,7 @@ const HomePage = ({setShow}) => {
         <Link to="/dashboard" className=" btn btn-white">Join Now</Link>
       </div>
     </div>
-  </header>
+  </section>
   {/* about */}
   <section id="about" className="section">
     <div className="title">
@@ -216,7 +216,7 @@ const HomePage = ({setShow}) => {
         • Can create Group Chats as well and can also chat with a single User.&nbsp;
         </p>
       </div>
-      <i class="fa-solid fa-notes"></i>
+      <i className="fa-solid fa-notes"></i>
     </div>
   </section>
   {/* footer */}

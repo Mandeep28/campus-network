@@ -79,11 +79,11 @@ const MyChats = ({ fetchAgain, userDetails }) => {
         alignItems="center"
       >
         My Chats
-        <GroupChatModal>
+      {user && user.role !== "student" ? <GroupChatModal>
           <button className='btn btn-teal' >
             New Group Chat <i className="fa fa-plus mx-1"></i>
           </button>
-        </GroupChatModal>
+        </GroupChatModal> : ""}
       </Box>
       <Box
         d="flex"
@@ -110,7 +110,7 @@ const MyChats = ({ fetchAgain, userDetails }) => {
                 key={chat._id}
               >
                 <div>
-                  {!chat.isGroupChat ? getSender(user, chat.users) : chat.chatName}
+                  {/* {!chat.isGroupChat ? getSender(user, chat.users) : chat.chatName} */}
                   <div className='d-flex justify-content-between my-1' style={{fontSize: "12px"}}>
                   <span >
                 {chat.latestMessage ? (chat.latestMessage.content).slice(0,25) : ""}

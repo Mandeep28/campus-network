@@ -15,7 +15,7 @@ import axios from "axios";
 import ChatLoading from "../ChatLoading";
 import UserListItem from "../userAvatar/UserListItem";
 
-const Header = ({setShow , setUser}) => {
+const Header = ({setShow }) => {
   const refClose = useRef(null);
   const refSearchModalClose = useRef(null);
   const [padding, setPadding] = useState(5); // set initial padding to 0px
@@ -32,6 +32,7 @@ const navigate = useNavigate();
 
   const {
     user,
+    setUser,
     setSelectedChat,
     notification,
     setNotification,
@@ -280,16 +281,16 @@ const navigate = useNavigate();
         </div>
         <Link to="/chats"><i className="fa fa-commenting fs-5 text-teal"></i> </Link>
 
-        <button
-          className="navbar-toggler"
+        <i
+          className="navbar-toggler fa fa-bars fs-5 "
           type="button"
           data-bs-toggle="offcanvas"
           data-bs-target="#offcanvasNavbar"
           aria-controls="offcanvasNavbar"
           aria-label="Toggle navigation"
         >
-          <span className="navbar-toggler-icon" />
-        </button>
+          {/* <span className="navbar-toggler-icon" /> */}
+        </i>
         </div>
         </div>
         <div
@@ -350,8 +351,8 @@ const navigate = useNavigate();
                 <button className="nav-link text-teal cursor-pointer w-100 text-start"  onClick={()=>{
                   localStorage.clear();
                   setShow(false);
-                  // setUser({});
-                  navigate("/login");
+                  setUser({});
+                  navigate("/");
                 }}>
                   <i className="fa fa-sign-out mx-1"></i> Logout
                 </button>

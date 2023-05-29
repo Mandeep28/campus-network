@@ -93,6 +93,11 @@ const App = () => {
         progress: 0,
         theme: "colored",
       });
+      setMaxStudent("")
+      setDepartment("")
+      setName("")
+      setSelectedOption("")
+      setInputValues([])
       setLoading(false);
     } catch (error) {
       console.log(error.response);
@@ -107,6 +112,11 @@ const App = () => {
         theme: "colored",
       });
       setLoading(false);
+      setMaxStudent("")
+      setDepartment("")
+      setName("")
+      setSelectedOption("")
+      setInputValues([])
     }
   };
 
